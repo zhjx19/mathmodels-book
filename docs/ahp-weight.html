@@ -524,16 +524,8 @@ CR = \frac{CI}{RI}
 <li>提取 5 组权重，分别是方案层对准则层每个因素的重要度（贡献度）。按列合并，转化为矩阵：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>W2 <span class="ot">=</span> <span class="fu">map_dfc</span>(res2, <span class="st">"w"</span>) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-• `` -&gt; `...1`
-• `` -&gt; `...2`
-• `` -&gt; `...3`
-• `` -&gt; `...4`
-• `` -&gt; `...5`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>W2</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>W2 <span class="ot">=</span> <span class="fu">map_dfc</span>(res2, <span class="st">"w"</span>) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span>
+<span id="cb6-2"><a href="#cb6-2"></a>W2</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          ...1       ...2      ...3      ...4      ...5
 [1,] 0.5953790 0.08193475 0.4285714 0.6337079 0.1666667
@@ -544,19 +536,19 @@ CR = \frac{CI}{RI}
 <p>该权重矩阵，行代表方案，列代表父级因素，将用于向上合成时的左乘矩阵。注意，若某方案不受某个父级因素支配（无连线），相应位置补 <span class="math inline">\(0\)</span>。</p>
 </section><section id="第-1-层上层" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="第-1-层上层">(2) 第 1 层（上层）</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>,   <span class="dv">3</span>,</span>
-<span id="cb10-2"><a href="#cb10-2"></a>             <span class="dv">2</span>,   <span class="dv">1</span>,   <span class="dv">7</span>, <span class="dv">5</span>,   <span class="dv">5</span>,</span>
-<span id="cb10-3"><a href="#cb10-3"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,</span>
-<span id="cb10-4"><a href="#cb10-4"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>,   <span class="dv">1</span>,</span>
-<span id="cb10-5"><a href="#cb10-5"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>,   <span class="dv">1</span>),</span>
-<span id="cb10-6"><a href="#cb10-6"></a>           <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">5</span>)</span>
-<span id="cb10-7"><a href="#cb10-7"></a>res <span class="ot">=</span> <span class="fu">AHP</span>(A)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>,   <span class="dv">3</span>,</span>
+<span id="cb8-2"><a href="#cb8-2"></a>             <span class="dv">2</span>,   <span class="dv">1</span>,   <span class="dv">7</span>, <span class="dv">5</span>,   <span class="dv">5</span>,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,</span>
+<span id="cb8-4"><a href="#cb8-4"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>,   <span class="dv">1</span>,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>,   <span class="dv">1</span>),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>           <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">5</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>res <span class="ot">=</span> <span class="fu">AHP</span>(A)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>提取一致性比率：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>res<span class="sc">$</span>CR</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>res<span class="sc">$</span>CR</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.01609027</code></pre>
 </div>
@@ -565,8 +557,8 @@ CR = \frac{CI}{RI}
 <li>提取权重向量：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>W1 <span class="ot">=</span> res<span class="sc">$</span>w</span>
-<span id="cb13-2"><a href="#cb13-2"></a>W1</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>W1 <span class="ot">=</span> res<span class="sc">$</span>w</span>
+<span id="cb11-2"><a href="#cb11-2"></a>W1</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.26360349 0.47583538 0.05381460 0.09806829 0.10867824</code></pre>
 </div>
@@ -576,7 +568,7 @@ CR = \frac{CI}{RI}
 <li>即做矩阵乘法：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>W2 <span class="sc">%*%</span> W1 <span class="sc">|&gt;</span> <span class="fu">as.vector</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>W2 <span class="sc">%*%</span> W1 <span class="sc">|&gt;</span> <span class="fu">as.vector</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2992545 0.2453040 0.4554415</code></pre>
 </div>

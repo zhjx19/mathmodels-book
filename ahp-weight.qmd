@@ -197,7 +197,7 @@ map_dbl(res2, "CR")
 
 - 提取 5 组权重，分别是方案层对准则层每个因素的重要度（贡献度）。按列合并，转化为矩阵：
 
-```{r}
+```{r message=FALSE}
 W2 = map_dfc(res2, "w") |> as.matrix()
 W2
 ```
