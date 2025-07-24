@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>9&nbsp; 秩和比法 – mathmodels 包使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./fuzzy-eval.html" rel="next">
+<link href="./grey-relational.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script><script>
+MathJax ={
+  tex: {
+    macros: {
+      bm: ["{\\boldsymbol #1}",1],
+    }
+  }
+};
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./rank-sum-ratio.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">mathmodels 包使用手册</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">前言</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./comp-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">评价类算法</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ahp-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./entropy-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./critic-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">CRITIC 法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pca-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">主成分赋权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topsis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">TOPSIS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grey-relational.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rank-sum-ratio.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fuzzy-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dea.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">数据包络分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inequality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">目录</h2>
+   
+  <ul>
+<li>
+<a href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4" id="toc-算法步骤" class="nav-link active" data-scroll-target="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="header-section-number">9.1</span> 算法步骤</a>
+  <ul class="collapse">
+<li><a href="#%E7%BC%96%E7%A7%A9" id="toc-编秩" class="nav-link" data-scroll-target="#%E7%BC%96%E7%A7%A9"><span class="header-section-number">9.1.1</span> 编秩</a></li>
+  <li><a href="#%E8%AE%A1%E7%AE%97%E7%A7%A9%E5%92%8C%E6%AF%94%E5%B9%B6%E6%8E%92%E5%BA%8F" id="toc-计算秩和比并排序" class="nav-link" data-scroll-target="#%E8%AE%A1%E7%AE%97%E7%A7%A9%E5%92%8C%E6%AF%94%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="header-section-number">9.1.2</span> 计算秩和比并排序</a></li>
+  <li><a href="#%E7%A1%AE%E5%AE%9A-rsr-%E7%9A%84%E5%88%86%E5%B8%83%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%A6%82%E7%8E%87%E5%8D%95%E4%BD%8D" id="toc-确定-rsr-的分布转化为概率单位" class="nav-link" data-scroll-target="#%E7%A1%AE%E5%AE%9A-rsr-%E7%9A%84%E5%88%86%E5%B8%83%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%A6%82%E7%8E%87%E5%8D%95%E4%BD%8D"><span class="header-section-number">9.1.3</span> 确定 RSR 的分布（转化为概率单位）</a></li>
+  <li><a href="#%E6%8B%9F%E5%90%88%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B%E4%BC%B0%E8%AE%A1%E5%80%BC" id="toc-拟合线性回归模型计算模型估计值" class="nav-link" data-scroll-target="#%E6%8B%9F%E5%90%88%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B%E4%BC%B0%E8%AE%A1%E5%80%BC"><span class="header-section-number">9.1.4</span> 拟合线性回归模型，计算模型估计值</a></li>
+  <li><a href="#%E8%BF%9B%E8%A1%8C%E5%88%86%E6%A1%A3%E6%8E%92%E5%BA%8F" id="toc-进行分档排序" class="nav-link" data-scroll-target="#%E8%BF%9B%E8%A1%8C%E5%88%86%E6%A1%A3%E6%8E%92%E5%BA%8F"><span class="header-section-number">9.1.5</span> 进行分档排序</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E6%A1%88%E4%BE%8B%E5%AD%95%E4%BA%A7%E5%A6%87%E4%BF%9D%E5%81%A5%E8%AF%84%E4%BB%B7" id="toc-案例孕产妇保健评价" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E5%AD%95%E4%BA%A7%E5%A6%87%E4%BF%9D%E5%81%A5%E8%AF%84%E4%BB%B7"><span class="header-section-number">9.2</span> 案例：孕产妇保健评价</a>
+  <ul class="collapse">
+<li><a href="#%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE" id="toc-准备数据" class="nav-link" data-scroll-target="#%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE"><span class="header-section-number">9.2.1</span> 准备数据</a></li>
+  <li><a href="#%E7%A7%A9%E5%92%8C%E6%AF%94%E6%B3%95%E8%AF%84%E4%BB%B7" id="toc-秩和比法评价" class="nav-link" data-scroll-target="#%E7%A7%A9%E5%92%8C%E6%AF%94%E6%B3%95%E8%AF%84%E4%BB%B7"><span class="header-section-number">9.2.2</span> 秩和比法评价</a></li>
+  <li><a href="#%E9%87%8D%E7%8E%B0%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E7%BB%93%E6%9E%9C" id="toc-重现经典案例结果" class="nav-link" data-scroll-target="#%E9%87%8D%E7%8E%B0%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E7%BB%93%E6%9E%9C"><span class="header-section-number">9.2.3</span> 重现经典案例结果</a></li>
+  <li><a href="#%E6%9B%B4%E4%B8%80%E8%88%AC%E5%81%9A%E6%B3%95" id="toc-更一般做法" class="nav-link" data-scroll-target="#%E6%9B%B4%E4%B8%80%E8%88%AC%E5%81%9A%E6%B3%95"><span class="header-section-number">9.2.4</span> 更一般做法</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./rank-sum-ratio.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-rank-sum-ratio" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p><strong>秩和比法</strong>（Rank-sum ratio，RSR）由田凤调教授于 1988 年提出，集古典参数统计与近代非参数统计各自优点于一体的统计分析方法。RSR 法现在广泛地应用于医疗卫生、科技、经济等邻域的多指标综合评价、统计预测预报、鉴别分类、统计质量控制等方面。</p>
+<p>RSR 一般过程是将正向指标从小到大排序进行排名、负向指标从大到小排序进行排名，再计算秩和比，最后统计回归、分档排序。通过秩转换，获得无量纲统计量 RSR；在此基础上，运用参数统计分析的概念与方法，研究 RSR 的分布；以 RSR 值对评价对象的优劣直接排序或分档排序，从而对评价对象做出综合评价。</p>
+<p><strong>优点：</strong>以非参数法为基础，对指标的选择无特殊要求，适用于各种评价对象，由于计算时使用的数值是秩次，可以消除异常值的干扰</p>
+<p><strong>缺点：</strong>排序的主要依据是利用原始数据的秩次，最终算得的 RSR 值反映的是综合秩次的差距，而与原始数据的顺位间的差距程度大小无关，这样在指标转化为秩次是会失去一些原始数据的信息，如原始数据的大小差别等。当 RSR 值实际上不满足正态分布时，分档归类的结果与实际情况会有偏差，且只能回答分级程度是否有差别，不能进一步回答具体的差别情况。</p>
+<p><strong>RSR 法本质</strong></p>
+<p>RSR 只使用了数据的相对大小关系，而不真正运用数值本身，也能用于处理“好”、“较好”、“一般”这类模糊指标问题。只要选择恰当的权重，RSR 法也能转化为模糊综合评价。</p>
+<p>实际上，只要确定了权重，编好了秩，原始样本的排序就结束了，但是 RSR 综合评价法再进行了统计回归、分档排序，这一步实际上是通过将样本的秩次分布映射到正态分布曲线上，运用正态分布 <span class="math inline">\(3 \sigma\)</span> 原则或其它连续变量离散化方法进行分档。</p>
+<section id="算法步骤" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="算法步骤">
+<span class="header-section-number">9.1</span> 算法步骤</h2>
+<p>设有 <span class="math inline">\(n\)</span> 个评价对象，<span class="math inline">\(m\)</span> 个评价指标，形成原始指标数据矩阵 <span class="math inline">\(X\)</span>，其中 <span class="math inline">\(x_{ij}\)</span> 表示第 <span class="math inline">\(i\)</span> 个评价对象第 <span class="math inline">\(j\)</span> 个指标的值。</p>
+<section id="编秩" class="level3" data-number="9.1.1"><h3 data-number="9.1.1" class="anchored" data-anchor-id="编秩">
+<span class="header-section-number">9.1.1</span> 编秩</h3>
+<p><strong>整数秩</strong></p>
+<p>编出每个指标各评价对象的秩，其中正向指标从小到大编秩，负向指标从大到小编秩，同一指标数据相同者编平均秩。例如，某指标下第 3、4、5 名的值相同（原始应占秩次 3, 4, 5），则它们的秩次均为 <span class="math inline">\((3+4+5) / 3 = 4\)</span>。下一个不同的值则编为秩次 6。</p>
+<p><strong>非整数秩</strong></p>
+<p>用类似于线性插值的方式对指标值进行编秩，以改进 RSR 法编秩方法的不足，所编秩次与原指标值之间存在定量的线性对应关系，从而克服了 RSR 法秩次化时易损失原指标值定量信息的缺点。</p>
+<p>对于正向指标： <span class="math display">\[
+R_{ij}=1+(n-1)\dfrac{x_{ij}-\min\limits_i x_{ij}}{\max\limits_i x_{ij}-\min\limits_i x_{ij}}
+\]</span></p>
+<p>对于负向指标： <span class="math display">\[
+R_{ij}=1+(n-1)\dfrac{\max\limits_i x_{ij}-x_{ij}}{\max\limits_i x_{ij}-\min\limits_i x_{ij}}
+\]</span></p>
+<p>非整数秩是将传统整数排名（如1, 2, 3, …）推广到连续区间的一种方法，其核心在于根据评价对象在数据中的相对位置，赋予其介于 <span class="math inline">\(1\)</span> 与 <span class="math inline">\(n\)</span> 之间的实数值，而非简单的整数秩次，从而更精细地刻画排名信息。该方法本质上是对原始数据进行线性归一化到 <span class="math inline">\([1,n]\)</span> （即线性插值处理），使排名由跳跃式的离散值转变为反映个体间细微差异的连续变量，提升综合评价的灵敏度与准确性。</p>
+<p>该步得到秩矩阵，记为 <span class="math inline">\(R=(R_{ij})_{m\times n}\)</span>。</p>
+</section><section id="计算秩和比并排序" class="level3" data-number="9.1.2"><h3 data-number="9.1.2" class="anchored" data-anchor-id="计算秩和比并排序">
+<span class="header-section-number">9.1.2</span> 计算秩和比并排序</h3>
+<p>秩和比 <span class="math inline">\(RSR_i\)</span> 定义为第 <span class="math inline">\(i\)</span> 个评价对象在所有 <span class="math inline">\(n\)</span> 个指标下的秩和相对于最大可能秩次（为 <span class="math inline">\(n\)</span> ）的比例： <span class="math display">\[
+RSR_i=\frac{1}{n}\sum^m_{j=1}w_jR_{ij}
+\]</span> 其中，<span class="math inline">\(w_j\)</span> 为第 <span class="math inline">\(j\)</span> 个指标的权重，满足 <span class="math inline">\(\sum_j=1^m w_j=1\)</span>。</p>
+<p>当指标权重相同时，<span class="math inline">\(w_j\equiv\frac1m\)</span>，此时秩和比可以表示为： <span class="math display">\[
+RSR_i=\frac{1}{mn}\sum^m_{j=1}R_{ij}
+\]</span></p>
+</section><section id="确定-rsr-的分布转化为概率单位" class="level3" data-number="9.1.3"><h3 data-number="9.1.3" class="anchored" data-anchor-id="确定-rsr-的分布转化为概率单位">
+<span class="header-section-number">9.1.3</span> 确定 RSR 的分布（转化为概率单位）</h3>
+<p>RSR 的分布是指用概率单位 Probit 表达的值特定的累计频率。 Probit 模型是一种广义的线性模型，服从正态分布。其转换方法为：</p>
+<ol type="1">
+<li>编制 RSR 频数分布表，列出各组频数 <span class="math inline">\(f_i\)</span>，计算各组累计频数 <span class="math inline">\(cf_i\)</span>；</li>
+<li>确定各组 RSR 的秩次范围及平均秩次；</li>
+<li>计算累计频率 <span class="math inline">\(p_i=cf_i/n\times100\%\)</span>，最后一项记为 <span class="math inline">\(1-\frac1{4n}\)</span> 进行修正。（使用离散分布作为正态分布的近似计算中，作些修正可以提高精度。这里若不做修正，得到的 <span class="math inline">\(Probit\to\infty\)</span>，不能用于计算）</li>
+<li>将累计频率换算为概率单位 <span class="math inline">\(\mathrm{Probit}_i\)</span>，为累计频率对应的标准正态分布的 <span class="math inline">\(p_i\)</span> 分位数加 <span class="math inline">\(5\)</span>。|</li>
+</ol></section><section id="拟合线性回归模型计算模型估计值" class="level3" data-number="9.1.4"><h3 data-number="9.1.4" class="anchored" data-anchor-id="拟合线性回归模型计算模型估计值">
+<span class="header-section-number">9.1.4</span> 拟合线性回归模型，计算模型估计值</h3>
+<p>以累积频率所对应的概率单位 Probit 为自变量，以 RSR 值为因变量，计算直线回归方程，即： <span class="math display">\[
+RSR = a+b * Probit
+\]</span></p>
+<p>回归方程需要做常规的回归诊断保证模型可用（略）。</p>
+<p>计算线性回归模型的预测值： <span class="math display">\[
+RSRfit_i = a + b * \text{Probit}_i
+\]</span></p>
+</section><section id="进行分档排序" class="level3" data-number="9.1.5"><h3 data-number="9.1.5" class="anchored" data-anchor-id="进行分档排序">
+<span class="header-section-number">9.1.5</span> 进行分档排序</h3>
+<p>根据 <span class="math inline">\(RSRfit_i\)</span> 值对评价对象进行分档排序，分档数由研究者根据实际情况决定。</p>
+<p>分档排序，实际上就是连续数值离散化，有很多种方法，只要合理就行。</p>
+</section></section><section id="案例孕产妇保健评价" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="案例孕产妇保健评价">
+<span class="header-section-number">9.2</span> 案例：孕产妇保健评价</h2>
+<p>加载包：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="准备数据" class="level3" data-number="9.2.1"><h3 data-number="9.2.1" class="anchored" data-anchor-id="准备数据">
+<span class="header-section-number">9.2.1</span> 准备数据</h3>
+<p>对某省 <span class="math inline">\(10\)</span> 个地区孕产妇保健工作就 <span class="math inline">\(3\)</span> 个指标（产前检查率(<span class="math inline">\(\%\)</span>)、 孕妇死亡率(<span class="math inline">\(1/10\)</span>万)、围产儿死亡率(<span class="math inline">\(\%\)</span>)），进行秩和比综合评价。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>df <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="at">ID =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>],</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="at">x1 =</span> <span class="fu">c</span>(<span class="fl">99.54</span>,<span class="fl">96.52</span>,<span class="fl">99.36</span>,<span class="fl">92.83</span>,<span class="fl">91.71</span>,<span class="fl">95.35</span>,<span class="fl">96.09</span>,<span class="fl">99.27</span>,<span class="fl">94.76</span>,<span class="fl">84.80</span>),</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="at">x2 =</span> <span class="fu">c</span>(<span class="fl">60.27</span>,<span class="fl">59.67</span>,<span class="fl">43.91</span>,<span class="fl">58.99</span>,<span class="fl">35.40</span>,<span class="fl">44.71</span>,<span class="fl">49.81</span>,<span class="fl">31.69</span>,<span class="fl">22.91</span>,<span class="fl">81.49</span>),</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">x3 =</span> <span class="fu">c</span>(<span class="fl">16.15</span>,<span class="fl">20.10</span>,<span class="fl">15.60</span>,<span class="fl">17.04</span>,<span class="fl">15.01</span>,<span class="fl">13.93</span>,<span class="fl">17.43</span>,<span class="fl">13.89</span>,<span class="fl">19.87</span>,<span class="fl">23.63</span>))</span>
+<span id="cb2-6"><a href="#cb2-6"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   ID       x1    x2    x3
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 A      99.5  60.3  16.2
+ 2 B      96.5  59.7  20.1
+ 3 C      99.4  43.9  15.6
+ 4 D      92.8  59.0  17.0
+ 5 E      91.7  35.4  15.0
+ 6 F      95.4  44.7  13.9
+ 7 G      96.1  49.8  17.4
+ 8 H      99.3  31.7  13.9
+ 9 I      94.8  22.9  19.9
+10 J      84.8  81.5  23.6</code></pre>
+</div>
+</div>
+<p>数据预处理，<code>x2</code> 和 <code>x3</code> 是负向指标，取倒数即可（不影响编秩）：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df1 <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(x2<span class="sc">:</span>x3, \(x) <span class="dv">1</span> <span class="sc">/</span> x))</span>
+<span id="cb4-3"><a href="#cb4-3"></a>df1</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   ID       x1     x2     x3
+   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 A      99.5 0.0166 0.0619
+ 2 B      96.5 0.0168 0.0498
+ 3 C      99.4 0.0228 0.0641
+ 4 D      92.8 0.0170 0.0587
+ 5 E      91.7 0.0282 0.0666
+ 6 F      95.4 0.0224 0.0718
+ 7 G      96.1 0.0201 0.0574
+ 8 H      99.3 0.0316 0.0720
+ 9 I      94.8 0.0436 0.0503
+10 J      84.8 0.0123 0.0423</code></pre>
+</div>
+</div>
+</section><section id="秩和比法评价" class="level3" data-number="9.2.2"><h3 data-number="9.2.2" class="anchored" data-anchor-id="秩和比法评价">
+<span class="header-section-number">9.2.2</span> 秩和比法评价</h3>
+<p><code>mathmodels</code> 包提供了 <code>rank_sum_ratio()</code> 函数实现用秩和比法综合评价，基本语法：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">rank_sum_ratio</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">"int"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>
+<code>data</code> 为原始指标数据，首列为评价对象 ID；</li>
+<li>
+<code>w</code> 为指标权重，可以通过各种赋权法得到，默认是等权重；</li>
+<li>
+<code>method</code> 设置编整数秩（<code>"int"</code>）还是非整数秩（<code>"non-int"</code>） 。</li>
+</ul></section><section id="重现经典案例结果" class="level3" data-number="9.2.3"><h3 data-number="9.2.3" class="anchored" data-anchor-id="重现经典案例结果">
+<span class="header-section-number">9.2.3</span> 重现经典案例结果</h3>
+<p>采用等指标权重、编整数秩：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>res <span class="ot">=</span> <span class="fu">rank_sum_ratio</span>(df1)  </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>查看结果表（包含中间结果）：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>res<span class="sc">$</span>resultTable</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 8
+   ID      RSR  barR     f  sumf barRn Probit RSRfit
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 J     0.1     1       1     1 0.1     3.72  0.216
+ 2 B     0.4     2.5     2     3 0.25    4.33  0.350
+ 3 D     0.4     2.5     2     3 0.25    4.33  0.350
+ 4 G     0.5     4       1     4 0.4     4.75  0.444
+ 5 I     0.567   5       1     5 0.5     5     0.500
+ 6 A     0.6     6.5     2     7 0.65    5.39  0.585
+ 7 E     0.6     6.5     2     7 0.65    5.39  0.585
+ 8 F     0.667   8       1     8 0.8     5.84  0.686
+ 9 C     0.767   9       1     9 0.9     6.28  0.784
+10 H     0.9    10       1    10 0.975   6.96  0.934</code></pre>
+</div>
+</div>
+<ul>
+<li>查看编秩结果：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res<span class="sc">$</span>rankTable</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   ID       x1    x2    x3
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 A        10     2     6
+ 2 B         7     3     2
+ 3 C         9     7     7
+ 4 D         3     4     5
+ 5 E         2     8     8
+ 6 F         5     6     9
+ 7 G         6     5     4
+ 8 H         8     9    10
+ 9 I         4    10     3
+10 J         1     1     1</code></pre>
+</div>
+</div>
+<ul>
+<li>查看线性回归模型结果：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>res<span class="sc">$</span>reg <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = RSR ~ Probit, data = rltTable)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.115792 -0.023458 -0.001329  0.051288  0.066768 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.60855    0.12516  -4.862  0.00282 ** 
+Probit       0.22169    0.02329   9.520 7.66e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.0653 on 6 degrees of freedom
+Multiple R-squared:  0.9379,    Adjusted R-squared:  0.9276 
+F-statistic: 90.63 on 1 and 6 DF,  p-value: 7.662e-05</code></pre>
+</div>
+</div>
+<p>可以进一步提取回归模型的各种结果（略）。</p>
+</section><section id="更一般做法" class="level3" data-number="9.2.4"><h3 data-number="9.2.4" class="anchored" data-anchor-id="更一般做法">
+<span class="header-section-number">9.2.4</span> 更一般做法</h3>
+<ul>
+<li>指标权重采用熵权法，注意应该根据原始数据计算：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>rlt <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="sc">-</span><span class="dv">1</span>], <span class="fu">c</span>(<span class="st">"+"</span>,<span class="st">"-"</span>,<span class="st">"-"</span>))</span>
+<span id="cb14-2"><a href="#cb14-2"></a>rlt<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x1        x2        x3 
+0.2945205 0.3631078 0.3423717 </code></pre>
+</div>
+</div>
+<ul>
+<li>采用非整数秩，注意，此时负向指标正向化处理更适合采用”最大值减”而不是”取倒数”：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>df2 <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(x2<span class="sc">:</span>x3, \(x) <span class="fu">max</span>(x) <span class="sc">-</span> x))</span>
+<span id="cb16-3"><a href="#cb16-3"></a>res <span class="ot">=</span> <span class="fu">rank_sum_ratio</span>(df2, rlt<span class="sc">$</span>w, <span class="st">"non-int"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>df2</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   ID       x1    x2    x3
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 A      99.5  21.2  7.48
+ 2 B      96.5  21.8  3.53
+ 3 C      99.4  37.6  8.03
+ 4 D      92.8  22.5  6.59
+ 5 E      91.7  46.1  8.62
+ 6 F      95.4  36.8  9.7 
+ 7 G      96.1  31.7  6.2 
+ 8 H      99.3  49.8  9.74
+ 9 I      94.8  58.6  3.76
+10 J      84.8   0    0   </code></pre>
+</div>
+</div>
+<ul>
+<li>查看结果表：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>res<span class="sc">$</span>resultTable</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 8
+   ID      RSR  barR     f  sumf barRn Probit RSRfit
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 J     0.1       1     1     1 0.1     3.72  0.366
+ 2 B     0.544     2     1     2 0.2     4.16  0.456
+ 3 D     0.578     3     1     3 0.3     4.48  0.521
+ 4 G     0.676     4     1     4 0.4     4.75  0.576
+ 5 A     0.720     5     1     5 0.5     5     0.627
+ 6 I     0.725     6     1     6 0.6     5.25  0.679
+ 7 E     0.754     7     1     7 0.7     5.52  0.734
+ 8 F     0.802     8     1     8 0.8     5.84  0.798
+ 9 C     0.826     9     1     9 0.9     6.28  0.888
+10 H     0.946    10     1    10 0.975   6.96  1.03 </code></pre>
+</div>
+</div>
+<p>其它结果略。</p>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "已复制");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "已复制");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./grey-relational.html" class="pagination-link" aria-label="灰色关联分析">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./fuzzy-eval.html" class="pagination-link" aria-label="模糊综合评价">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

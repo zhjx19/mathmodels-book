@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>13&nbsp; 系统评价 – mathmodels 包使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./inequality.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script><script>
+MathJax ={
+  tex: {
+    macros: {
+      bm: ["{\\boldsymbol #1}",1],
+    }
+  }
+};
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./system-eval.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">mathmodels 包使用手册</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">前言</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./comp-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">评价类算法</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ahp-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./entropy-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./critic-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">CRITIC 法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pca-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">主成分赋权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topsis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">TOPSIS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grey-relational.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rank-sum-ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fuzzy-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dea.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">数据包络分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inequality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-eval.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">目录</h2>
+   
+  <ul>
+<li>
+<a href="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-耦合协调度" class="nav-link active" data-scroll-target="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">13.1</span> 耦合协调度</a>
+  <ul class="collapse">
+<li><a href="#%E8%80%A6%E5%90%88%E5%BA%A6" id="toc-耦合度" class="nav-link" data-scroll-target="#%E8%80%A6%E5%90%88%E5%BA%A6"><span class="header-section-number">13.1.1</span> 耦合度</a></li>
+  <li><a href="#%E5%8D%8F%E8%B0%83%E6%8C%87%E6%95%B0" id="toc-协调指数" class="nav-link" data-scroll-target="#%E5%8D%8F%E8%B0%83%E6%8C%87%E6%95%B0"><span class="header-section-number">13.1.2</span> 协调指数</a></li>
+  <li><a href="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6-1" id="toc-耦合协调度-1" class="nav-link" data-scroll-target="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6-1"><span class="header-section-number">13.1.3</span> 耦合协调度</a></li>
+  </ul>
+</li>
+  <li><a href="#%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-障碍度" class="nav-link" data-scroll-target="#%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">13.2</span> 障碍度</a></li>
+  <li>
+<a href="#%E6%A1%88%E4%BE%8B%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-案例耦合协调度" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">13.3</span> 案例：耦合协调度</a>
+  <ul class="collapse">
+<li><a href="#%E5%88%86%E5%88%AB%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%B3%BB%E7%BB%9F" id="toc-分别综合评价每个子系统" class="nav-link" data-scroll-target="#%E5%88%86%E5%88%AB%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="header-section-number">13.3.1</span> 分别综合评价每个子系统</a></li>
+  <li><a href="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-批量计算耦合协调度" class="nav-link" data-scroll-target="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">13.3.2</span> 批量计算耦合协调度</a></li>
+  <li><a href="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-批量计算障碍度" class="nav-link" data-scroll-target="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">13.3.3</span> 批量计算障碍度</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./system-eval.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-system-eval" class="quarto-section-identifier"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="耦合协调度" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="耦合协调度">
+<span class="header-section-number">13.1</span> 耦合协调度</h2>
+<p><strong>耦合协调度</strong>，是分析事物协调发展水平的重要工具。其中，耦合度反映两个或多个系统间的相互作用与影响，体现系统间协调发展的动态关联关系，能够量化系统间的相互依赖与制约程度；协调度则衡量耦合关系中良性耦合的程度，反映协调状况的优劣。</p>
+<p>在经济地理学研究中，耦合协调度模型应用广泛。该学科主要关注由多个子系统（如产业系统、技术创新系统、社会文化系统、生态环境系统等）构成的区域经济复杂系统。因此，该模型成为分析区域经济系统中不同子系统间关联性、协同性、协调性及其对区域经济发展影响的常用方法。</p>
+<p>然而，区域经济中多系统间的耦合协调关系往往难以通过耦合协调度模型简单揭示。该模型仅能从宏观层面反映区域经济系统中不同子系统间的耦合协调程度，存在明显局限性：既无法深入分析各子系统内部的结构、功能和动力机制，也难以充分考虑多系统间的非线性关系、反馈机制和时滞效应等复杂因素。特别是在缺乏对两系统间关系明确认知的情况下，仅通过简单分析其共同发展态势难以获得深刻洞察，需要结合实际情况辩证运用这一方法。建议借助理论分析，深化系统间关系的机理阐释与理论模型构建。</p>
+<p>耦合协调度共涉及 3 个指标值的计算，分别是耦合度 <span class="math inline">\(C\)</span> 值，协调指数 <span class="math inline">\(T\)</span> 值，耦合协调度 <span class="math inline">\(D\)</span> 值。并且最终结合耦合协调度 <span class="math inline">\(D\)</span> 值和协调等级划分标准，最终得出各项的耦合协调程度。</p>
+<section id="耦合度" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="耦合度">
+<span class="header-section-number">13.1.1</span> 耦合度</h3>
+<p>耦合度的概念源自物理学，用来描述两个或多个系统之间的相互作用与关联性。在社会经济领域，耦合度被用来评估诸如基础设施与公共服务、经济发展与环境保护等不同系统之间的相互影响。</p>
+<p>简单来说，耦合度越高，意味着两个系统之间的互动越强，彼此的促进作用越明显。例如，当农村基础设施的改善带动了公共服务水平的提升，反过来，公共服务的提高又促进了基础设施的进一步完善，这样的互动关系就会表现为一个较高的耦合度。</p>
+<p>耦合度指两个或两个以上系统之间的相互作用影响，实现协调发展的动态关联关系，可以反映系统之间的相互依赖相互制约程度。<span class="math inline">\(n\)</span> 个系统相互作用耦合度可以定义为： <span class="math display">\[
+C_n = \frac{(u_1u_2\cdots u_n)^{1/n}}{(u_1+u_2+\cdots+u_n)/n}
+\]</span></p>
+<p>其中，<span class="math inline">\(u_i\)</span> 为第 <span class="math inline">\(i\)</span> 个子系统的标准化值，其分布区间为 <span class="math inline">\([0,1]\)</span>。<span class="math inline">\(C\)</span> 值越大，子系统间离散程度越小，耦合度越高；反之，子系统间耦合度越低。</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th style="text-align: center;">耦合度区间</th>
+<th style="text-align: center;">耦合程度</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">[0, 0.3)</td>
+<td style="text-align: center;">低度耦合</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.3, 0.6)</td>
+<td style="text-align: center;">中低度耦合</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">[0.6, 0.8)</td>
+<td style="text-align: center;">中高度耦合</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.8, 1.0]</td>
+<td style="text-align: center;">高度耦合</td>
+</tr>
+</tbody>
+</table>
+<p>耦合度取决于多个系统的发展程度及其相互关系。比如，当两个系统都发展得很好且相互促进时，耦合度接近于 <span class="math inline">\(1\)</span>；反之，当两个系统中有一个发展滞后或彼此关联性弱时，耦合度会很低。</p>
+</section><section id="协调指数" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="协调指数">
+<span class="header-section-number">13.1.2</span> 协调指数</h3>
+<p><strong>协调指数</strong>，是各子系统标准化值的加权综合得分，反映系统整体的协调发展程度。其计算公式为： <span class="math display">\[
+T = \sum_{i=1}^n w_i u_i
+\]</span> 其中，<span class="math inline">\(w_i\)</span> 为各子系统的权重，满足 <span class="math inline">\(\sum\limits_{i=1}^n w_i = 1\)</span>。</p>
+</section><section id="耦合协调度-1" class="level3" data-number="13.1.3"><h3 data-number="13.1.3" class="anchored" data-anchor-id="耦合协调度-1">
+<span class="header-section-number">13.1.3</span> 耦合协调度</h3>
+<p>耦合度虽然能够反映系统间的互动强度，但无法全面描述系统的整体发展状况。因此，协调度模型应运而生。该模型不仅考量系统间的相互作用，更关注其是否实现和谐发展。</p>
+<p><strong>耦合协调度</strong>，是综合耦合度与协调指数的复合指标，定义为二者的几何平均： <span class="math display">\[
+D = \sqrt{C T}
+\]</span></p>
+<p>耦合协调度的取值范围为 <span class="math inline">\([0,1]\)</span>，<span class="math inline">\(D\)</span> 值越高，耦合协调程度越高，两系统发展越协调，反之亦然。</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th style="text-align: center;">协调度区间</th>
+<th style="text-align: center;">表示的意义</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">[0, 0.1)</td>
+<td style="text-align: center;">极度失调衰退类</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.1, 0.2)</td>
+<td style="text-align: center;">严重失调衰退类</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">[0.2, 0.3)</td>
+<td style="text-align: center;">中度失调衰退类</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.3, 0.4)</td>
+<td style="text-align: center;">轻度失调衰退类</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">[0.4, 0.5)</td>
+<td style="text-align: center;">濒临失调衰退类</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.5, 0.6)</td>
+<td style="text-align: center;">勉强协调发展类</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">[0.6, 0.7)</td>
+<td style="text-align: center;">初级协调发展类</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.7, 0.8)</td>
+<td style="text-align: center;">中级协调发展类</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">[0.8, 0.9)</td>
+<td style="text-align: center;">良好协调发展类</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">[0.9, 1]</td>
+<td style="text-align: center;">优质协调发展类</td>
+</tr>
+</tbody>
+</table></section></section><section id="障碍度" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="障碍度">
+<span class="header-section-number">13.2</span> 障碍度</h2>
+<p><strong>障碍度模型</strong>，旨在评估各指标或因素对系统协调发展的制约程度，识别影响协调水平提升的关键瓶颈。该模型常与耦合协调度模型结合使用，用于诊断协调水平偏低的内在原因，具有较强的解释力和实践指导价值。例如，在区域经济发展研究中，可通过障碍度分析判断经济活力不足、协调机制缺失，还是绿色发展滞后等因素构成主要制约。</p>
+<p>作为耦合协调度模型的有益补充，障碍度模型有助于深入揭示系统内部的非均衡问题，为制定精准化、针对性的优化策略提供科学依据。</p>
+<p>障碍度模型包含三个关键概念，用于识别制约系统协调发展的主要因素：</p>
+<ul>
+<li><p><strong>指标贡献度</strong>：反映各指标对系统整体发展目标（如协调发展）的影响程度。通常由其权重体现，权重越高，表明该指标在系统中的作用越重要。例如，GDP 增长可能在经济子系统中具有较高的贡献度。</p></li>
+<li><p><strong>指标偏差度</strong>：衡量指标实际表现与其理想状态之间的差距。标准化值越低（接近0），表示实际水平与目标差距越大，偏差度越高。例如，若环境保护水平显著低于预期目标，则其偏差度较大。</p></li>
+<li><p><strong>障碍度</strong>：综合考虑指标的<strong>权重（贡献度）</strong>和<strong>与理想值的偏离程度（偏差度）</strong>，量化其对系统协调发展的阻碍作用。障碍度越高，说明该指标是制约系统协调的关键瓶颈。</p></li>
+</ul>
+<p>这些概念有助于研究者识别优先改进的领域，广泛应用于政策评估、区域规划与可持续发展分析。</p>
+<p>障碍度模型通常基于多层级指标体系。设有 <span class="math inline">\(m\)</span> 个一级指标，第 <span class="math inline">\(j\)</span> 个一级指标下包含 <span class="math inline">\(m_j\)</span> 个二级指标（注意：各一级指标下的二级指标数量可不同）。障碍度计算步骤如下：</p>
+<ul>
+<li>**二级指标 <span class="math inline">\(j\)</span> 在一级指标 <span class="math inline">\(i\)</span> 下的障碍度： <span class="math display">\[
+O_{ij} = (1 - X_{ij}) \cdot w_{ij}
+\]</span> 其中：
+<ul>
+<li>
+<span class="math inline">\(X_{ij} \in [0,1]\)</span> 是第 <span class="math inline">\(ij\)</span>个指标的标准化值（且已正向化处理）；</li>
+<li>
+<span class="math inline">\(w_{ij}\)</span> 是该指标的权重，通常通过熵值法、AHP 或主成分分析等方法确定；</li>
+<li>
+<span class="math inline">\((1 - X_{ij})\)</span> 表示该指标与理想状态的偏离程度。</li>
+</ul>
+</li>
+</ul>
+<blockquote class="blockquote">
+<p>⚠️ <strong>说明</strong>：障碍度本身是相对值，用于比较各指标的阻碍作用大小，一般不进行全局归一化**，通过比较其数值大小判断影响程度。</p>
+</blockquote>
+<ul>
+<li>
+<strong>一级指标 <span class="math inline">\(i\)</span> 的总体障碍度</strong>： <span class="math display">\[
+U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
+\]</span> 即该一级指标下所有二级指标障碍度的加总，用于评估该子系统对整体协调发展的阻碍程度。</li>
+</ul>
+<p>最终，可根据 <span class="math inline">\(O_{ij}\)</span> 和 <span class="math inline">\(U_i\)</span> 的大小排序，识别出最主要的障碍因素。</p>
+</section><section id="案例耦合协调度" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="案例耦合协调度">
+<span class="header-section-number">13.3</span> 案例：耦合协调度</h2>
+<p>加载包：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>使用模拟数据：中国东部沿海地区 8 个省市“科技-经济-生态”系统协调发展研究（2015–2024年）</p>
+<ul>
+<li>科技创新子系统：R_D投入强度, 高新技术企业数, 专利授权量</li>
+<li>经济发展子系统：GDP总量, 人均可支配收入, 产业结构高级化</li>
+<li>生态环境子系统：空气质量优良率, 单位GDP能耗, 绿地覆盖率</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>cdev <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/cdev-sim.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>cdev</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 11
+   地区   年份 R_D投入强度 高新技术企业数 专利授权量 GDP总量 人均可支配收入
+   &lt;chr&gt; &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;
+ 1 上海   2015        3.9            8820       17.7   26881          42655
+ 2 上海   2016        4.44           9551       18     29300          44731
+ 3 上海   2017        4.53          10000       20.9   31255          47753
+ 4 上海   2018        4.44          10406       23.3   33185          50151
+ 5 上海   2019        4.66          11044       24.3   34222          52690
+ 6 上海   2020        5.07          11561       26.8   36722          54781
+ 7 上海   2021        4.78          12146       29.8   38388          57669
+ 8 上海   2022        5.67          12769       30.9   40910          59499
+ 9 上海   2023        5.53          13561       33.8   42373          62583
+10 上海   2024        5.15          14016       35.7   44758          65044
+# ℹ 70 more rows
+# ℹ 4 more variables: 产业结构高级化 &lt;dbl&gt;, 空气质量优良率 &lt;dbl&gt;,
+#   单位GDP能耗 &lt;dbl&gt;, 绿地覆盖率 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<section id="分别综合评价每个子系统" class="level3" data-number="13.3.1"><h3 data-number="13.3.1" class="anchored" data-anchor-id="分别综合评价每个子系统">
+<span class="header-section-number">13.3.1</span> 分别综合评价每个子系统</h3>
+<ul>
+<li>用熵权法分别综合评价每个子系统</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>tech <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">3</span>))</span>
+<span id="cb4-2"><a href="#cb4-2"></a>eco <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">3</span>))</span>
+<span id="cb4-3"><a href="#cb4-3"></a>env <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">9</span><span class="sc">:</span><span class="dv">11</span>], <span class="fu">c</span>(<span class="st">"+"</span>,<span class="st">"-"</span>,<span class="st">"+"</span>))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>查看指标权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>rlt <span class="ot">=</span> <span class="fu">list</span>(tech, eco, env)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">map</span>(rlt, <span class="st">"w"</span>) <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   R_D投入强度 高新技术企业数     专利授权量        GDP总量 人均可支配收入 
+     0.3215465      0.3414780      0.3369755      0.3098166      0.2481369 
+产业结构高级化 空气质量优良率    单位GDP能耗     绿地覆盖率 
+     0.4420465      0.3934835      0.3515999      0.2549167 </code></pre>
+</div>
+</div>
+<ul>
+<li>计算三个子系统的综合得分</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>S <span class="ot">=</span> <span class="fu">map_dfc</span>(rlt, <span class="st">"s"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">set_names</span>(<span class="st">"科技"</span>, <span class="st">"经济"</span>, <span class="st">"生态"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`
+• `` -&gt; `...2`
+• `` -&gt; `...3`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>S <span class="ot">=</span> <span class="fu">bind_cols</span>(cdev[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], S)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>S</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 5
+   地区   年份  科技  经济  生态
+   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 上海   2015  36.2  50.2  40.6
+ 2 上海   2016  41.9  52.7  42.2
+ 3 上海   2017  45.1  57.9  46.4
+ 4 上海   2018  46.4  60.7  55.4
+ 5 上海   2019  49.8  62.9  58.7
+ 6 上海   2020  55.4  65.8  61.3
+ 7 上海   2021  55.9  71.1  68.0
+ 8 上海   2022  64.5  72.8  76.1
+ 9 上海   2023  66.5  75.2  80.1
+10 上海   2024  65.4  77.3  79.8
+# ℹ 70 more rows</code></pre>
+</div>
+</div>
+</section><section id="批量计算耦合协调度" class="level3" data-number="13.3.2"><h3 data-number="13.3.2" class="anchored" data-anchor-id="批量计算耦合协调度">
+<span class="header-section-number">13.3.2</span> 批量计算耦合协调度</h3>
+<ul>
+<li>归一化子系统得分</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>S <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, rescale))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>按年份分组，分别计算耦合协调度</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>S <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">coupling_degree</span>(d, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
+<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 5
+    年份 地区  coupling  coord coupling_coord
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2015 上海  0.965    0.466         0.671  
+ 2  2015 北京  0.953    0.449         0.655  
+ 3  2015 天津  0.00201  0.0245        0.00701
+ 4  2015 山东  0.00106  0.0940        0.00998
+ 5  2015 广东  0.987    0.349         0.587  
+ 6  2015 江苏  0.786    0.193         0.389  
+ 7  2015 浙江  0.951    0.302         0.536  
+ 8  2015 福建  0.000820 0.260         0.0146 
+ 9  2016 上海  0.970    0.507         0.701  
+10  2016 北京  0.971    0.510         0.703  
+# ℹ 70 more rows</code></pre>
+</div>
+</div>
+</section><section id="批量计算障碍度" class="level3" data-number="13.3.3"><h3 data-number="13.3.3" class="anchored" data-anchor-id="批量计算障碍度">
+<span class="header-section-number">13.3.3</span> 批量计算障碍度</h3>
+<ul>
+<li>按年份分组，分别计算二级指标障碍度</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>res <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">obstacle_degree</span>(d, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">unnest</span>(model)</span>
+<span id="cb14-6"><a href="#cb14-6"></a>res</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 5
+    年份 地区   科技  经济  生态
+   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  2015 上海  0.204 0.117 0.213
+ 2  2015 北京  0.204 0.118 0.229
+ 3  2015 天津  0.325 0.333 0.317
+ 4  2015 山东  0.320 0.253 0.333
+ 5  2015 广东  0.194 0.217 0.240
+ 6  2015 江苏  0.265 0.227 0.316
+ 7  2015 浙江  0.265 0.245 0.188
+ 8  2015 福建  0.333 0.281 0.125
+ 9  2016 上海  0.180 0.107 0.207
+10  2016 北京  0.174 0.108 0.208
+# ℹ 70 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>若要查看每年 <code>科技</code> 前三大的障碍度</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">slice_max</span>(科技, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 5
+    年份 地区   科技  经济   生态
+   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1  2015 福建  0.333 0.281 0.125 
+ 2  2015 天津  0.325 0.333 0.317 
+ 3  2015 山东  0.320 0.253 0.333 
+ 4  2016 天津  0.324 0.327 0.313 
+ 5  2016 福建  0.320 0.280 0.114 
+ 6  2016 山东  0.304 0.238 0.317 
+ 7  2017 天津  0.325 0.318 0.294 
+ 8  2017 山东  0.310 0.223 0.306 
+ 9  2017 福建  0.289 0.261 0.0979
+10  2018 天津  0.304 0.313 0.272 
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>若要查看每个子系统前三大的障碍度，先宽变长</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">pivot_longer</span>(科技<span class="sc">:</span>生态, <span class="at">names_to =</span> <span class="st">"子系统"</span>, <span class="at">values_to =</span> <span class="st">"障碍度"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">slice_max</span>(障碍度, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> <span class="fu">c</span>(年份, 子系统))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 90 × 4
+    年份 地区  子系统 障碍度
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1  2015 福建  科技    0.333
+ 2  2015 天津  科技    0.325
+ 3  2015 山东  科技    0.320
+ 4  2015 天津  经济    0.333
+ 5  2015 福建  经济    0.281
+ 6  2015 山东  经济    0.253
+ 7  2015 山东  生态    0.333
+ 8  2015 天津  生态    0.317
+ 9  2015 江苏  生态    0.316
+10  2016 天津  科技    0.324
+# ℹ 80 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>批量计算一级指标障碍度 <span class="math inline">\(U_i\)</span>，即按年份分组汇总列和</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(科技<span class="sc">:</span>生态, sum), <span class="at">.by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+    年份  科技  经济  生态
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  2015  2.11 1.79  1.96 
+ 2  2016  1.91 1.70  1.86 
+ 3  2017  1.86 1.58  1.70 
+ 4  2018  1.71 1.47  1.56 
+ 5  2019  1.60 1.37  1.46 
+ 6  2020  1.50 1.28  1.34 
+ 7  2021  1.38 1.17  1.20 
+ 8  2022  1.26 1.07  1.00 
+ 9  2023  1.18 0.968 0.954
+10  2024  1.12 0.865 0.821</code></pre>
+</div>
+</div>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "已复制");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "已复制");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./inequality.html" class="pagination-link" aria-label="不平等度量">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="参考文献">
+        <span class="nav-page-text">参考文献</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

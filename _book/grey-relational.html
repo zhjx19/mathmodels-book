@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>8&nbsp; 灰色关联分析 – mathmodels 包使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./rank-sum-ratio.html" rel="next">
+<link href="./topsis.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script><script>
+MathJax ={
+  tex: {
+    macros: {
+      bm: ["{\\boldsymbol #1}",1],
+    }
+  }
+};
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./grey-relational.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">mathmodels 包使用手册</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">前言</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./comp-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">评价类算法</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ahp-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./entropy-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./critic-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">CRITIC 法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pca-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">主成分赋权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topsis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">TOPSIS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grey-relational.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rank-sum-ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fuzzy-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dea.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">数据包络分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inequality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">目录</h2>
+   
+  <ul>
+<li>
+<a href="#%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6" id="toc-灰色关联度" class="nav-link active" data-scroll-target="#%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6"><span class="header-section-number">8.1</span> 灰色关联度</a>
+  <ul class="collapse">
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%97%A0%E9%87%8F%E7%BA%B2%E5%A4%84%E7%90%86" id="toc-数据无量纲处理" class="nav-link" data-scroll-target="#%E6%95%B0%E6%8D%AE%E6%97%A0%E9%87%8F%E7%BA%B2%E5%A4%84%E7%90%86"><span class="header-section-number">8.1.1</span> 数据无量纲处理</a></li>
+  <li><a href="#%E8%AE%A1%E7%AE%97%E5%85%B3%E8%81%94%E7%B3%BB%E6%95%B0" id="toc-计算关联系数" class="nav-link" data-scroll-target="#%E8%AE%A1%E7%AE%97%E5%85%B3%E8%81%94%E7%B3%BB%E6%95%B0"><span class="header-section-number">8.1.2</span> 计算关联系数</a></li>
+  <li><a href="#%E8%AE%A1%E7%AE%97%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6" id="toc-计算灰色关联度" class="nav-link" data-scroll-target="#%E8%AE%A1%E7%AE%97%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6"><span class="header-section-number">8.1.3</span> 计算灰色关联度</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E6%A1%88%E4%BE%8B-1%E8%BF%90%E5%8A%A8%E5%91%98%E8%AE%AD%E7%BB%83%E4%B8%8E%E6%88%90%E7%BB%A9" id="toc-案例-1运动员训练与成绩" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B-1%E8%BF%90%E5%8A%A8%E5%91%98%E8%AE%AD%E7%BB%83%E4%B8%8E%E6%88%90%E7%BB%A9"><span class="header-section-number">8.2</span> 案例 1：运动员训练与成绩</a>
+  <ul class="collapse">
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE" id="toc-创建数据" class="nav-link" data-scroll-target="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE"><span class="header-section-number">8.2.1</span> 创建数据</a></li>
+  <li><a href="#%E6%97%A0%E9%87%8F%E7%BA%B2%E5%8C%96%E5%A4%84%E7%90%86" id="toc-无量纲化处理" class="nav-link" data-scroll-target="#%E6%97%A0%E9%87%8F%E7%BA%B2%E5%8C%96%E5%A4%84%E7%90%86"><span class="header-section-number">8.2.2</span> 无量纲化处理</a></li>
+  <li><a href="#%E8%AE%A1%E7%AE%97%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6-1" id="toc-计算灰色关联度-1" class="nav-link" data-scroll-target="#%E8%AE%A1%E7%AE%97%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6-1"><span class="header-section-number">8.2.3</span> 计算灰色关联度</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E6%A1%88%E4%BE%8B-2%E6%8A%95%E8%B5%84%E4%BA%A7%E5%87%BA%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90" id="toc-案例-2投资产出优势分析" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B-2%E6%8A%95%E8%B5%84%E4%BA%A7%E5%87%BA%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90"><span class="header-section-number">8.3</span> 案例 2：投资产出优势分析</a>
+  <ul class="collapse">
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE-1" id="toc-创建数据-1" class="nav-link" data-scroll-target="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE-1"><span class="header-section-number">8.3.1</span> 创建数据</a></li>
+  <li><a href="#%E6%97%A0%E9%87%8F%E7%BA%B2%E5%8C%96%E5%A4%84%E7%90%86-1" id="toc-无量纲化处理-1" class="nav-link" data-scroll-target="#%E6%97%A0%E9%87%8F%E7%BA%B2%E5%8C%96%E5%A4%84%E7%90%86-1"><span class="header-section-number">8.3.2</span> 无量纲化处理</a></li>
+  <li><a href="#%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6" id="toc-优势分析批量计算灰色关联度" class="nav-link" data-scroll-target="#%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E5%BA%A6"><span class="header-section-number">8.3.3</span> 优势分析：批量计算灰色关联度</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E8%AF%84%E4%BB%B7" id="toc-灰色关联评价" class="nav-link" data-scroll-target="#%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E8%AF%84%E4%BB%B7"><span class="header-section-number">8.4</span> 灰色关联评价</a>
+  <ul class="collapse">
+<li><a href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86" id="toc-数据预处理" class="nav-link" data-scroll-target="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="header-section-number">8.4.1</span> 数据预处理</a></li>
+  <li><a href="#%E6%8C%87%E6%A0%87%E6%9D%83%E9%87%8D%E7%86%B5%E6%9D%83%E6%B3%95" id="toc-指标权重熵权法" class="nav-link" data-scroll-target="#%E6%8C%87%E6%A0%87%E6%9D%83%E9%87%8D%E7%86%B5%E6%9D%83%E6%B3%95"><span class="header-section-number">8.4.2</span> 指标权重：熵权法</a></li>
+  <li><a href="#%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E8%AF%84%E4%BB%B7-1" id="toc-灰色关联评价-1" class="nav-link" data-scroll-target="#%E7%81%B0%E8%89%B2%E5%85%B3%E8%81%94%E8%AF%84%E4%BB%B7-1"><span class="header-section-number">8.4.3</span> 灰色关联评价</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./grey-relational.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-grey-rel" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p><strong>灰色关联分析</strong>源于几何直观，实质上是一种曲线间几何形状的比较：几何形状越接近，则发展变化趋势越接近，关联程度就越大。</p>
+<section id="灰色关联度" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="灰色关联度">
+<span class="header-section-number">8.1</span> 灰色关联度</h2>
+<section id="数据无量纲处理" class="level3" data-number="8.1.1"><h3 data-number="8.1.1" class="anchored" data-anchor-id="数据无量纲处理">
+<span class="header-section-number">8.1.1</span> 数据无量纲处理</h3>
+<p>对单位不一，初值不同的序列，应首先进行初值化，即将该序列的所有数据分别除以首项数据，将变量化为无单位的相对数值。负向数据需要做正向化，若用取倒数变换，可以和初值化一起做，即用首项数据除以该所有数据；</p>
+<p>或者，</p>
+<ul>
+<li>做数据均值化，所有数据都除以均值</li>
+<li>做数据百分比化，所有数据都除以最大值</li>
+<li>做数据归一化</li>
+</ul>
+<p><code>mathmodels</code> 包提供了初值化、均值化、最大值化函数 <code>rescale_initial(), rescale_mean(), rescale_extreme()</code> 专用于灰色关联预处理。</p>
+</section><section id="计算关联系数" class="level3" data-number="8.1.2"><h3 data-number="8.1.2" class="anchored" data-anchor-id="计算关联系数">
+<span class="header-section-number">8.1.2</span> 计算关联系数</h3>
+<p>设参考序列为 <span class="math display">\[
+X_0=\left\{x_0(1),x_0(2),\cdots,x_0(m)\right\}
+\]</span></p>
+<p>比较序列为 <span class="math display">\[
+X_i=\left\{x_i(1),x_i(2),\cdots,x_i(m)\right\},\quad i=1,\cdots,n
+\]</span></p>
+<p>比较序列 <span class="math inline">\(X_i\)</span> 对参考序列 <span class="math inline">\(X_0\)</span> 在 <span class="math inline">\(k\)</span> 处的关联系数定义为： <span class="math display">\[
+\eta_i\left(k\right)=\frac{\min_s\min_t\left|x_0\left(t\right)-x_s\left(t\right)\right|+\rho\max_s\max_t\left|x_0\left(t\right)-x_s\left(t\right)\right|}{\left|x_0\left(k\right)-x_i\left(k\right)\right|+\rho\max_s\max_t\left|x_0\left(t\right)-x_s\left(t\right)\right|}
+\]</span> 其中，<span class="math inline">\(\min_s\min_t\left|x_0(t)-x_s(t)\right|\)</span> 和 <span class="math inline">\(\max_s\max_t\left|x_0(t)-x_s(t)\right|\)</span> 分别称为两级最小差、两级最大差；<span class="math inline">\(\rho\)</span> 称为分辨系数，越大分辨率越大，一般采用 <span class="math inline">\(\rho=0.5\)</span>。</p>
+</section><section id="计算灰色关联度" class="level3" data-number="8.1.3"><h3 data-number="8.1.3" class="anchored" data-anchor-id="计算灰色关联度">
+<span class="header-section-number">8.1.3</span> 计算灰色关联度</h3>
+<p>关联系数只表示了各个位置参考序列和比较序列之间的关联程度，为了从总体上了解序列之间的关联程度，必须求出它们的平均值，即<strong>灰色关联度</strong>： <span class="math display">\[
+r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
+\]</span> 若各指标有不同的权重，可以对进行加权平均，得到<strong>灰色加权关联度</strong>。</p>
+<p>结果解读：</p>
+<ul>
+<li>
+<span class="math inline">\(r \in [0, 0.35)\)</span>，称为弱关联</li>
+<li>
+<span class="math inline">\(r \in (0.35, 0.65)\)</span>，称为中度关联</li>
+<li>
+<span class="math inline">\(r \in [0.65, 1]\)</span>，称为强关联</li>
+</ul>
+<p>加载包：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section><section id="案例-1运动员训练与成绩" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="案例-1运动员训练与成绩">
+<span class="header-section-number">8.2</span> 案例 1：运动员训练与成绩</h2>
+<p>对某健将级女子铅球运动员的跟踪调查，获得其 1982 年至 1986 年每年最好成绩及 16 项专项素质和身体素质的数据，做灰色关联分析，看哪些指标与铅球成绩关联度更高？</p>
+<section id="创建数据" class="level3" data-number="8.2.1"><h3 data-number="8.2.1" class="anchored" data-anchor-id="创建数据">
+<span class="header-section-number">8.2.1</span> 创建数据</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>sports <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/sports.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>sports</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 18
+   年份  铅球 `4kg前抛` `4kg后抛` `4kg原地` 立定跳远  高翻  抓举  卧推 `3kg前抛`
+  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1  1982  13.6      11.5      13.8      12.4     2.48    85    55    65      12.8
+2  1983  14.0      13        16.4      12.7     2.49    85    65    70      15.3
+3  1984  14.5      15.2      16.9      14.0     2.56    90    75    75      16.2
+4  1985  15.6      15.3      16.6      14.0     2.64   100    80    85      16.4
+5  1986  15.7      15.0      17.3      13.5     2.59   105    80    90      17.0
+# ℹ 8 more variables: `3kg后抛` &lt;dbl&gt;, `3kg原地` &lt;dbl&gt;, `3kg滑步` &lt;dbl&gt;,
+#   三级跳 &lt;dbl&gt;, 全蹲 &lt;dbl&gt;, 挺举 &lt;dbl&gt;, `30米跑` &lt;dbl&gt;, `100米跑` &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section><section id="无量纲化处理" class="level3" data-number="8.2.2"><h3 data-number="8.2.2" class="anchored" data-anchor-id="无量纲化处理">
+<span class="header-section-number">8.2.2</span> 无量纲化处理</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>sports <span class="ot">=</span> sports <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">16</span>, rescale_initial),</span>
+<span id="cb4-3"><a href="#cb4-3"></a>         <span class="fu">across</span>(<span class="dv">17</span><span class="sc">:</span><span class="dv">18</span>, \(x) <span class="fu">rescale_initial</span>(x, <span class="st">"-"</span>)))</span>
+<span id="cb4-4"><a href="#cb4-4"></a>sports</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 18
+   年份  铅球 `4kg前抛` `4kg后抛` `4kg原地` 立定跳远  高翻  抓举  卧推 `3kg前抛`
+  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1  1982  1         1         1         1        1     1     1     1         1   
+2  1983  1.03      1.13      1.19      1.02     1.00  1     1.18  1.08      1.20
+3  1984  1.07      1.32      1.23      1.12     1.03  1.06  1.36  1.15      1.27
+4  1985  1.15      1.33      1.20      1.13     1.06  1.18  1.45  1.31      1.28
+5  1986  1.15      1.31      1.26      1.08     1.04  1.24  1.45  1.38      1.33
+# ℹ 8 more variables: `3kg后抛` &lt;dbl&gt;, `3kg原地` &lt;dbl&gt;, `3kg滑步` &lt;dbl&gt;,
+#   三级跳 &lt;dbl&gt;, 全蹲 &lt;dbl&gt;, 挺举 &lt;dbl&gt;, `30米跑` &lt;dbl&gt;, `100米跑` &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section><section id="计算灰色关联度-1" class="level3" data-number="8.2.3"><h3 data-number="8.2.3" class="anchored" data-anchor-id="计算灰色关联度-1">
+<span class="header-section-number">8.2.3</span> 计算灰色关联度</h3>
+<p><code>mathmodel</code> 包提供了 <code>grey_corr()</code> 函数实现计算灰色关联度，基本语法：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">grey_corr</span>(ref, cmp, <span class="at">rho =</span> <span class="fl">0.5</span>, <span class="at">w =</span> <span class="cn">NULL</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>
+<code>ref</code> 为参考序列</li>
+<li>
+<code>cmp</code> 为比较序列</li>
+<li>
+<code>rho</code> 为分辨系数</li>
+<li>
+<code>w</code> 为指标权重向量</li>
+</ul>
+<p>采用默认分辨系数，不提供指标权重：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>res <span class="ot">=</span> <span class="fu">grey_corr</span>(sports[[<span class="dv">2</span>]], sports[,<span class="dv">3</span><span class="sc">:</span><span class="dv">18</span>])</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>将结果转化为数据框，并排序：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">enframe</span>(res, <span class="at">value =</span> <span class="st">"灰色关联度"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>灰色关联度)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 2
+   name     灰色关联度
+   &lt;chr&gt;         &lt;dbl&gt;
+ 1 全蹲          0.933
+ 2 3kg滑步       0.895
+ 3 高翻          0.855
+ 4 4kg原地       0.854
+ 5 挺举          0.847
+ 6 立定跳远      0.776
+ 7 30米跑        0.745
+ 8 100米跑       0.726
+ 9 3kg原地       0.708
+10 三级跳        0.705
+11 3kg后抛       0.683
+12 4kg后抛       0.663
+13 卧推          0.659
+14 4kg前抛       0.588
+15 3kg前抛       0.582
+16 抓举          0.502</code></pre>
+</div>
+</div>
+</section></section><section id="案例-2投资产出优势分析" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="案例-2投资产出优势分析">
+<span class="header-section-number">8.3</span> 案例 2：投资产出优势分析</h2>
+<p>灰色关联分析的参考序列只有 <span class="math inline">\(1\)</span> 个，当参考序列不止 <span class="math inline">\(1\)</span> 个时，让比较序列和各个参考序列都做一遍灰色关联分析，得到灰色关联度矩阵，叫作<strong>优势分析</strong>。</p>
+<p>设有 <span class="math inline">\(m\)</span> 个参考序列，<span class="math inline">\(l\)</span> 个比较序列，则这 <span class="math inline">\(l\)</span> 个比较序列对每一个参考序列都有 <span class="math inline">\(1\)</span> 个关联度，记 <span class="math inline">\(r_ij\)</span> 表示第 <span class="math inline">\(j\)</span> 个比较序列对第 <span class="math inline">\(i\)</span> 个参考序列的关联度，可得到关联度矩阵 <span class="math inline">\(R = (r_{ij})_m \times l\)</span>。</p>
+<p>根据矩阵 <span class="math inline">\(R\)</span> 的各元素的大小，可分析判断出哪些因素起主要影响（优势因素），哪些因素起次要影响。</p>
+<section id="创建数据-1" class="level3" data-number="8.3.1"><h3 data-number="8.3.1" class="anchored" data-anchor-id="创建数据-1">
+<span class="header-section-number">8.3.1</span> 创建数据</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>invest <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/invest.csv"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>invest</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 12
+   year    x1    x2    x3    x4    x5    y1    y2    y3    y4    y5    y6
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1  1979  309.  195.  24.6  20    19.0  170   57.6  88.6  11.2  4.03  13.7
+2  1980  310   190.  21    25.6  19    174   70.7  70    13.3  4.26  15.6
+3  1981  295   187.  12.2  23.3  22.3  197   76.8  85.4  16.8  4.34  13.8
+4  1982  346   205   15.1  29.2  23.5  216.  80.7  99.8  18.9  5.06  12.0
+5  1983  367   223.  14.6  30    27.7  236.  89.8 103.   22.8  5.78  14.0</code></pre>
+</div>
+</div>
+</section><section id="无量纲化处理-1" class="level3" data-number="8.3.2"><h3 data-number="8.3.2" class="anchored" data-anchor-id="无量纲化处理-1">
+<span class="header-section-number">8.3.2</span> 无量纲化处理</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>invest <span class="ot">=</span> invest <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span><span class="dv">1</span>, rescale_initial))</span>
+<span id="cb12-3"><a href="#cb12-3"></a>invest</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 12
+   year    x1    x2    x3    x4    x5    y1    y2    y3    y4    y5    y6
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1  1979 1     1     1      1     1     1     1    1      1     1    1    
+2  1980 1.00  0.972 0.854  1.28  1.00  1.02  1.23 0.790  1.19  1.06 1.14 
+3  1981 0.956 0.958 0.496  1.16  1.17  1.16  1.33 0.964  1.50  1.08 1.01 
+4  1982 1.12  1.05  0.614  1.46  1.24  1.27  1.40 1.13   1.69  1.26 0.874
+5  1983 1.19  1.14  0.592  1.5   1.46  1.39  1.56 1.17   2.04  1.43 1.02 </code></pre>
+</div>
+</div>
+</section><section id="优势分析批量计算灰色关联度" class="level3" data-number="8.3.3"><h3 data-number="8.3.3" class="anchored" data-anchor-id="优势分析批量计算灰色关联度">
+<span class="header-section-number">8.3.3</span> 优势分析：批量计算灰色关联度</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">map_dfc</span>(invest[<span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>], \(x) <span class="fu">grey_corr</span>(x, invest[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>])) <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">投资/产出</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">names</span>(invest)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">.before =</span> <span class="dv">1</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  `投资/产出`    y1    y2    y3    y4    y5    y6
+  &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 x1          0.802 0.689 0.891 0.678 0.811 0.743
+2 x2          0.761 0.666 0.858 0.663 0.774 0.766
+3 x3          0.557 0.529 0.579 0.568 0.565 0.562
+4 x4          0.810 0.885 0.577 0.780 0.804 0.607
+5 x5          0.935 0.800 0.675 0.731 0.921 0.632</code></pre>
+</div>
+</div>
+</section></section><section id="灰色关联评价" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="灰色关联评价">
+<span class="header-section-number">8.4</span> 灰色关联评价</h2>
+<p><strong>灰色关联评价</strong>，类似于理想解法，算法步骤如下：</p>
+<ul>
+<li>对指标数据预处理：一致化、规范化后，得到规范矩阵；</li>
+<li>由于各个指标对综合评价的权重不同，需要根据指标权重对规范矩阵做加权，得到加权规范矩阵；</li>
+<li>构造参考样本，为“正理想样本”，即各个指标取最大值，构成的最佳样本；</li>
+<li>将每个样本（评价对象）看作是比较序列，将参考样本作为参考序列，代入灰色关联分析算法，计算灰色关联度。</li>
+<li>根据该灰色关联度，就可以排序或评价样本的优劣。</li>
+</ul>
+<p>以评价河流水质为例。</p>
+<section id="数据预处理" class="level3" data-number="8.4.1"><h3 data-number="8.4.1" class="anchored" data-anchor-id="数据预处理">
+<span class="header-section-number">8.4.1</span> 数据预处理</h3>
+<ul>
+<li>只将中间型、区间型指标做归一化：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>df <span class="ot">=</span> water_quality <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">mutate</span>(<span class="at">PH =</span> <span class="fu">rescale_middle</span>(PH, <span class="dv">7</span>),</span>
+<span id="cb16-3"><a href="#cb16-3"></a>         <span class="at">nutrient =</span> <span class="fu">rescale_interval</span>(nutrient, <span class="dv">10</span>, <span class="dv">20</span>))</span>
+<span id="cb16-4"><a href="#cb16-4"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 5
+      ID    O2     PH  germ nutrient
+   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1  4.69 0.717     51    1    
+ 2     2  2.03 0.407     19    0.694
+ 3     3  9.11 0.524     46    0.906
+ 4     4  8.61 0.966     46    0.444
+ 5     5  7.13 0.655     50    0.691
+ 6     6  2.39 0.841     38    0.601
+ 7     7  7.69 0.855     38    0.655
+ 8     8  9.3  0.869     27    0    
+ 9     9  5.45 0.572      5    1    
+10    10  6.19 0.814     17    0.785
+11    11  7.93 0.634      9    0.699
+12    12  4.4  0.807     17    0.542
+13    13  7.46 0.145     23    1    
+14    14  2.01 0         47    0.455
+15    15  2.04 0.586     23    1    
+16    16  7.73 0.407     52    1    
+17    17  6.35 0.6       25    0.182
+18    18  8.29 0.0276    39    1    
+19    19  3.54 0.814     54    0.409
+20    20  7.44 0.490      8    0.273</code></pre>
+</div>
+</div>
+</section><section id="指标权重熵权法" class="level3" data-number="8.4.2"><h3 data-number="8.4.2" class="anchored" data-anchor-id="指标权重熵权法">
+<span class="header-section-number">8.4.2</span> 指标权重：熵权法</h3>
+<p>已经归一化的指标，不必重复做归一化：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>idx <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"+"</span>, <span class="cn">NA</span>, <span class="st">"-"</span>, <span class="cn">NA</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>res <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], idx)  </span>
+<span id="cb18-3"><a href="#cb18-3"></a>res<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       O2        PH      germ  nutrient 
+0.3153202 0.1813149 0.3506929 0.1526721 </code></pre>
+</div>
+</div>
+</section><section id="灰色关联评价-1" class="level3" data-number="8.4.3"><h3 data-number="8.4.3" class="anchored" data-anchor-id="灰色关联评价-1">
+<span class="header-section-number">8.4.3</span> 灰色关联评价</h3>
+<p><code>mathmodels</code> 包提供了 <code>grey_corr_topsis()</code> 函数实现灰色关联 <code>TOPSIS</code> 法，基本语法：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">grey_corr_topsis</span>(X, w, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">rho =</span> <span class="fl">0.5</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>
+<code>X</code> 为决策矩阵</li>
+<li>
+<code>w</code> 为指标权重</li>
+<li>
+<code>index</code> 可以指定对哪些列做正向（<code>"+"</code>）、负向（<code>"-"</code>）、不做（<code>NA</code>）归一化，默认 <code>index = NULL</code> 表示，所有列都不做归一化。</li>
+<li>
+<code>rho</code> 为分辨系数</li>
+</ul>
+<p>执行灰色关联 TOPSIS 评价，已经归一化的指标，不必重复做归一化：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>gcd <span class="ot">=</span> <span class="fu">grey_corr_topsis</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], res<span class="sc">$</span>w, idx)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>转化成 <code>0-100</code> 分数，增加排名列：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">tibble</span>(<span class="at">ID =</span> df<span class="sc">$</span>ID, 灰色关联度 <span class="ot">=</span> gcd, </span>
+<span id="cb22-2"><a href="#cb22-2"></a>       <span class="at">score =</span> <span class="fu">rescale</span>(灰色关联度, <span class="at">b =</span> <span class="dv">100</span>),</span>
+<span id="cb22-3"><a href="#cb22-3"></a>       <span class="at">rank =</span> <span class="fu">min_rank</span>(<span class="sc">-</span>score)) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>score)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 4
+      ID 灰色关联度 score  rank
+   &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+ 1    11      0.613 100       1
+ 2     9      0.613  99.9     2
+ 3    10      0.592  91.9     3
+ 4     7      0.562  80.4     4
+ 5    20      0.560  79.6     5
+ 6     3      0.558  79.0     6
+ 7     8      0.557  78.6     7
+ 8    13      0.552  76.7     8
+ 9     4      0.552  76.5     9
+10    12      0.545  73.9    10
+11    18      0.520  64.2    11
+12    16      0.511  60.9    12
+13    15      0.506  58.8    13
+14     5      0.503  57.6    14
+15    17      0.502  57.3    15
+16     1      0.501  56.9    16
+17     6      0.472  45.8    17
+18     2      0.469  44.8    18
+19    19      0.430  29.8    19
+20    14      0.353   0      20</code></pre>
+</div>
+</div>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "已复制");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "已复制");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./topsis.html" class="pagination-link" aria-label="TOPSIS">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">TOPSIS</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./rank-sum-ratio.html" class="pagination-link" aria-label="秩和比法">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

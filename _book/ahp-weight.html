@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>2&nbsp; 层次分析法 – mathmodels 包使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./entropy-weight.html" rel="next">
+<link href="./preprocessing.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script><script>
+MathJax ={
+  tex: {
+    macros: {
+      bm: ["{\\boldsymbol #1}",1],
+    }
+  }
+};
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./ahp-weight.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">mathmodels 包使用手册</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">前言</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./comp-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">评价类算法</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ahp-weight.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./entropy-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./critic-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">CRITIC 法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pca-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">主成分赋权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topsis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">TOPSIS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grey-relational.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rank-sum-ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fuzzy-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dea.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">数据包络分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inequality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">目录</h2>
+   
+  <ul>
+<li>
+<a href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4" id="toc-算法步骤" class="nav-link active" data-scroll-target="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="header-section-number">2.1</span> 算法步骤</a>
+  <ul class="collapse">
+<li><a href="#%E5%BB%BA%E7%AB%8B%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84" id="toc-建立层次结构" class="nav-link" data-scroll-target="#%E5%BB%BA%E7%AB%8B%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="header-section-number">2.1.1</span> 建立层次结构</a></li>
+  <li><a href="#%E6%9E%84%E9%80%A0%E5%88%A4%E6%96%AD%E7%9F%A9%E9%98%B5" id="toc-构造判断矩阵" class="nav-link" data-scroll-target="#%E6%9E%84%E9%80%A0%E5%88%A4%E6%96%AD%E7%9F%A9%E9%98%B5"><span class="header-section-number">2.1.2</span> 构造判断矩阵</a></li>
+  <li><a href="#%E8%AE%A1%E7%AE%97%E6%9D%83%E5%90%91%E9%87%8F%E5%8F%8A%E4%B8%80%E8%87%B4%E6%80%A7%E6%A3%80%E9%AA%8C" id="toc-计算权向量及一致性检验" class="nav-link" data-scroll-target="#%E8%AE%A1%E7%AE%97%E6%9D%83%E5%90%91%E9%87%8F%E5%8F%8A%E4%B8%80%E8%87%B4%E6%80%A7%E6%A3%80%E9%AA%8C"><span class="header-section-number">2.1.3</span> 计算权向量及一致性检验</a></li>
+  <li><a href="#%E8%AE%A1%E7%AE%97%E7%BB%84%E5%90%88%E6%9D%83%E5%90%91%E9%87%8F%E4%B8%8E%E7%BB%84%E5%90%88%E4%B8%80%E8%87%B4%E6%80%A7%E6%A3%80%E9%AA%8C" id="toc-计算组合权向量与组合一致性检验" class="nav-link" data-scroll-target="#%E8%AE%A1%E7%AE%97%E7%BB%84%E5%90%88%E6%9D%83%E5%90%91%E9%87%8F%E4%B8%8E%E7%BB%84%E5%90%88%E4%B8%80%E8%87%B4%E6%80%A7%E6%A3%80%E9%AA%8C"><span class="header-section-number">2.1.4</span> 计算组合权向量与组合一致性检验</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E6%A1%88%E4%BE%8B%E6%97%85%E6%B8%B8%E5%9C%B0%E9%80%89%E6%8B%A9" id="toc-案例旅游地选择" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E6%97%85%E6%B8%B8%E5%9C%B0%E9%80%89%E6%8B%A9"><span class="header-section-number">2.2</span> 案例：旅游地选择</a>
+  <ul class="collapse">
+<li><a href="#%E5%BB%BA%E7%AB%8B%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84-1" id="toc-建立层次结构-1" class="nav-link" data-scroll-target="#%E5%BB%BA%E7%AB%8B%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84-1"><span class="header-section-number">2.2.1</span> 建立层次结构</a></li>
+  <li><a href="#%E7%A1%AE%E5%AE%9A%E5%88%A4%E6%96%AD%E7%9F%A9%E9%98%B5" id="toc-确定判断矩阵" class="nav-link" data-scroll-target="#%E7%A1%AE%E5%AE%9A%E5%88%A4%E6%96%AD%E7%9F%A9%E9%98%B5"><span class="header-section-number">2.2.2</span> 确定判断矩阵</a></li>
+  <li><a href="#%E5%9F%BA%E4%BA%8Emathmodels%E5%8C%85%E6%B1%82%E8%A7%A3" id="toc-基于mathmodels包求解" class="nav-link" data-scroll-target="#%E5%9F%BA%E4%BA%8Emathmodels%E5%8C%85%E6%B1%82%E8%A7%A3"><span class="header-section-number">2.2.3</span> 基于mathmodels包求解</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./ahp-weight.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-ahp" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p><strong>层次分析法（AHP）</strong>，是一种将复杂决策问题结构化并进行定量分析的系统方法，由美国运筹学家 T. L. Saaty 于 20 世纪 70 年代提出。该方法通过构建层次结构模型，并对主观判断进行量化处理，从而有效解决多目标、多准则下的复杂决策问题，尤其适用于定性因素与定量因素交织的实际场景。</p>
+<p>AHP 的核心优势在于能够合理地结合定性判断与定量分析，依据人类思维和心理规律，将决策过程层次化、数量化，使原本模糊的判断变得清晰可操作。因此，它被广泛应用于各类复杂的决策分析中。由于其决策依据主要来源于计算所得的权重，AHP 也常被用于确定评价指标的相对重要性权重。</p>
+<p>与传统依赖大量定量数据的方法不同，AHP 只需通过对指标之间的定性比较，即可构造判断矩阵并进一步合成得出各指标的权重，也因此是一种主观赋权法。在实际应用中，建议采用问卷形式，邀请多位专家对各项指标进行两两比较或直接打分，从而构建出更具代表性和科学性的判断矩阵。</p>
+<section id="算法步骤" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="算法步骤">
+<span class="header-section-number">2.1</span> 算法步骤</h2>
+<section id="建立层次结构" class="level3" data-number="2.1.1"><h3 data-number="2.1.1" class="anchored" data-anchor-id="建立层次结构">
+<span class="header-section-number">2.1.1</span> 建立层次结构</h3>
+<p>在深入分析实际问题的基础上，将有关的各个因素按照不同属性自上而下地分解成若干层次，同一层的诸因素从属于上一层的因素或对上层因素有影响，同时又支配下一层的因素或受到下层因素的作用。</p>
+<p>最上层为目标层，通常只有一个因素，最下层通常为方案或对象层，中间可以有一个或多个层次，通常为准则或指标层。准则层一般 <span class="math inline">\(5 \sim 7\)</span> 个因素为好，当准则过多时（比如多于 <span class="math inline">\(9\)</span> 个）应进一步分解出子准则层。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/hierarchy-diagram.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>AHP层次结构示意图</figcaption></figure>
+</div>
+</div>
+</div>
+</section><section id="构造判断矩阵" class="level3" data-number="2.1.2"><h3 data-number="2.1.2" class="anchored" data-anchor-id="构造判断矩阵">
+<span class="header-section-number">2.1.2</span> 构造判断矩阵</h3>
+<p>构造判断矩阵，这一步是要比较层次结构模型的第二层各个因素对上一层因素影响，从而确定它们对上层因素的影响作用中所占的权重。有时需要理解为下层因素对上层因素的贡献。</p>
+<p>设有 <span class="math inline">\(n\)</span> 个因素 <span class="math inline">\(x_1,x_2,\cdots,x_n\)</span> 对上一层目标有影响，直接确定它们对目标的影响程度不是很容易，所以每次取两个因素 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 比较，用 <span class="math inline">\(a_{ij}\)</span> 表示 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 对上层目标的影响之比，则 <span class="math inline">\(A=(a_{ij})_{m\times n}\)</span> 称为<strong>判断矩阵</strong>或成对比较矩阵。</p>
+<p><span class="math display">\[
+A=\begin{bmatrix}
+\dfrac{x_1}{x_1}&amp;\dfrac{x_1}{x_2}&amp;\cdots&amp;\dfrac{x_1}{x_n} \\
+\dfrac{x_2}{x_1}&amp;\dfrac{x_2}{x_2}&amp;\cdots&amp;\dfrac{x_2}{x_n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\dfrac{x_n}{x_1}&amp;\dfrac{x_n}{x_2}&amp;\cdots&amp;\dfrac{x_n}{x_n}
+\end{bmatrix}
+\]</span></p>
+<p>判断矩阵主对角线都为 <span class="math inline">\(1\)</span>，关于主对角线对称的元素互为倒数，所以是正互反矩阵。</p>
+<p>Saaty 根据绝大多数人认知事物的心理习惯，建议用<span class="math inline">\(1 \sim 9\)</span> 及其倒数作为标度来确定 <span class="math inline">\(a_{ij}\)</span> 的值。</p>
+<table class="caption-top table">
+<caption>Saaty 发明的 1-9 标度含义</caption>
+<thead><tr class="header">
+<th style="text-align: center;">
+<span class="math inline">\(i\)</span> 比 <span class="math inline">\(j\)</span> 强的重要程度</th>
+<th style="text-align: center;">相等</th>
+<th style="text-align: center;">稍强</th>
+<th style="text-align: center;">强</th>
+<th style="text-align: center;">很强</th>
+<th style="text-align: center;">绝对强</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(a_{ij}\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">9</td>
+</tr></tbody>
+</table>
+<p>其中，2, 4, 6, 8 分别介于 1, 3, 5, 7, 9 对应的重要程度之间。</p>
+</section><section id="计算权向量及一致性检验" class="level3" data-number="2.1.3"><h3 data-number="2.1.3" class="anchored" data-anchor-id="计算权向量及一致性检验">
+<span class="header-section-number">2.1.3</span> 计算权向量及一致性检验</h3>
+<p>对于每一个判断矩阵，计算其最大特征根 <span class="math inline">\(\lambda_{max}\)</span> 及对应特征向量。</p>
+<p>再进行<strong>一致性检验</strong>：利用一致性指标、平均随机一致性指标计算一致性比率。若检验通过，那么归一化特征向量即为权向量；若不通过，需重新构造判断矩阵 .</p>
+<p>判断矩阵涉及到的一个关键问题：<strong>一致性</strong>，这涉及到两两比较的传递性。比如 <span class="math inline">\(a\)</span> 的重要性是 <span class="math inline">\(b\)</span> 的 <span class="math inline">\(2\)</span> 倍，<span class="math inline">\(b\)</span> 的重要性是 <span class="math inline">\(c\)</span> 的 <span class="math inline">\(3\)</span> 倍，则传递过来的 <span class="math inline">\(a\)</span> 的重要性得是 <span class="math inline">\(c\)</span> 的 <span class="math inline">\(6\)</span> 倍，而你对 <span class="math inline">\(a\)</span> 和 <span class="math inline">\(c\)</span> 两两比较的重要性不一定是 <span class="math inline">\(6\)</span> 倍，这就是不一致。</p>
+<p>由于判断矩阵构造过程只是在做两两比较，看不到这些传递过来的关系，故不可能做到完全的一致性，所以需要对判断矩阵进行一致性检验：即保证一致性的偏差不能太大。</p>
+<div class="definition" name="Definition1">
+<p><strong>定义 1</strong> 若正互反矩阵 <span class="math inline">\(A\)</span> 满足： <span class="math display">\[
+a_{ij}a_{jk}=a_{ik},\quad i,j,k=1,\cdots,n
+\]</span> 则称 <span class="math inline">\(A\)</span> 为一致矩阵。</p>
+</div>
+<p><span class="math inline">\(n\)</span> 阶一致阵具有如下性质：</p>
+<ol type="i">
+<li><p>一致阵的唯一非零特征根为 <span class="math inline">\(n\)</span></p></li>
+<li><p>一致阵的任一列（行）向量都是对应于特征根 <span class="math inline">\(n\)</span> 的特征向量</p></li>
+</ol>
+<p>因此，判别一个 <span class="math inline">\(n\)</span> 阶矩阵 <span class="math inline">\(A\)</span> 是否为一致矩阵，只要计算 <span class="math inline">\(A\)</span> 的最大特征根 <span class="math inline">\(\lambda_{max}\)</span> 即可。如果 <span class="math inline">\(A\)</span> 不是一致矩阵，则可以证明 <span class="math inline">\(\lambda_{max}&gt;n\)</span>，并且 <span class="math inline">\(\lambda_{max}\)</span> 越大，不一致程度越严重。</p>
+<div class="definition" name="Definition2">
+<p><strong>定义 2</strong> 设 <span class="math inline">\(A\)</span> 为 <span class="math inline">\(n\)</span> 阶判断矩阵，定义一致性指标为： <span class="math display">\[
+CI = \frac{\lambda_{max}-n}{n-1}
+\]</span></p>
+</div>
+<p>当 <span class="math inline">\(CI = 0\)</span> 时为一致矩阵；<span class="math inline">\(CI\)</span> 越大，<span class="math inline">\(A\)</span> 的不一致程度越严重。</p>
+<p>前面说了要保证判断矩阵一致性的偏差不能太大，那就需要有个基准，为此，Saaty 采用随机模拟取平均的方法，得到了各阶判断矩阵的一致性的基准：一致性指标 <span class="math inline">\(RI\)</span>。</p>
+<table class="caption-top table">
+<caption>不同阶数矩阵的随机一致性指标</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: center;">矩阵阶数</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">7</th>
+<th style="text-align: center;">8</th>
+<th style="text-align: center;">9</th>
+<th style="text-align: center;">10</th>
+<th style="text-align: center;">11</th>
+<th style="text-align: center;">12</th>
+<th style="text-align: center;">13</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(RI\)</span></td>
+<td style="text-align: center;">0.58</td>
+<td style="text-align: center;">0.90</td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">1.24</td>
+<td style="text-align: center;">1.32</td>
+<td style="text-align: center;">1.41</td>
+<td style="text-align: center;">1.45</td>
+<td style="text-align: center;">1.49</td>
+<td style="text-align: center;">1.51</td>
+<td style="text-align: center;">1.54</td>
+<td style="text-align: center;">1.56</td>
+</tr></tbody>
+</table>
+<p>有了 <span class="math inline">\(RI\)</span>，只要一致性指标偏离它的相对偏差不超过一定程度，就可以认为是满足一致性要求。于是，</p>
+<div class="definition" name="Definition3">
+<p><strong>定义 3</strong> 定义一致性比率为： <span class="math display">\[
+CR = \frac{CI}{RI}
+\]</span></p>
+</div>
+<p>规定当 <span class="math inline">\(CR &lt; 0.1\)</span> 时，<span class="math inline">\(A\)</span> 的不一致程度在容许范围内，可用其归一化的特征向量作为权重向量，否则需要重新调整判断矩阵 <span class="math inline">\(A\)</span>。</p>
+</section><section id="计算组合权向量与组合一致性检验" class="level3" data-number="2.1.4"><h3 data-number="2.1.4" class="anchored" data-anchor-id="计算组合权向量与组合一致性检验">
+<span class="header-section-number">2.1.4</span> 计算组合权向量与组合一致性检验</h3>
+<p>为了实现层次分析法的最终目的，需要从上而下逐层进行各层元素对目标层合成权重的计算。</p>
+<p>对应单个层次结构的单个判断矩阵必须要满足一致性要求。同样地，各层元素对目标层的合成权重向量是否可以接受，就需要进行综合一致性检验。</p>
+<p><strong>注：</strong>实际应用中，通常不做整体一致性检验，只保证每个层次结构单独满足一致性检验即可。</p>
+</section></section><section id="案例旅游地选择" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="案例旅游地选择">
+<span class="header-section-number">2.2</span> 案例：旅游地选择</h2>
+<p><strong>问题描述：</strong>某人要出去旅游，有 <span class="math inline">\(3\)</span> 个备选旅游地供参考，他准备从景色、费用、居住条件、饮食、旅途共 <span class="math inline">\(5\)</span> 个因素来考量，最终选择最优的旅游地。</p>
+<section id="建立层次结构-1" class="level3" data-number="2.2.1"><h3 data-number="2.2.1" class="anchored" data-anchor-id="建立层次结构-1">
+<span class="header-section-number">2.2.1</span> 建立层次结构</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/hierarchy-diagram-ex.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>旅游地选择的层次结构图</figcaption></figure>
+</div>
+</div>
+</div>
+</section><section id="确定判断矩阵" class="level3" data-number="2.2.2"><h3 data-number="2.2.2" class="anchored" data-anchor-id="确定判断矩阵">
+<span class="header-section-number">2.2.2</span> 确定判断矩阵</h3>
+<section id="准则层对目标层的判断矩阵" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="准则层对目标层的判断矩阵">1. 准则层对目标层的判断矩阵</h4>
+<p>准则层 <span class="math inline">\(5\)</span> 个因素景色、费用、居住条件、饮食、交通，对目标层旅游地选择的相对重要度，构成 <span class="math inline">\(1\)</span> 个子结构，需要 <span class="math inline">\(1\)</span> 个判断矩阵： <span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1/2 &amp; 4 &amp; 3 &amp; 3 \\
+2 &amp; 1 &amp; 7 &amp; 5 &amp; 5 \\
+1/4 &amp; 1/7 &amp; 1 &amp; 1/2 &amp; 1/3 \\
+1/3 &amp; 1/5 &amp; 2 &amp; 1 &amp; 1 \\
+1/3 &amp; 1/5 &amp; 3 &amp; 1 &amp; 1
+\end{bmatrix}
+\]</span> 其中，<span class="math inline">\(a_{ij}\)</span> 表示 <span class="math inline">\(x_i\)</span> 与 <span class="math inline">\(x_j\)</span> 对选择旅游地的相对重要性之比。比如，<span class="math inline">\(a_{21}=2\)</span> 表示在该人看来，费用 <span class="math inline">\(x_2\)</span> 是景色 <span class="math inline">\(x_1\)</span> 的 <span class="math inline">\(2\)</span> 倍重要。</p>
+</section><section id="方案层对准则层的判断矩阵" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="方案层对准则层的判断矩阵">2. 方案层对准则层的判断矩阵</h4>
+<p>方案层（<span class="math inline">\(3\)</span> 个旅游地）对准则层（<span class="math inline">\(5\)</span> 个因素），构成了 <span class="math inline">\(5\)</span> 个单独的子结构，需要 <span class="math inline">\(5\)</span> 个判断矩阵。此时可以理解为 <span class="math inline">\(3\)</span> 个旅游地分别对每个因素的贡献度（重要度）。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/hierarchy-diagram-5.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>方案层对准则层的各因素的贡献度结构图</figcaption></figure>
+</div>
+</div>
+</div>
+<p><span class="math display">\[
+\begin{gathered}B_1=\begin{bmatrix}1&amp;2&amp;5\\1/2&amp;1&amp;2\\1/5&amp;1/2&amp;1\end{bmatrix},\quad B_2=\begin{bmatrix}1&amp;1/3&amp;1/8\\3&amp;1&amp;1/3\\8&amp;3&amp;1\end{bmatrix}\\B_3=\begin{bmatrix}1&amp;1&amp;3\\1&amp;1&amp;3\\1/3&amp;1/3&amp;1\end{bmatrix},\quad B_4=\begin{bmatrix}1&amp;3&amp;4\\1/3&amp;1&amp;1\\1/4&amp;1&amp;1\end{bmatrix},\quad B_5=\begin{bmatrix}1&amp;1&amp;1/4\\1&amp;1&amp;1/4\\4&amp;4&amp;1\end{bmatrix}\end{gathered}
+\]</span></p>
+</section></section><section id="基于mathmodels包求解" class="level3" data-number="2.2.3"><h3 data-number="2.2.3" class="anchored" data-anchor-id="基于mathmodels包求解">
+<span class="header-section-number">2.2.3</span> 基于mathmodels包求解</h3>
+<p>加载包：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>mathmodels</code> 包提供了 <code>AHP()</code> 函数实现一个子结构的层次分析法，只需要提供判断矩阵，就可以计算权重、一致性比率、最大特征值、一致性指标。</p>
+<p>本例是层次分析法典型的嵌套层次结构（三个层级，两层判断矩阵），需要对判断矩阵逐层计算，再向上合成。</p>
+<section id="第-2-层下层" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="第-2-层下层">(1) 第 2 层（下层）</h4>
+<ul>
+<li>准备判断矩阵：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>B1 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,  <span class="dv">2</span>, <span class="dv">5</span>,</span>
+<span id="cb2-2"><a href="#cb2-2"></a>              <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,<span class="dv">1</span>, <span class="dv">2</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>              <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,<span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>B2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>              <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>              <span class="dv">8</span>, <span class="dv">3</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>B3 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>,</span>
+<span id="cb2-8"><a href="#cb2-8"></a>              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>,</span>
+<span id="cb2-9"><a href="#cb2-9"></a>              <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,<span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-10"><a href="#cb2-10"></a>B4 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>,</span>
+<span id="cb2-11"><a href="#cb2-11"></a>              <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,<span class="dv">1</span>, <span class="dv">1</span>,</span>
+<span id="cb2-12"><a href="#cb2-12"></a>              <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>,<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-13"><a href="#cb2-13"></a>B5 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>,</span>
+<span id="cb2-14"><a href="#cb2-14"></a>              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>,</span>
+<span id="cb2-15"><a href="#cb2-15"></a>              <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>批量层次分析法：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>res2 <span class="ot">=</span> <span class="fu">list</span>(B1,B2,B3,B4,B5) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">map</span>(AHP)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>提取 5 个一致性比率：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">map_dbl</span>(res2, <span class="st">"CR"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  4.771648e-03  1.328987e-03 -7.656711e-16  7.933373e-03  0.000000e+00</code></pre>
+</div>
+</div>
+<ul>
+<li>提取 5 组权重，分别是方案层对准则层每个因素的重要度（贡献度）。按列合并，转化为矩阵：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>W2 <span class="ot">=</span> <span class="fu">map_dfc</span>(res2, <span class="st">"w"</span>) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`
+• `` -&gt; `...2`
+• `` -&gt; `...3`
+• `` -&gt; `...4`
+• `` -&gt; `...5`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>W2</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          ...1       ...2      ...3      ...4      ...5
+[1,] 0.5953790 0.08193475 0.4285714 0.6337079 0.1666667
+[2,] 0.2763505 0.23634070 0.4285714 0.1919206 0.1666667
+[3,] 0.1282705 0.68172455 0.1428571 0.1743715 0.6666667</code></pre>
+</div>
+</div>
+<p>该权重矩阵，行代表方案，列代表父级因素，将用于向上合成时的左乘矩阵。注意，若某方案不受某个父级因素支配（无连线），相应位置补 <span class="math inline">\(0\)</span>。</p>
+</section><section id="第-1-层上层" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="第-1-层上层">(2) 第 1 层（上层）</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>,   <span class="dv">3</span>,</span>
+<span id="cb10-2"><a href="#cb10-2"></a>             <span class="dv">2</span>,   <span class="dv">1</span>,   <span class="dv">7</span>, <span class="dv">5</span>,   <span class="dv">5</span>,</span>
+<span id="cb10-3"><a href="#cb10-3"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>,   <span class="dv">1</span>,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>             <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>,   <span class="dv">1</span>),</span>
+<span id="cb10-6"><a href="#cb10-6"></a>           <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">5</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a>res <span class="ot">=</span> <span class="fu">AHP</span>(A)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>提取一致性比率：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>res<span class="sc">$</span>CR</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01609027</code></pre>
+</div>
+</div>
+<ul>
+<li>提取权重向量：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>W1 <span class="ot">=</span> res<span class="sc">$</span>w</span>
+<span id="cb13-2"><a href="#cb13-2"></a>W1</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.26360349 0.47583538 0.05381460 0.09806829 0.10867824</code></pre>
+</div>
+</div>
+</section><section id="向上合成" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="向上合成">(3) 向上合成</h4>
+<ul>
+<li>即做矩阵乘法：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>W2 <span class="sc">%*%</span> W1 <span class="sc">|&gt;</span> <span class="fu">as.vector</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2992545 0.2453040 0.4554415</code></pre>
+</div>
+</div>
+<p><strong>注：</strong>若有更多的层级，继续将新的权重矩阵左乘即可，比如 <code>W3 %*% W2 %*% W1</code>。</p>
+<p>该权重向量就是方案层（<span class="math inline">\(3\)</span> 个旅游地）对目标层（选择旅游地）的权重。其中，第 <span class="math inline">\(3\)</span> 个权重最大为 <span class="math inline">\(0.4554\)</span>，所以应该选择第 <span class="math inline">\(3\)</span> 个旅游地，作为最佳旅游地。</p>
+
+
+</section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "已复制");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "已复制");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./preprocessing.html" class="pagination-link" aria-label="指标数据预处理">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./entropy-weight.html" class="pagination-link" aria-label="熵权法">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
