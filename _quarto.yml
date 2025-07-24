@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: _book
+  output-dir: docs
 lang: zh
 book:
   title: "mathmodels 包使用手册"

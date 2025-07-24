@@ -65,7 +65,7 @@ knitr::include_graphics("figs/my-Rbook.png")
 
 欢迎关注我的[知乎](https://www.zhihu.com/people/huc_zhangjingxin/columns)，公众号：R 语言与数学建模，B 站：[张敬信老师](https://space.bilibili.com/192858956/upload/video)
 
-欢迎加入我的个人知识库，里面有所有整理好的我出品的基于 tidyverse/mlr3verse 的全网最新的 R 语言编程、R 机器学习、数学建模学习、案例资料，可以下载，可以 DeepSeek 问答：
+欢迎加入我的个人知识库，里面有所有整理好的我出品的基于 tidyverse/mlr3verse 的全网最新的 R 语言编程、R 机器学习、数学建模相关学习、案例资料，可以下载，可以 DeepSeek 问答：
 
 - **ima 知识库**：[数学建模](https://ima.qq.com/wiki/?shareId=86d3795128d0ad4af1468f75198e084a9667e59b4113a76062ef77e2473a92d5)，[tidy-R语言](https://ima.qq.com/wiki/?shareId=8b45680097fd3c9b37f0e657087b7f5554fc0f0fc85fc3a0d274f3378e369078)，[R机器学习](https://ima.qq.com/wiki/?shareId=d0437ec3afa911aa05c3d9a242a1d11eb0a6188a7e35cbdc33f79efa2a067bf2)，[大学数学学习](https://ima.qq.com/wiki/?shareId=49fb2abcb0199ecb09acd61a6ed3e408d2a5ff931fbe743a8d27512aed7fbe0b)
 
