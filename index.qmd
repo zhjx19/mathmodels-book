@@ -1,0 +1,72 @@
+# 前言 {#sec-preface .unnumbered}
+
+这是与 `mathmodels` 包配套的中文使用手册，使用黄湘云提供的 [`quarto` 中文书籍模板](https://github.com/XiangyunHuang/quarto-book)编写，内容整合自该包的 vignettes，目前只完整包含**评价类算法**。
+
+## `mathmodels` 包与本配套使用手册的核心特色
+
+#### 1. 细节考究，算法严谨 {.unnumbered}
+
+- **全面覆盖主流算法**：涵盖综合评价、数据包络分析、不平等度量、灰色预测、模糊评价等 13 大类核心算法
+- **算法实现精益求精**：每个函数都经过精心设计，充分考虑数据预处理、指标方向性、权重计算等易忽略的细节
+- **理论与实践并重**：所有算法均基于《数学建模：算法与编程实现》教材，理论扎实，应用可靠
+
+#### 2. 接口优雅，极致易用 {.unnumbered}
+
+- **统一的函数设计哲学**：采用一致的参数命名和接口规范，学习成本极低
+- **智能内置处理**：自动处理数据标准化、归一化、正向化等预处理步骤，让用户专注核心分析
+- **丰富的可视化支持**：提供隶属函数可视化、结果排序展示等直观功能
+
+#### 3. tidyverse 生态无缝集成 {.unnumbered}
+
+- **数据管道式编程**：完美支持`%>%`管道操作，代码简洁流畅
+- **批量处理能力强大**：结合 `mutate()`、`across()` 等 tidyverse 函数，轻松实现批量算法应用
+- **现代化数据操作**：与 tidyverse 生态系统深度融合，提供符合R用户习惯的操作体验
+
+#### 4. 教学科研双重价值 {.unnumbered}
+
+- **完整配套资源**：包内 vignettes 与在线书籍形成完整学习体系
+- **案例驱动学习**：丰富的真实案例帮助用户快速掌握算法应用
+- **学术研究利器**：为研究人员提供可靠、高效的算法工具箱
+
+#### 5. 创新算法组合 {.unnumbered}
+
+- **主客观赋权融合**：提供线性组合、乘法综合、博弈均衡等多种权重合成方法
+- **多层次分解分析**：支持泰尔指数多维度分解，深入挖掘数据内在规律
+- **扩展性强**：模块化设计便于功能扩展和定制开发
+
+这套完整的解决方案将复杂的数学建模算法转化为简单易用的 R 工具，让研究者和实践者能够专注于解决实际问题，而非算法实现的细节。
+
+## 关于 `mathmodels` 包（当前 0.0.5 版本）
+
+[mathmodels](https://github.com/zhjx19/mathmodels) 包是一个功能丰富的 R 语言数学建模包，专为《数学建模：算法与编程实现》[@zhang22]（机械工业出版社）配套开发。该包涵盖了微分方程与差分方程、统计分析、优化、评价和预测等多个领域的算法实现。当前版本重点关注评价算法模块，主要包括：指标数据预处理（标准化、归一化等）、主客观赋权方法（层次分析法、熵权法、CRITIC 法、主成分法）及主客观组合赋权、综合评价方法（TOPSIS 法、模糊综合评价法、秩和比法、数据包络分析（DEA, SBM, Malmquist）、不平等测度（基尼系数、泰尔指数）、系统评价（耦合协调度、障碍度）以及灰色预测模型（GM(1,1)、GM(1,N)、Verhulst 模型）等。本包面向数学建模领域的研究人员和实践者而设计，提供便捷高效的算法工具支持。
+
+可从 Github 安装：
+
+```{r eval=FALSE}
+remotes::install_github("zhjx19/mathmodels")
+```
+
+
+或下载到本地解压到当前路径安装（需先安装依赖包：`deaR` 包）：
+
+```{r eval=FALSE}
+install.packages("mathmodels-master", repos=NULL, type="source")
+```
+
+```{r echo=FALSE, fig.cap="配套书：《数学建模：算法与编程实现》", out.width="60%"}
+knitr::include_graphics("figs/my-book.jpg")
+```
+
+```{r echo=FALSE, fig.cap="R编程入门书：《R语言编程：基于tidyverse》", out.width="60%"}
+knitr::include_graphics("figs/my-Rbook.png")
+```
+
+## 更多学习资源
+
+欢迎关注我的[知乎](https://www.zhihu.com/people/huc_zhangjingxin/columns)，公众号：R 语言与数学建模，B 站：[张敬信老师](https://space.bilibili.com/192858956/upload/video)
+
+欢迎加入我的个人知识库，里面有所有整理好的我出品的基于 tidyverse/mlr3verse 的全网最新的 R 语言编程、R 机器学习、数学建模学习、案例资料，可以下载，可以 DeepSeek 问答：
+
+- **ima 知识库**：[数学建模](https://ima.qq.com/wiki/?shareId=86d3795128d0ad4af1468f75198e084a9667e59b4113a76062ef77e2473a92d5)，[tidy-R语言](https://ima.qq.com/wiki/?shareId=8b45680097fd3c9b37f0e657087b7f5554fc0f0fc85fc3a0d274f3378e369078)，[R机器学习](https://ima.qq.com/wiki/?shareId=d0437ec3afa911aa05c3d9a242a1d11eb0a6188a7e35cbdc33f79efa2a067bf2)，[大学数学学习](https://ima.qq.com/wiki/?shareId=49fb2abcb0199ecb09acd61a6ed3e408d2a5ff931fbe743a8d27512aed7fbe0b)
+
+- **知乎直答知识库**：[数学建模](https://zhida.zhihu.com/repositories/7519894915619675735)，[tidy-R语言](https://zhida.zhihu.com/repositories/7516353785554708517)，[R机器学习](https://zhida.zhihu.com/repositories/7516353835152131383)，[大学数学学习](https://zhida.zhihu.com/repositories/7519900840641494809)

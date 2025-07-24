@@ -1,0 +1,67 @@
+project:
+  type: book
+  output-dir: _book
+lang: zh
+book:
+  title: "mathmodels 包使用手册"
+  subtitle: "化繁为简的数学建模利器"
+  author: "张敬信"
+  date: today
+  output-file: "_main"
+  chapters:
+    - index.qmd
+    - part: comp-eval.qmd
+      chapters:
+        - preprocessing.qmd
+        - ahp-weight.qmd
+        - entropy-weight.qmd
+        - critic-weight.qmd
+        - pca-weight.qmd
+        - combine-weights.qmd
+        - topsis.qmd
+        - grey-relational.qmd
+        - rank-sum-ratio.qmd
+        - fuzzy-eval.qmd
+        - dea.qmd
+        - inequality.qmd
+        - system-eval.qmd
+    - references.qmd
+#  appendices:
+#    - appendix-a.qmd
+  repo-branch: main
+  search: true
+
+bibliography: references.bib
+csl: china-national-standard-gb-t-7714-2015-numeric.csl
+format:
+  html:
+    theme: cosmo
+    code-link: true
+    code-line-numbers: true
+    include-in-header:
+      - header.html
+  pdf:
+    documentclass: book
+    include-in-header: preamble.tex
+    classoption: [UTF8,twoside,openany,table]
+    keep-tex: true
+    lof: true
+    lot: true
+    geometry:
+      - tmargin=2.5cm
+      - bmargin=2.5cm
+      - lmargin=3.0cm
+      - rmargin=2.0cm
+    highlight-style: github
+    number-sections: true
+    top-level-division: chapter
+    colorlinks: true
+    mathspec: true
+    link-citations: true
+    crossref:
+      chapters: true
+  docx:
+    toc: true
+    toc-depth: 3
+    crossref:
+      chapters: true

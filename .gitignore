@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.quarto/
+
+/.quarto/
+
+.DS_Store
+
+data/
+*_files/
+_book/
+_main.tex
