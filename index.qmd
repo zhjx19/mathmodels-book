@@ -1,6 +1,8 @@
 # 前言 {#sec-preface .unnumbered}
 
-这是与 `mathmodels` 包配套的中文使用手册，使用黄湘云提供的 [`quarto` 中文书籍模板](https://github.com/XiangyunHuang/quarto-book)编写，内容整合自该包的 vignettes，目前只完整包含**评价类算法**。
+[^fn1]: 使用黄湘云提供的 [`quarto` 中文书籍模板](https://github.com/XiangyunHuang/quarto-book)编写.
+
+这是与 `mathmodels` 包配套的中文使用手册[^fn1]，内容整合自该包的 vignettes，目前只完整包含**评价类算法**。
 
 ## `mathmodels` 包与本配套使用手册的核心特色
 
@@ -18,7 +20,7 @@
 
 #### 3. tidyverse 生态无缝集成 {.unnumbered}
 
-- **数据管道式编程**：完美支持`%>%`管道操作，代码简洁流畅
+- **数据管道式编程**：完美支持 `|>` 管道操作，代码简洁流畅
 - **批量处理能力强大**：结合 `mutate()`、`across()` 等 tidyverse 函数，轻松实现批量算法应用
 - **现代化数据操作**：与 tidyverse 生态系统深度融合，提供符合R用户习惯的操作体验
 
