@@ -298,7 +298,7 @@ knitr::include_graphics("figs/bool-op2.png")
 
 模糊集与隶属函数（曲线）一一对应，所以，很自然地，模糊集的逻辑运算，就等同于隶属函数（曲线）的逻辑运算（取 $\min$、取 $\max$、做 $1-x$）。
 
-```{r echo=FALSE, fig.cap="布尔运算换个写法", out.width="90%"}
+```{r echo=FALSE, fig.cap="从布尔运算到模糊运算", out.width="90%"}
 knitr::include_graphics("figs/fuzzy-op.png")
 ```
 
@@ -417,6 +417,7 @@ R = matrix(c(0.8, 0.7, 0.6, 0.7,
              0.1, 0.2, 0.2, 0.1,
              0.1, 0.1, 0.2, 0.2), nrow = 3, byrow = TRUE)
 mu = fuzzy_eval(w, R, 3)
+mu
 ```
 
 ##### (5) 去模糊化得到最终评价 {.unnumbered}
@@ -436,7 +437,6 @@ defuzzify(mu, scores, method = "weighted_average")
 **注：**对于归一化的模糊评价隶属向量，加权平均法与重心法结果是相同的。
 
 ```{r}
-mu = fuzzy_eval(w, R, 3)
 scores = c(90, 75, 50)
 defuzzify(mu, scores, method = "max_membership")       # 最大隶属度法
 ```
