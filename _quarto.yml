@@ -24,6 +24,7 @@ book:
         - fuzzy-eval.qmd
         - dea.qmd
         - inequality.qmd
+        - regional-economics.qmd
         - system-eval.qmd
     - references.qmd
 #  appendices:

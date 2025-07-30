@@ -60,7 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./system-eval.html" rel="next">
+<link href="./regional-economics.html" rel="next">
 <link href="./dea.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -248,8 +248,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./regional-economics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./system-eval.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
   </div>
 </li>
       </ul>
@@ -419,22 +425,22 @@ G = \frac{0.5 - A}{0.5} = 1 - 2A
 <span class="header-section-number">12.2.3</span> 案例：批量计算基尼系数</h3>
 <p>数据整理自国家统计局网站，包含 2014-2023 年全国 31 个省份八个主要行业：“信息业”、“制造业”、“医疗”、“商贸”、“建筑业”、“教育”、“科研”、“金融业”的平均工资和就业人数。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>dat <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/income.xlsx"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>dat</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/income.xlsx"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2,480 × 5
-   行业   地区   年份 平均工资 就业人数
-   &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
- 1 信息业 上海   2014   170174   248000
- 2 信息业 上海   2015   183365   254000
- 3 信息业 上海   2016   200657   268000
- 4 信息业 上海   2017   212063   307000
- 5 信息业 上海   2018   232522   356000
- 6 信息业 上海   2019   237405   418000
- 7 信息业 上海   2020   270619   448000
- 8 信息业 上海   2021   303573   507000
- 9 信息业 上海   2022   330126   544000
-10 信息业 上海   2023   363745   528000
+<pre><code># A tibble: 2,480 × 6
+   行业   区域  地区   年份 平均工资 就业人数
+   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 信息业 东部  上海   2014   170174   248000
+ 2 信息业 东部  上海   2015   183365   254000
+ 3 信息业 东部  上海   2016   200657   268000
+ 4 信息业 东部  上海   2017   212063   307000
+ 5 信息业 东部  上海   2018   232522   356000
+ 6 信息业 东部  上海   2019   237405   418000
+ 7 信息业 东部  上海   2020   270619   448000
+ 8 信息业 东部  上海   2021   303573   507000
+ 9 信息业 东部  上海   2022   330126   544000
+10 信息业 东部  上海   2023   363745   528000
 # ℹ 2,470 more rows</code></pre>
 </div>
 </div>
@@ -444,7 +450,7 @@ G = \frac{0.5 - A}{0.5} = 1 - 2A
 <li>就是简单的分组汇总：按 <code>年份</code> 和 <code>行业</code> 分组，每组计算出一个基尼系数值</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
 <span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">summarise</span>(<span class="at">Gini =</span> <span class="fu">gini</span>(平均工资, 就业人数), <span class="at">.by =</span> <span class="fu">c</span>(年份, 行业)) </span>
 <span id="cb10-3"><a href="#cb10-3"></a>res </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -505,7 +511,7 @@ G = \frac{0.5 - A}{0.5} = 1 - 2A
 </section><section id="每个省份每年份内行业间工资的不平等程度基尼系数" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="每个省份每年份内行业间工资的不平等程度基尼系数">2. 每个省份每年份内<strong>行业间工资的不平等程度（基尼系数）</strong>
 </h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>dat <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>df <span class="sc">|&gt;</span> </span>
 <span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">summarise</span>(<span class="at">Gini =</span> <span class="fu">gini</span>(平均工资, 就业人数), <span class="at">.by =</span> <span class="fu">c</span>(年份, 地区)) <span class="sc">|&gt;</span> </span>
 <span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> 地区, <span class="at">values_from =</span> Gini)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -532,23 +538,23 @@ G = \frac{0.5 - A}{0.5} = 1 - 2A
 <span class="header-section-number">12.2.4</span> 绘制洛伦兹曲线</h3>
 <p>以“教育”行业 2023 年的数据为例，</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>edu23 <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>edu23 <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
 <span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">filter</span>(行业 <span class="sc">==</span> <span class="st">"教育"</span>, 年份 <span class="sc">==</span> <span class="st">"2023"</span>)</span>
 <span id="cb17-3"><a href="#cb17-3"></a>edu23</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 31 × 5
-   行业  地区    年份 平均工资 就业人数
-   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
- 1 教育  上海    2023   235503   388000
- 2 教育  云南    2023   116750   644000
- 3 教育  内蒙古  2023   110236   366000
- 4 教育  北京    2023   230965   508000
- 5 教育  吉林    2023   100625   346000
- 6 教育  四川    2023   116527  1238000
- 7 教育  天津    2023   149140   212000
- 8 教育  宁夏    2023   111737   112000
- 9 教育  安徽    2023   119779   678000
-10 教育  山东    2023   124519  1291000
+<pre><code># A tibble: 31 × 6
+   行业  区域  地区    年份 平均工资 就业人数
+   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 教育  东部  上海    2023   235503   388000
+ 2 教育  西部  云南    2023   116750   644000
+ 3 教育  西部  内蒙古  2023   110236   366000
+ 4 教育  东部  北京    2023   230965   508000
+ 5 教育  东北  吉林    2023   100625   346000
+ 6 教育  西部  四川    2023   116527  1238000
+ 7 教育  东部  天津    2023   149140   212000
+ 8 教育  西部  宁夏    2023   111737   112000
+ 9 教育  中部  安徽    2023   119779   678000
+10 教育  东部  山东    2023   124519  1291000
 # ℹ 21 more rows</code></pre>
 </div>
 </div>
@@ -727,41 +733,16 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 <li>两嵌套分组将组间部分 <span class="math inline">\(T_b\)</span> 分为 <span class="math inline">\(T_{b1}\)</span>（ <code>group1</code> 间）和 <span class="math inline">\(T_{b2}\)</span>（ <code>group2</code> 间），<span class="math inline">\(T_w\)</span> 仅为 <code>group2</code> 内的不平等，反映严格的层次结构。</li>
 </ul></section></section><section id="案例批量计算泰尔指数及其分解" class="level3" data-number="12.3.4"><h3 data-number="12.3.4" class="anchored" data-anchor-id="案例批量计算泰尔指数及其分解">
 <span class="header-section-number">12.3.4</span> 案例：批量计算泰尔指数及其分解</h3>
-<p>仍使用前文的 2014-2023 年全国 31 个省份八个主要行业的平均工资和就业人数数据，增加一列 <code>区域</code>，将省份划分至”东部”、“中部”、“西部”、“东部”。</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>df <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">mutate</span>(区域 <span class="ot">=</span> <span class="fu">case_match</span>(地区,</span>
-<span id="cb27-3"><a href="#cb27-3"></a>    <span class="fu">c</span>(<span class="st">"北京"</span>,<span class="st">"天津"</span>,<span class="st">"河北"</span>,<span class="st">"上海"</span>,<span class="st">"江苏"</span>,<span class="st">"浙江"</span>,<span class="st">"福建"</span>,<span class="st">"山东"</span>,<span class="st">"广东"</span>,<span class="st">"海南"</span>) <span class="sc">~</span> <span class="st">"东部"</span>,</span>
-<span id="cb27-4"><a href="#cb27-4"></a>    <span class="fu">c</span>(<span class="st">"山西"</span>,<span class="st">"安徽"</span>,<span class="st">"江西"</span>,<span class="st">"河南"</span>,<span class="st">"湖北"</span>,<span class="st">"湖南"</span>) <span class="sc">~</span> <span class="st">"中部"</span>,</span>
-<span id="cb27-5"><a href="#cb27-5"></a>    <span class="fu">c</span>(<span class="st">"辽宁"</span>,<span class="st">"吉林"</span>,<span class="st">"黑龙江"</span>) <span class="sc">~</span> <span class="st">"东北"</span>,</span>
-<span id="cb27-6"><a href="#cb27-6"></a>    <span class="at">.default =</span> <span class="st">"西部"</span>), <span class="at">.before =</span> 地区)</span>
-<span id="cb27-7"><a href="#cb27-7"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2,480 × 6
-   行业   区域  地区   年份 平均工资 就业人数
-   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
- 1 信息业 东部  上海   2014   170174   248000
- 2 信息业 东部  上海   2015   183365   254000
- 3 信息业 东部  上海   2016   200657   268000
- 4 信息业 东部  上海   2017   212063   307000
- 5 信息业 东部  上海   2018   232522   356000
- 6 信息业 东部  上海   2019   237405   418000
- 7 信息业 东部  上海   2020   270619   448000
- 8 信息业 东部  上海   2021   303573   507000
- 9 信息业 东部  上海   2022   330126   544000
-10 信息业 东部  上海   2023   363745   528000
-# ℹ 2,470 more rows</code></pre>
-</div>
-</div>
+<p>仍使用前文的 2014-2023 年全国 31 个省份八个主要行业的平均工资和就业人数数据。</p>
 <section id="每年关于行业的收入不平等性泰尔指数及其分解" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="每年关于行业的收入不平等性泰尔指数及其分解">1. 每年关于行业的收入不平等性（泰尔指数及其分解）</h4>
 <p><code>theil_*()</code> 系列函数的返回值，特意设计为两个成分的列表，且每个成分是长度相同、元素命名相同的向量，非常方便分组汇总并展开批量结果。</p>
 <p>每年就是按年份分组汇总，关于行业就是以 <code>行业</code> 为分组变量，分别对每组数据计算关于单个分组变量的泰尔指数及其分解。因为每组返回长度为 <span class="math inline">\(2\)</span> 的对象（列表），所以用 <code>reframe()</code> 代替 <code>summarise()</code>，结果是行数翻倍。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>res <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), <span class="at">group =</span> <span class="st">"行业"</span>, </span>
-<span id="cb29-3"><a href="#cb29-3"></a>                          <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
-<span id="cb29-4"><a href="#cb29-4"></a>          <span class="at">.by =</span> 年份) </span>
-<span id="cb29-5"><a href="#cb29-5"></a>res </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>res <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), <span class="at">group =</span> <span class="st">"行业"</span>, </span>
+<span id="cb27-3"><a href="#cb27-3"></a>                          <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
+<span id="cb27-4"><a href="#cb27-4"></a>          <span class="at">.by =</span> 年份) </span>
+<span id="cb27-5"><a href="#cb27-5"></a>res </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 2
     年份 Theil       
@@ -790,8 +771,8 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 </div>
 <p><code>Theil</code> 列是嵌套的向量，再做横向（往宽）展开即可：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>res <span class="sc">|&gt;</span> </span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 12
     年份      T     Tb     Tw 信息业 制造业   医疗   商贸 建筑业   教育   科研
@@ -823,11 +804,11 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 </section><section id="每年关于区域的收入不平等性批量泰尔指数及其分解" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="每年关于区域的收入不平等性批量泰尔指数及其分解">2. 每年关于区域的收入不平等性（批量泰尔指数及其分解）</h4>
 <p>同样做法，只需将分组变量换成 <code>区域</code>：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), <span class="at">group =</span> <span class="st">"区域"</span>, </span>
-<span id="cb33-3"><a href="#cb33-3"></a>                          <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
-<span id="cb33-4"><a href="#cb33-4"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
-<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), <span class="at">group =</span> <span class="st">"区域"</span>, </span>
+<span id="cb31-3"><a href="#cb31-3"></a>                          <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
+<span id="cb31-4"><a href="#cb31-4"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 8
     年份      T      Tb     Tw   东部   西部    东北   中部
@@ -858,12 +839,12 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 </section><section id="两交叉分组泰尔指数及其分解" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="两交叉分组泰尔指数及其分解">3. 两交叉分组泰尔指数及其分解</h4>
 <p>批量计算每年 <code>行业</code> 与 <code>区域</code> 两交叉分组泰尔指数及其分解：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g2_cross</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), </span>
-<span id="cb35-3"><a href="#cb35-3"></a>                                 <span class="at">group1 =</span> <span class="st">"行业"</span>, <span class="at">group2 =</span> <span class="st">"区域"</span>, </span>
-<span id="cb35-4"><a href="#cb35-4"></a>                                 <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
-<span id="cb35-5"><a href="#cb35-5"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
-<span id="cb35-6"><a href="#cb35-6"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g2_cross</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), </span>
+<span id="cb33-3"><a href="#cb33-3"></a>                                 <span class="at">group1 =</span> <span class="st">"行业"</span>, <span class="at">group2 =</span> <span class="st">"区域"</span>, </span>
+<span id="cb33-4"><a href="#cb33-4"></a>                                 <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
+<span id="cb33-5"><a href="#cb33-5"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 14
     年份      T     Tb     Tw   Tw_b   Tw_w 信息业 制造业   医疗   商贸 建筑业
@@ -898,12 +879,12 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 </ul></section><section id="两嵌套分组泰尔指数及其分解" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="两嵌套分组泰尔指数及其分解">4. 两嵌套分组泰尔指数及其分解</h4>
 <p>仅用数据中有嵌套关系的 <code>区域</code> 和 <code>地区</code> 测试：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g2_nest</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), </span>
-<span id="cb37-3"><a href="#cb37-3"></a>                                <span class="at">group1 =</span> <span class="st">"区域"</span>, <span class="at">group2 =</span> <span class="st">"地区"</span>, </span>
-<span id="cb37-4"><a href="#cb37-4"></a>                                <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
-<span id="cb37-5"><a href="#cb37-5"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
-<span id="cb37-6"><a href="#cb37-6"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">reframe</span>(<span class="at">Theil =</span> <span class="fu">theil_g2_nest</span>(<span class="fu">pick</span>(<span class="fu">everything</span>()), </span>
+<span id="cb35-3"><a href="#cb35-3"></a>                                <span class="at">group1 =</span> <span class="st">"区域"</span>, <span class="at">group2 =</span> <span class="st">"地区"</span>, </span>
+<span id="cb35-4"><a href="#cb35-4"></a>                                <span class="at">y =</span> <span class="st">"平均工资"</span>, <span class="at">pop =</span> <span class="st">"就业人数"</span>), </span>
+<span id="cb35-5"><a href="#cb35-5"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb35-6"><a href="#cb35-6"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 40
     年份      T   Tb_g1  Tb_g2     Tw   东部    西部      东北    中部 东部_上海
@@ -1366,8 +1347,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./system-eval.html" class="pagination-link" aria-label="系统评价">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./regional-economics.html" class="pagination-link" aria-label="区域经济">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

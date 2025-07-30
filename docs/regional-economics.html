@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>13&nbsp; 区域经济 – mathmodels 包使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./system-eval.html" rel="next">
+<link href="./inequality.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script><script>
+MathJax ={
+  tex: {
+    macros: {
+      bm: ["{\\boldsymbol #1}",1],
+    }
+  }
+};
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./regional-economics.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">mathmodels 包使用手册</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">前言</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./comp-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">评价类算法</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ahp-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./entropy-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./critic-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">CRITIC 法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pca-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">主成分赋权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topsis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">TOPSIS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grey-relational.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rank-sum-ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">秩和比法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fuzzy-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dea.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">数据包络分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inequality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regional-economics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">目录</h2>
+   
+  <ul>
+<li>
+<a href="#%E5%8C%BA%E4%BD%8D%E5%95%86" id="toc-区位商" class="nav-link active" data-scroll-target="#%E5%8C%BA%E4%BD%8D%E5%95%86"><span class="header-section-number">13.1</span> 区位商</a>
+  <ul class="collapse">
+<li><a href="#%E5%8C%BA%E4%BD%8D%E5%95%86%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F" id="toc-区位商计算公式" class="nav-link" data-scroll-target="#%E5%8C%BA%E4%BD%8D%E5%95%86%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="header-section-number">13.1.1</span> 区位商计算公式</a></li>
+  <li><a href="#%E6%A1%88%E4%BE%8B%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E5%8C%BA%E4%BD%8D%E5%95%86" id="toc-案例批量计算区位商" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E5%8C%BA%E4%BD%8D%E5%95%86"><span class="header-section-number">13.1.2</span> 案例：批量计算区位商</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E8%B5%AB%E8%8A%AC%E8%BE%BE%E5%B0%94-%E8%B5%AB%E5%B8%8C%E6%9B%BC%E6%8C%87%E6%95%B0" id="toc-赫芬达尔-赫希曼指数" class="nav-link" data-scroll-target="#%E8%B5%AB%E8%8A%AC%E8%BE%BE%E5%B0%94-%E8%B5%AB%E5%B8%8C%E6%9B%BC%E6%8C%87%E6%95%B0"><span class="header-section-number">13.2</span> 赫芬达尔-赫希曼指数</a>
+  <ul class="collapse">
+<li><a href="#hhi-%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F" id="toc-hhi-计算公式" class="nav-link" data-scroll-target="#hhi-%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="header-section-number">13.2.1</span> HHI 计算公式</a></li>
+  <li><a href="#%E6%A1%88%E4%BE%8B%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97-hhi" id="toc-案例批量计算-hhi" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97-hhi"><span class="header-section-number">13.2.2</span> 案例：批量计算 HHI</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#eg-%E6%8C%87%E6%95%B0" id="toc-eg-指数" class="nav-link" data-scroll-target="#eg-%E6%8C%87%E6%95%B0"><span class="header-section-number">13.3</span> EG 指数</a>
+  <ul class="collapse">
+<li><a href="#eg-%E6%8C%87%E6%95%B0%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F" id="toc-eg-指数计算公式" class="nav-link" data-scroll-target="#eg-%E6%8C%87%E6%95%B0%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="header-section-number">13.3.1</span> EG 指数计算公式</a></li>
+  <li><a href="#%E6%A1%88%E4%BE%8B%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97-eg-%E6%8C%87%E6%95%B0" id="toc-案例批量计算-eg-指数" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97-eg-%E6%8C%87%E6%95%B0"><span class="header-section-number">13.3.2</span> 案例：批量计算 EG 指数</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./regional-economics.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-regional-economics" class="quarto-section-identifier"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>在区域经济研究中，专业化程度、市场集中度和产业集聚水平是衡量区域经济发展特征的重要指标。本篇介绍如何批量计算：</p>
+<ul>
+<li>
+<strong>区位商（LQ）</strong>：衡量区域产业专业化程度</li>
+<li>
+<strong>赫芬达尔-赫希曼指数（HHI）</strong>：反映市场集中度和竞争程度</li>
+<li>
+<strong>EG 指数</strong>：测度产业空间集聚水平</li>
+</ul>
+<p>通过这些指标的计算与分析，可以深入理解区域产业结构特征和竞争优势。</p>
+<p>加载包：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="区位商" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="区位商">
+<span class="header-section-number">13.1</span> 区位商</h2>
+<p><strong>区位商</strong>，是一种衡量某一地区某产业或经济活动的专业化程度的指标。其核心思想是：如果一个地区某产业的比重显著高于全国该产业的比重，则说明该地区在该产业上具有相对优势或专业化特征。</p>
+<p>区位商作为一种简洁有效的相对指标，广泛应用于区域经济分析、产业政策制定、城市规划、企业选址及学术研究等领域。从国内外研究实践来看，该方法用途广泛，已成为识别区域产业发展特征的重要工具。具体应用包括：</p>
+<ol type="1">
+<li><p>识别优势产业与主导产业：通过比较各产业的区位商，判断哪些部门在区域中具有专业化优势，是区域经济发展的核心动力，为政府制定产业扶持政策提供依据。</p></li>
+<li><p>判断产业集群与专业化水平：反映特定产业在某一地区的集聚程度，辅助分析产业集聚趋势和区域分工格局。</p></li>
+<li><p>分析就业结构与劳动力配置：可应用于就业数据，评估某一行业在区域内的就业集中度和发展潜力。</p></li>
+<li><p>支持产业政策与结构调整：帮助决策者识别竞争力较弱的“输入型”产业，明确产业结构优化和转型升级的方向。</p></li>
+<li><p>指导城市功能定位与企业投资选址：用于评估城市经济功能（如工业型、服务型、创新型城市），并为企业在特定地区投资布局提供可行性参考。 综上，区位商方法是判断不同部门（产业）在区域经济发展中是否具备比较优势的行之有效手段，尤其在主导产业选择、产业集群识别和区域发展战略制定中具有重要应用价值。</p></li>
+</ol>
+<section id="区位商计算公式" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="区位商计算公式">
+<span class="header-section-number">13.1.1</span> 区位商计算公式</h3>
+<p>区位商计算公式为： <span class="math display">\[
+LQ_{ij}=\frac{E_{ij}/E_i}{E_{\cdot j}/E}
+\]</span> 其中，</p>
+<ul>
+<li>
+<span class="math inline">\(E_{ij}\)</span> 为地区 <span class="math inline">\(i\)</span> 的产业 <span class="math inline">\(j\)</span> 的产值（或就业人数等）</li>
+<li>
+<span class="math inline">\(E_i\)</span> 为地区 <span class="math inline">\(i\)</span> 的总产值（或总就业人数）</li>
+<li>
+<span class="math inline">\(E_{\cdot j}\)</span> 为全国产业 <span class="math inline">\(j\)</span> 的总产值</li>
+<li>
+<span class="math inline">\(E\)</span> 为全国总产值</li>
+</ul>
+<p>结果解读：</p>
+<ul>
+<li>
+<span class="math inline">\(LQ &gt; 1\)</span>：表示该地区在该产业上的专业化程度高于全国平均水平，说明该部门具有比较优势，属于产品输出型产业，是区域经济的主导产业或潜在增长点，具备较强竞争力和发展潜力。</li>
+<li>
+<span class="math inline">\(LQ = 1\)</span>：表示该地区在该产业上的专业化水平与全国平均水平相当，说明该部门处于一般发展水平，能够满足本区域的基本需求，但未形成明显优势或劣势。</li>
+<li>
+<span class="math inline">\(LQ &lt; 1\)</span>：表示该地区在该产业上的专业化程度低于全国平均水平，说明该部门竞争力较弱，属于产品输入型产业，依赖外部供给，是区域产业结构调整或转型升级的重点方向。</li>
+</ul></section><section id="案例批量计算区位商" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="案例批量计算区位商">
+<span class="header-section-number">13.1.2</span> 案例：批量计算区位商</h3>
+<p>从国家统计局网站搜集 2015-2024 年 31 个省份的 GDP 和第一、二、三产业数据：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>dat <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/industry.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>dat</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 310 × 6
+    年份 地区      GDP 第一产业 第二产业 第三产业
+   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2015 上海   26887      126.    8409.   18353.
+ 2  2015 云南   14960     2079.    5492.    7389 
+ 3  2015 内蒙古 12949     1630.    5270.    6049.
+ 4  2015 北京   24779.     140.    4420.   20219.
+ 5  2015 吉林   10018     1271.    3838.    4910.
+ 6  2015 四川   30342     3661    13192.   13489.
+ 7  2015 天津   10880.     162.    4490.    6228.
+ 8  2015 宁夏    2579.     237.    1117.    1226.
+ 9  2015 安徽   23831.    2376.   10838.   10617.
+10  2015 山东   55289.    4903.   24815.   25571.
+# ℹ 300 more rows</code></pre>
+</div>
+</div>
+<p>下面演示批量计算每个年份各地区的第一、二、三产业的区位商。</p>
+<p>首先，计算区位商需要每年的全国数据，先分组汇总出来：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>nation <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">summarise</span>(地区 <span class="ot">=</span> <span class="fu">str_c</span>(<span class="fu">intToUtf8</span>(<span class="dv">1</span>), <span class="st">"全国"</span>), </span>
+<span id="cb4-3"><a href="#cb4-3"></a>            <span class="fu">across</span>(<span class="sc">-</span>地区, sum), <span class="at">.by =</span> 年份)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>nation</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 6
+    年份 地区              GDP 第一产业 第二产业 第三产业
+   &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2015 "\u0001全国"  693642    57768.  298297.  337578.
+ 2  2016 "\u0001全国"  750949.   60161.  310384.  380404.
+ 3  2017 "\u0001全国"  832096.   62097.  337659.  432342.
+ 4  2018 "\u0001全国"  914118.   64748.  363741.  485629.
+ 5  2019 "\u0001全国"  982320.   70474.  381590.  530257.
+ 6  2020 "\u0001全国" 1009938.   78031   382893.  549014.
+ 7  2021 "\u0001全国" 1142483    83221   449062.  610199.
+ 8  2022 "\u0001全国" 1193975    88210.  466133.  639632.
+ 9  2023 "\u0001全国" 1250932.   89822   479036.  682074 
+10  2024 "\u0001全国" 1340313.   91417.  491643.  757253.</code></pre>
+</div>
+</div>
+<p>同时增加地区列，为了保证后面将“全国”放在各分组的第一行，这里使用一个小技巧，给“全国”拼接上一个 Unicode 最小值字符：<code>str_c(intToUtf8(1), "全国")</code>，这样再排序自然就排在第一位了。</p>
+<p>然后，与原始数据合并，并按地区排序：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df <span class="ot">=</span> <span class="fu">bind_rows</span>(dat, nation) <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">group_by</span>(年份) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">arrange</span>(地区, <span class="at">.by_group =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb6-5"><a href="#cb6-5"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 320 × 6
+    年份 地区             GDP 第一产业 第二产业 第三产业
+   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2015 "\u0001全国" 693642    57768.  298297.  337578.
+ 2  2015 "上海"        26887      126.    8409.   18353.
+ 3  2015 "云南"        14960     2079.    5492.    7389 
+ 4  2015 "内蒙古"      12949     1630.    5270.    6049.
+ 5  2015 "北京"        24779.     140.    4420.   20219.
+ 6  2015 "吉林"        10018     1271.    3838.    4910.
+ 7  2015 "四川"        30342     3661    13192.   13489.
+ 8  2015 "天津"        10880.     162.    4490.    6228.
+ 9  2015 "宁夏"         2579.     237.    1117.    1226.
+10  2015 "安徽"        23831.    2376.   10838.   10617.
+# ℹ 310 more rows</code></pre>
+</div>
+</div>
+<p>最后，按年份分组计算区位商即可：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">LQ</span>(df, 地区, GDP, <span class="fu">contains</span>(<span class="st">"产业"</span>), <span class="at">.by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 310 × 5
+    年份 地区   第一产业 第二产业 第三产业
+   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2015 上海     0.0560    0.727    1.40 
+ 2  2015 云南     1.67      0.854    1.01 
+ 3  2015 内蒙古   1.51      0.946    0.960
+ 4  2015 北京     0.0680    0.415    1.68 
+ 5  2015 吉林     1.52      0.891    1.01 
+ 6  2015 四川     1.45      1.01     0.913
+ 7  2015 天津     0.179     0.960    1.18 
+ 8  2015 宁夏     1.10      1.01     0.976
+ 9  2015 安徽     1.20      1.06     0.915
+10  2015 山东     1.06      1.04     0.950
+# ℹ 300 more rows</code></pre>
+</div>
+</div>
+<p>结果是每年各地区第一、二、三产业的区位商。</p>
+<p><strong>注：</strong>实际上，上述代码还能再简化：前面的 <code>ungroup()</code> 没有必要做，这样 <code>df</code> 就是分组数据框，最后执行 <code>LQ(df, 地区, GDP, contains("产业")</code> 即得到同样结果。</p>
+</section></section><section id="赫芬达尔-赫希曼指数" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="赫芬达尔-赫希曼指数">
+<span class="header-section-number">13.2</span> 赫芬达尔-赫希曼指数</h2>
+<p><strong>赫芬达尔-赫希曼指数（HHI）</strong>，是一种衡量市场集中度或产业集聚程度的经典指标，其核心原理是：</p>
+<ul>
+<li>将一个整体（如市场、区域、产业）的总“份额”分配给其内部的各个组成部分（如企业、地区、产业），HHI 通过计算这些份额的平方和来反映其分布的集中程度。</li>
+<li>HHI 值越大，表示该整体内的组成部分分布越不均衡，少数几个组成部分占据了绝大部分份额，即集中度高。</li>
+<li>HHI 值越小，表示份额在各个组成部分之间分布越均匀，即集中度低。</li>
+</ul>
+<p>其数学基础是：平方和对大数值更敏感。例如，一个 <span class="math inline">\(90\%+10\%\)</span> 的分布，其平方和远大于 <span class="math inline">\(50\%+50\%\)</span>的分布。</p>
+<p>HHI 广泛应用于经济学、产业组织、区域经济和反垄断分析中，主要用途包括：</p>
+<ul>
+<li>评估市场垄断程度：在美国等国家，HHI 是反垄断机构（如司法部）判断市场是否过度集中的核心指标。</li>
+<li>衡量产业集聚：分析某一产业（如电子信息产业）在全国各省之间的空间分布是否集中。</li>
+<li>评价区域产业结构：衡量一个区域（如东部地区）的经济是否依赖少数几个主导产业，还是产业结构多元化。</li>
+<li>政策分析：为产业政策、区域协调发展政策提供数据支持。</li>
+</ul>
+<p>特别地，结合多个区域比较时，HHI 可以回答：</p>
+<ul>
+<li>“哪个区域的某个产业分布更集中？”</li>
+<li>“哪个区域的产业结构更依赖少数几个主导产业？”</li>
+</ul>
+<section id="hhi-计算公式" class="level3" data-number="13.2.1"><h3 data-number="13.2.1" class="anchored" data-anchor-id="hhi-计算公式">
+<span class="header-section-number">13.2.1</span> HHI 计算公式</h3>
+<p>设有 <span class="math inline">\(n\)</span> 个地区（或企业），每个地区 <span class="math inline">\(i\)</span> 的“份额”为 <span class="math inline">\(s_i = \frac{E_i}{\sum_{i=1}^n E_i}\)</span>（如产值占比、市场份额）。</p>
+<p>则赫芬达尔-赫希曼指数定义为： <span class="math display">\[
+HHI = \sum_{i=1}^n s_i^2
+\]</span></p>
+<p>若要跨区域比较，可以对 HHI 做标准化：由于不同区域的地区数量（<span class="math inline">\(n\)</span>）不同，而 HHI 的取值范围是 <span class="math inline">\([1/n, 1]\)</span>，这会影响跨区域比较的公平性。为此，可进行标准化，将 HHI 转换到 <span class="math inline">\([0, 1]\)</span> 区间，用 <span class="math inline">\(0\)</span> （而不是 <span class="math inline">\(1/n\)</span>）表示完全均匀，<span class="math inline">\(1\)</span> 表示完全集中： <span class="math display">\[
+HHI_{norm} = \frac{HHI - 1/n}{1-1/n}
+\]</span></p>
+<p><strong>注：</strong>原始 HHI 用于比较同一区域下（若干地区）的集中度；标准化 HHI 用于比较不同区域（不同的地区数量）的推荐方式。</p>
+</section><section id="案例批量计算-hhi" class="level3" data-number="13.2.2"><h3 data-number="13.2.2" class="anchored" data-anchor-id="案例批量计算-hhi">
+<span class="header-section-number">13.2.2</span> 案例：批量计算 HHI</h3>
+<p>使用上一篇的 2014-2023 年全国 31 个省份八个主要行业的平均工资和就业人数数据。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>df <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/income.xlsx"</span>) </span>
+<span id="cb10-2"><a href="#cb10-2"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,480 × 6
+   行业   区域  地区   年份 平均工资 就业人数
+   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 信息业 东部  上海   2014   170174   248000
+ 2 信息业 东部  上海   2015   183365   254000
+ 3 信息业 东部  上海   2016   200657   268000
+ 4 信息业 东部  上海   2017   212063   307000
+ 5 信息业 东部  上海   2018   232522   356000
+ 6 信息业 东部  上海   2019   237405   418000
+ 7 信息业 东部  上海   2020   270619   448000
+ 8 信息业 东部  上海   2021   303573   507000
+ 9 信息业 东部  上海   2022   330126   544000
+10 信息业 东部  上海   2023   363745   528000
+# ℹ 2,470 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>分别针对每年每个行业，计算各个区域的 HHI，再来个长变宽：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">summarise</span>(<span class="at">hhi =</span> <span class="fu">HHI</span>(就业人数, <span class="at">scaled =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb12-3"><a href="#cb12-3"></a>            <span class="at">.by =</span> <span class="fu">c</span>(年份, 行业, 区域)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> 区域, <span class="at">values_from =</span> hhi)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 6
+    年份 行业     东部   西部   东北    中部
+   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1  2014 信息业 0.0781 0.0746 0.0481 0.00865
+ 2  2015 信息业 0.0830 0.0868 0.0539 0.0133 
+ 3  2016 信息业 0.0821 0.0876 0.0487 0.0236 
+ 4  2017 信息业 0.0844 0.0952 0.0461 0.0264 
+ 5  2018 信息业 0.0867 0.0894 0.0543 0.0295 
+ 6  2019 信息业 0.0860 0.0860 0.0632 0.0472 
+ 7  2020 信息业 0.0874 0.0922 0.0940 0.0455 
+ 8  2021 信息业 0.0862 0.0980 0.133  0.0456 
+ 9  2022 信息业 0.0882 0.104  0.118  0.0426 
+10  2023 信息业 0.0874 0.110  0.144  0.0389 
+# ℹ 70 more rows</code></pre>
+</div>
+</div>
+</section></section><section id="eg-指数" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="eg-指数">
+<span class="header-section-number">13.3</span> EG 指数</h2>
+<p>基尼系数和泰尔指数虽能反映产业的空间不平等分布，但这种不平等往往源于企业规模差异，而非真正的空间集聚。当少数大型企业主导产业时，即使它们在地理上分散，基尼系数仍会显示高不平等度，形成“假集聚”。</p>
+<p>例如，10 家企业分布在 10 个区域，其中 1 家占据 <span class="math inline">\(90\%\)</span> 的份额，其余 9 家各占 <span class="math inline">\(1.1\%\)</span>。即便完全分散布局，基尼系数依然很高，反映的是企业规模不平等，而非空间集聚。</p>
+<p>EG 指数修正了这一缺陷，区分了：</p>
+<p><strong>产业集中度</strong>：少数大企业的主导作用（规模效应） <strong>产业空间集中度</strong>：经济活动在特定区域的集聚（地理集聚）</p>
+<p>通过控制企业规模，EG 指数更准确地测度空间集聚程度，避免被企业规模分布误导。</p>
+<section id="eg-指数计算公式" class="level3" data-number="13.3.1"><h3 data-number="13.3.1" class="anchored" data-anchor-id="eg-指数计算公式">
+<span class="header-section-number">13.3.1</span> EG 指数计算公式</h3>
+<p>Ellison &amp; Glaeser (1997) 将企业视为追求利润最大化的主体，在选址时会选择能带来最高利润的区域。其利润主要受三方面因素影响：区域自然条件、企业“抱团”形成的集聚经济，以及企业自身特征。基于此，他们构建了企业选址的数理模型，并通过特定的统计假设推导出计算产业空间集中度的 EG 指数公式： <span class="math display">\[
+\begin{aligned}
+\gamma_{EG} &amp;= \frac{\sum_{i=1}^M(s_i-x_i)^2-(1-\sum_{i=1}^Mx_i^2)\sum_{j=1}^Nz_j^2}{(1-\sum_{i=1}^Mx_i^2)(1-\sum_{j=1}^Nz_j^2)} \\
+&amp;= \left[\frac{\sum_{i=1}^M(s_i-x_i)^2}{1-\sum_{i=1}^Mx_i^2}-h\right]/(1-h)
+\end{aligned}
+\]</span> 其中，</p>
+<ul>
+<li>
+<span class="math inline">\(M\)</span> 为地区的个数，<span class="math inline">\(N\)</span> 为企业个数；</li>
+<li>
+<span class="math inline">\(s_i\)</span> 为第 <span class="math inline">\(i\)</span> 个地区某行业就业人数占该行业总就业人数的比重；</li>
+<li>
+<span class="math inline">\(x_i\)</span> 为第 <span class="math inline">\(i\)</span> 个地区所有行业就业人数占整个地区所有行业就业人数的比重，代表总体集聚程度，反映的是某行业相对于全体行业地理分布的偏离程度；</li>
+<li>
+<span class="math inline">\(z_j\)</span> 为第 <span class="math inline">\(j\)</span> 个企业就业人数占该行业所有就业人数的比重，用来计算产业的赫芬达尔-赫希曼指数 <span class="math inline">\(h = \sum z_j^2\)</span>，反映企业的规模分配情况。</li>
+</ul>
+<p>EG 指数是根据企业选址的关联性得出的，其衡量的是企业“共同选址”的关系强弱，因此可有效地避免企业规模差异对总体集聚程度的影响。</p>
+<ul>
+<li>
+<span class="math inline">\(EG = 0\)</span>：行业分布完全随机（无集聚）</li>
+<li>
+<span class="math inline">\(EG &gt; 0\)</span>：存在正向集聚（企业集中在某些地区）</li>
+<li>
+<span class="math inline">\(EG &lt; 0\)</span>：存在负向集聚（即分散化，企业有意避开彼此）</li>
+</ul>
+<p>一般认为 EG 指数大于 <span class="math inline">\(0.05\)</span> 时，产业高度集聚，小于 <span class="math inline">\(0.02\)</span> 时，产业集聚度低。</p>
+</section><section id="案例批量计算-eg-指数" class="level3" data-number="13.3.2"><h3 data-number="13.3.2" class="anchored" data-anchor-id="案例批量计算-eg-指数">
+<span class="header-section-number">13.3.2</span> 案例：批量计算 EG 指数</h3>
+<p>继续使用上面的 2014-2023 年全国 31 个省份八个主要行业的平均工资和就业人数数据。</p>
+<ul>
+<li>批量建模，计算每年各行业的 EG 指数：</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">EG</span>(d, 地区, 行业, 就业人数))) <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 3
+    年份 行业        EG
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1  2014 信息业 -0.0482
+ 2  2014 制造业 -0.0783
+ 3  2014 医疗   -0.0380
+ 4  2014 商贸   -0.0484
+ 5  2014 建筑业 -0.0574
+ 6  2014 教育   -0.0354
+ 7  2014 科研   -0.0345
+ 8  2014 金融业 -0.0396
+ 9  2015 信息业 -0.0478
+10  2015 制造业 -0.0785
+# ℹ 70 more rows</code></pre>
+</div>
+</div>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "已复制");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "已复制");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./inequality.html" class="pagination-link" aria-label="不平等度量">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./system-eval.html" class="pagination-link" aria-label="系统评价">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

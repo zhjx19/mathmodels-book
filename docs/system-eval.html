@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>13&nbsp; 系统评价 – mathmodels 包使用手册</title>
+<title>14&nbsp; 系统评价 – mathmodels 包使用手册</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -61,7 +61,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./references.html" rel="next">
-<link href="./inequality.html" rel="prev">
+<link href="./regional-economics.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -138,7 +138,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./system-eval.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./system-eval.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
@@ -248,8 +248,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./regional-economics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./system-eval.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
   </div>
 </li>
       </ul>
@@ -269,27 +275,27 @@ window.Quarto = {
    
   <ul>
 <li>
-<a href="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-耦合协调度" class="nav-link active" data-scroll-target="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">13.1</span> 耦合协调度</a>
+<a href="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-耦合协调度" class="nav-link active" data-scroll-target="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">14.1</span> 耦合协调度</a>
   <ul class="collapse">
-<li><a href="#%E8%80%A6%E5%90%88%E5%BA%A6" id="toc-耦合度" class="nav-link" data-scroll-target="#%E8%80%A6%E5%90%88%E5%BA%A6"><span class="header-section-number">13.1.1</span> 耦合度</a></li>
-  <li><a href="#%E5%8D%8F%E8%B0%83%E6%8C%87%E6%95%B0" id="toc-协调指数" class="nav-link" data-scroll-target="#%E5%8D%8F%E8%B0%83%E6%8C%87%E6%95%B0"><span class="header-section-number">13.1.2</span> 协调指数</a></li>
-  <li><a href="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6-1" id="toc-耦合协调度-1" class="nav-link" data-scroll-target="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6-1"><span class="header-section-number">13.1.3</span> 耦合协调度</a></li>
+<li><a href="#%E8%80%A6%E5%90%88%E5%BA%A6" id="toc-耦合度" class="nav-link" data-scroll-target="#%E8%80%A6%E5%90%88%E5%BA%A6"><span class="header-section-number">14.1.1</span> 耦合度</a></li>
+  <li><a href="#%E5%8D%8F%E8%B0%83%E6%8C%87%E6%95%B0" id="toc-协调指数" class="nav-link" data-scroll-target="#%E5%8D%8F%E8%B0%83%E6%8C%87%E6%95%B0"><span class="header-section-number">14.1.2</span> 协调指数</a></li>
+  <li><a href="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6-1" id="toc-耦合协调度-1" class="nav-link" data-scroll-target="#%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6-1"><span class="header-section-number">14.1.3</span> 耦合协调度</a></li>
   </ul>
 </li>
-  <li><a href="#%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-障碍度" class="nav-link" data-scroll-target="#%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">13.2</span> 障碍度</a></li>
+  <li><a href="#%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-障碍度" class="nav-link" data-scroll-target="#%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">14.2</span> 障碍度</a></li>
   <li>
-<a href="#%E6%A1%88%E4%BE%8B%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-案例耦合协调度障碍度" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">13.3</span> 案例：耦合协调度、障碍度</a>
+<a href="#%E6%A1%88%E4%BE%8B%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-案例耦合协调度障碍度" class="nav-link" data-scroll-target="#%E6%A1%88%E4%BE%8B%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">14.3</span> 案例：耦合协调度、障碍度</a>
   <ul class="collapse">
-<li><a href="#%E5%88%86%E5%88%AB%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%B3%BB%E7%BB%9F" id="toc-分别综合评价每个子系统" class="nav-link" data-scroll-target="#%E5%88%86%E5%88%AB%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="header-section-number">13.3.1</span> 分别综合评价每个子系统</a></li>
-  <li><a href="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-批量计算耦合协调度" class="nav-link" data-scroll-target="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">13.3.2</span> 批量计算耦合协调度</a></li>
-  <li><a href="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-批量计算障碍度" class="nav-link" data-scroll-target="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">13.3.3</span> 批量计算障碍度</a></li>
+<li><a href="#%E5%88%86%E5%88%AB%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%B3%BB%E7%BB%9F" id="toc-分别综合评价每个子系统" class="nav-link" data-scroll-target="#%E5%88%86%E5%88%AB%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="header-section-number">14.3.1</span> 分别综合评价每个子系统</a></li>
+  <li><a href="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6" id="toc-批量计算耦合协调度" class="nav-link" data-scroll-target="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E8%80%A6%E5%90%88%E5%8D%8F%E8%B0%83%E5%BA%A6"><span class="header-section-number">14.3.2</span> 批量计算耦合协调度</a></li>
+  <li><a href="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E9%9A%9C%E7%A2%8D%E5%BA%A6" id="toc-批量计算障碍度" class="nav-link" data-scroll-target="#%E6%89%B9%E9%87%8F%E8%AE%A1%E7%AE%97%E9%9A%9C%E7%A2%8D%E5%BA%A6"><span class="header-section-number">14.3.3</span> 批量计算障碍度</a></li>
   </ul>
 </li>
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./system-eval.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></a></li></ol></nav><div class="quarto-title">
-<h1 class="title"><span id="sec-system-eval" class="quarto-section-identifier"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">系统评价</span></span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./system-eval.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-system-eval" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">系统评价</span></span></h1>
 </div>
 
 
@@ -303,14 +309,14 @@ window.Quarto = {
   
 
 
-</header><section id="耦合协调度" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="耦合协调度">
-<span class="header-section-number">13.1</span> 耦合协调度</h2>
+</header><section id="耦合协调度" class="level2" data-number="14.1"><h2 data-number="14.1" class="anchored" data-anchor-id="耦合协调度">
+<span class="header-section-number">14.1</span> 耦合协调度</h2>
 <p><strong>耦合协调度</strong>，是分析事物协调发展水平的重要工具。其中，耦合度反映两个或多个系统间的相互作用与影响，体现系统间协调发展的动态关联关系，能够量化系统间的相互依赖与制约程度；协调度则衡量耦合关系中良性耦合的程度，反映协调状况的优劣。</p>
 <p>在经济地理学研究中，耦合协调度模型应用广泛。该学科主要关注由多个子系统（如产业系统、技术创新系统、社会文化系统、生态环境系统等）构成的区域经济复杂系统。因此，该模型成为分析区域经济系统中不同子系统间关联性、协同性、协调性及其对区域经济发展影响的常用方法。</p>
 <p>然而，区域经济中多系统间的耦合协调关系往往难以通过耦合协调度模型简单揭示。该模型仅能从宏观层面反映区域经济系统中不同子系统间的耦合协调程度，存在明显局限性：既无法深入分析各子系统内部的结构、功能和动力机制，也难以充分考虑多系统间的非线性关系、反馈机制和时滞效应等复杂因素。特别是在缺乏对两系统间关系明确认知的情况下，仅通过简单分析其共同发展态势难以获得深刻洞察，需要结合实际情况辩证运用这一方法。建议借助理论分析，深化系统间关系的机理阐释与理论模型构建。</p>
 <p>耦合协调度共涉及 3 个指标值的计算，分别是耦合度 <span class="math inline">\(C\)</span> 值，协调指数 <span class="math inline">\(T\)</span> 值，耦合协调度 <span class="math inline">\(D\)</span> 值。并且最终结合耦合协调度 <span class="math inline">\(D\)</span> 值和协调等级划分标准，最终得出各项的耦合协调程度。</p>
-<section id="耦合度" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="耦合度">
-<span class="header-section-number">13.1.1</span> 耦合度</h3>
+<section id="耦合度" class="level3" data-number="14.1.1"><h3 data-number="14.1.1" class="anchored" data-anchor-id="耦合度">
+<span class="header-section-number">14.1.1</span> 耦合度</h3>
 <p>耦合度的概念源自物理学，用来描述两个或多个系统之间的相互作用与关联性。在社会经济领域，耦合度被用来评估诸如基础设施与公共服务、经济发展与环境保护等不同系统之间的相互影响。</p>
 <p>简单来说，耦合度越高，意味着两个系统之间的互动越强，彼此的促进作用越明显。例如，当农村基础设施的改善带动了公共服务水平的提升，反过来，公共服务的提高又促进了基础设施的进一步完善，这样的互动关系就会表现为一个较高的耦合度。</p>
 <p>耦合度指两个或两个以上系统之间的相互作用影响，实现协调发展的动态关联关系，可以反映系统之间的相互依赖相互制约程度。<span class="math inline">\(n\)</span> 个系统相互作用耦合度可以定义为： <span class="math display">\[
@@ -342,13 +348,13 @@ C_n = \frac{(u_1u_2\cdots u_n)^{1/n}}{(u_1+u_2+\cdots+u_n)/n}
 </tbody>
 </table>
 <p>耦合度取决于多个系统的发展程度及其相互关系。比如，当两个系统都发展得很好且相互促进时，耦合度接近于 <span class="math inline">\(1\)</span>；反之，当两个系统中有一个发展滞后或彼此关联性弱时，耦合度会很低。</p>
-</section><section id="协调指数" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="协调指数">
-<span class="header-section-number">13.1.2</span> 协调指数</h3>
+</section><section id="协调指数" class="level3" data-number="14.1.2"><h3 data-number="14.1.2" class="anchored" data-anchor-id="协调指数">
+<span class="header-section-number">14.1.2</span> 协调指数</h3>
 <p><strong>协调指数</strong>，是各子系统标准化值的加权综合得分，反映系统整体的协调发展程度。其计算公式为： <span class="math display">\[
 T = \sum_{i=1}^n w_i u_i
 \]</span> 其中，<span class="math inline">\(w_i\)</span> 为各子系统的权重，满足 <span class="math inline">\(\sum\limits_{i=1}^n w_i = 1\)</span>。</p>
-</section><section id="耦合协调度-1" class="level3" data-number="13.1.3"><h3 data-number="13.1.3" class="anchored" data-anchor-id="耦合协调度-1">
-<span class="header-section-number">13.1.3</span> 耦合协调度</h3>
+</section><section id="耦合协调度-1" class="level3" data-number="14.1.3"><h3 data-number="14.1.3" class="anchored" data-anchor-id="耦合协调度-1">
+<span class="header-section-number">14.1.3</span> 耦合协调度</h3>
 <p>耦合度虽然能够反映系统间的互动强度，但无法全面描述系统的整体发展状况。因此，协调度模型应运而生。该模型不仅考量系统间的相互作用，更关注其是否实现和谐发展。</p>
 <p><strong>耦合协调度</strong>，是综合耦合度与协调指数的复合指标，定义为二者的几何平均： <span class="math display">\[
 D = \sqrt{C T}
@@ -415,8 +421,8 @@ D = \sqrt{C T}
 <code>id_cols</code> 不参与计算的列名向量，默认为 <code>NULL</code>。</li>
 </ul>
 <p>返回 <code>tibble</code> 包含 ID （若提供 <code>id_cols</code>），<code>coupling</code>（耦合度）、<code>coord</code>（协调指数）、<code>coupling_coord</code>（耦合协调度）。</p>
-</section></section><section id="障碍度" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="障碍度">
-<span class="header-section-number">13.2</span> 障碍度</h2>
+</section></section><section id="障碍度" class="level2" data-number="14.2"><h2 data-number="14.2" class="anchored" data-anchor-id="障碍度">
+<span class="header-section-number">14.2</span> 障碍度</h2>
 <p><strong>障碍度模型</strong>，旨在评估各指标或因素对系统协调发展的制约程度，识别影响协调水平提升的关键瓶颈。该模型常与耦合协调度模型结合使用，用于诊断协调水平偏低的内在原因，具有较强的解释力和实践指导价值。例如，在区域经济发展研究中，可通过障碍度分析判断经济活力不足、协调机制缺失，还是绿色发展滞后等因素构成主要制约。</p>
 <p>作为耦合协调度模型的有益补充，障碍度模型有助于深入揭示系统内部的非均衡问题，为制定精准化、针对性的优化策略提供科学依据。</p>
 <p>障碍度模型包含三个关键概念，用于识别制约系统协调发展的主要因素：</p>
@@ -457,8 +463,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">obstacle_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>参数同 <code>coupling_degree()</code> 函数。为了便于批量计算，该函数设计为只计算二级指标障碍度 <span class="math inline">\(O_{ij}\)</span>，想进一步计算一级指标障碍度 <span class="math inline">\(U_i\)</span>，在外面接着使用 <code>summarise(..., .by)</code> 即可。</p>
-</section><section id="案例耦合协调度障碍度" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="案例耦合协调度障碍度">
-<span class="header-section-number">13.3</span> 案例：耦合协调度、障碍度</h2>
+</section><section id="案例耦合协调度障碍度" class="level2" data-number="14.3"><h2 data-number="14.3" class="anchored" data-anchor-id="案例耦合协调度障碍度">
+<span class="header-section-number">14.3</span> 案例：耦合协调度、障碍度</h2>
 <p>加载包：</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -492,8 +498,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 #   单位GDP能耗 &lt;dbl&gt;, 绿地覆盖率 &lt;dbl&gt;</code></pre>
 </div>
 </div>
-<section id="分别综合评价每个子系统" class="level3" data-number="13.3.1"><h3 data-number="13.3.1" class="anchored" data-anchor-id="分别综合评价每个子系统">
-<span class="header-section-number">13.3.1</span> 分别综合评价每个子系统</h3>
+<section id="分别综合评价每个子系统" class="level3" data-number="14.3.1"><h3 data-number="14.3.1" class="anchored" data-anchor-id="分别综合评价每个子系统">
+<span class="header-section-number">14.3.1</span> 分别综合评价每个子系统</h3>
 <ul>
 <li>用熵权法分别综合评价每个子系统</li>
 </ul>
@@ -540,8 +546,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 # ℹ 70 more rows</code></pre>
 </div>
 </div>
-</section><section id="批量计算耦合协调度" class="level3" data-number="13.3.2"><h3 data-number="13.3.2" class="anchored" data-anchor-id="批量计算耦合协调度">
-<span class="header-section-number">13.3.2</span> 批量计算耦合协调度</h3>
+</section><section id="批量计算耦合协调度" class="level3" data-number="14.3.2"><h3 data-number="14.3.2" class="anchored" data-anchor-id="批量计算耦合协调度">
+<span class="header-section-number">14.3.2</span> 批量计算耦合协调度</h3>
 <ul>
 <li>归一化子系统得分</li>
 </ul>
@@ -575,8 +581,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 # ℹ 70 more rows</code></pre>
 </div>
 </div>
-</section><section id="批量计算障碍度" class="level3" data-number="13.3.3"><h3 data-number="13.3.3" class="anchored" data-anchor-id="批量计算障碍度">
-<span class="header-section-number">13.3.3</span> 批量计算障碍度</h3>
+</section><section id="批量计算障碍度" class="level3" data-number="14.3.3"><h3 data-number="14.3.3" class="anchored" data-anchor-id="批量计算障碍度">
+<span class="header-section-number">14.3.3</span> 批量计算障碍度</h3>
 <ul>
 <li>按年份分组，分别计算二级指标障碍度</li>
 </ul>
@@ -1092,8 +1098,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./inequality.html" class="pagination-link" aria-label="不平等度量">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">不平等度量</span></span>
+      <a href="./regional-economics.html" class="pagination-link" aria-label="区域经济">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">区域经济</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
