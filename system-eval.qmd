@@ -191,12 +191,20 @@ S |>
 
 ### 批量计算障碍度
 
+- 先用熵权法计算指标权重，注意指标已经归一化
+
+```{r}
+w = entropy_weight(S[3:5], rep(NA, 3))$w
+w
+```
+
+
 - 按年份分组，分别计算二级指标障碍度
 
 ```{r}
 res = S |> 
   nest(.by = 年份) |> 
-  mutate(model = map(data, \(d) obstacle_degree(d, id_cols = "地区"))) |> 
+  mutate(model = map(data, \(d) obstacle_degree(d, w, id_cols = "地区"))) |> 
   select(-data) |> 
   unnest(model)
 res

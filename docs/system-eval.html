@@ -584,29 +584,40 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 </section><section id="批量计算障碍度" class="level3" data-number="14.3.3"><h3 data-number="14.3.3" class="anchored" data-anchor-id="批量计算障碍度">
 <span class="header-section-number">14.3.3</span> 批量计算障碍度</h3>
 <ul>
+<li>先用熵权法计算指标权重，注意指标已经归一化</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>w <span class="ot">=</span> <span class="fu">entropy_weight</span>(S[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))<span class="sc">$</span>w</span>
+<span id="cb14-2"><a href="#cb14-2"></a>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     科技      经济      生态 
+0.3898977 0.2839915 0.3261108 </code></pre>
+</div>
+</div>
+<ul>
 <li>按年份分组，分别计算二级指标障碍度</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>res <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">obstacle_degree</span>(d, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
-<span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">unnest</span>(model)</span>
-<span id="cb14-6"><a href="#cb14-6"></a>res</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>res <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">obstacle_degree</span>(d, w, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">unnest</span>(model)</span>
+<span id="cb16-6"><a href="#cb16-6"></a>res</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 80 × 5
-    年份 地区   科技  经济  生态
-   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1  2015 上海  0.204 0.117 0.213
- 2  2015 北京  0.204 0.118 0.229
- 3  2015 天津  0.325 0.333 0.317
- 4  2015 山东  0.320 0.253 0.333
- 5  2015 广东  0.194 0.217 0.240
- 6  2015 江苏  0.265 0.227 0.316
- 7  2015 浙江  0.265 0.245 0.188
- 8  2015 福建  0.333 0.281 0.125
- 9  2016 上海  0.180 0.107 0.207
-10  2016 北京  0.174 0.108 0.208
+    年份 地区   科技   经济  生态
+   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1  2015 上海  0.238 0.0997 0.209
+ 2  2015 北京  0.238 0.100  0.224
+ 3  2015 天津  0.381 0.284  0.310
+ 4  2015 山东  0.374 0.216  0.326
+ 5  2015 广东  0.227 0.185  0.235
+ 6  2015 江苏  0.310 0.193  0.309
+ 7  2015 浙江  0.309 0.209  0.184
+ 8  2015 福建  0.390 0.240  0.122
+ 9  2016 上海  0.211 0.0907 0.202
+10  2016 北京  0.204 0.0919 0.204
 # ℹ 70 more rows</code></pre>
 </div>
 </div>
@@ -614,22 +625,22 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 <li>若要查看每年 <code>科技</code> 前三大的障碍度</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>res <span class="sc">|&gt;</span> </span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">slice_max</span>(科技, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">slice_max</span>(科技, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 30 × 5
     年份 地区   科技  经济   生态
    &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
- 1  2015 福建  0.333 0.281 0.125 
- 2  2015 天津  0.325 0.333 0.317 
- 3  2015 山东  0.320 0.253 0.333 
- 4  2016 天津  0.324 0.327 0.313 
- 5  2016 福建  0.320 0.280 0.114 
- 6  2016 山东  0.304 0.238 0.317 
- 7  2017 天津  0.325 0.318 0.294 
- 8  2017 山东  0.310 0.223 0.306 
- 9  2017 福建  0.289 0.261 0.0979
-10  2018 天津  0.304 0.313 0.272 
+ 1  2015 福建  0.390 0.240 0.122 
+ 2  2015 天津  0.381 0.284 0.310 
+ 3  2015 山东  0.374 0.216 0.326 
+ 4  2016 天津  0.379 0.278 0.306 
+ 5  2016 福建  0.374 0.238 0.112 
+ 6  2016 山东  0.355 0.203 0.310 
+ 7  2017 天津  0.380 0.271 0.288 
+ 8  2017 山东  0.363 0.190 0.299 
+ 9  2017 福建  0.338 0.222 0.0957
+10  2018 天津  0.356 0.267 0.266 
 # ℹ 20 more rows</code></pre>
 </div>
 </div>
@@ -637,23 +648,23 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 <li>若要查看每个子系统前三大的障碍度，先宽变长</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>res <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">pivot_longer</span>(科技<span class="sc">:</span>生态, <span class="at">names_to =</span> <span class="st">"子系统"</span>, <span class="at">values_to =</span> <span class="st">"障碍度"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">slice_max</span>(障碍度, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> <span class="fu">c</span>(年份, 子系统))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">pivot_longer</span>(科技<span class="sc">:</span>生态, <span class="at">names_to =</span> <span class="st">"子系统"</span>, <span class="at">values_to =</span> <span class="st">"障碍度"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">slice_max</span>(障碍度, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> <span class="fu">c</span>(年份, 子系统))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 90 × 4
     年份 地区  子系统 障碍度
    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;
- 1  2015 福建  科技    0.333
- 2  2015 天津  科技    0.325
- 3  2015 山东  科技    0.320
- 4  2015 天津  经济    0.333
- 5  2015 福建  经济    0.281
- 6  2015 山东  经济    0.253
- 7  2015 山东  生态    0.333
- 8  2015 天津  生态    0.317
- 9  2015 江苏  生态    0.316
-10  2016 天津  科技    0.324
+ 1  2015 福建  科技    0.390
+ 2  2015 天津  科技    0.381
+ 3  2015 山东  科技    0.374
+ 4  2015 天津  经济    0.284
+ 5  2015 福建  经济    0.240
+ 6  2015 山东  经济    0.216
+ 7  2015 山东  生态    0.326
+ 8  2015 天津  生态    0.310
+ 9  2015 江苏  生态    0.309
+10  2016 天津  科技    0.379
 # ℹ 80 more rows</code></pre>
 </div>
 </div>
@@ -661,22 +672,22 @@ U_i = \sum_{j=1}^{m_i} O_{ij} = \sum_{j=1}^{m_i} (1 - X_{ij}) \cdot w_{ij}
 <li>批量计算一级指标障碍度 <span class="math inline">\(U_i\)</span>，即按年份分组汇总列和</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>res <span class="sc">|&gt;</span> </span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(科技<span class="sc">:</span>生态, sum), <span class="at">.by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(科技<span class="sc">:</span>生态, sum), <span class="at">.by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 4
     年份  科技  经济  生态
    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1  2015  2.11 1.79  1.96 
- 2  2016  1.91 1.70  1.86 
- 3  2017  1.86 1.58  1.70 
- 4  2018  1.71 1.47  1.56 
- 5  2019  1.60 1.37  1.46 
- 6  2020  1.50 1.28  1.34 
- 7  2021  1.38 1.17  1.20 
- 8  2022  1.26 1.07  1.00 
- 9  2023  1.18 0.968 0.954
-10  2024  1.12 0.865 0.821</code></pre>
+ 1  2015  2.47 1.53  1.92 
+ 2  2016  2.24 1.45  1.82 
+ 3  2017  2.18 1.35  1.66 
+ 4  2018  2.01 1.26  1.53 
+ 5  2019  1.87 1.17  1.43 
+ 6  2020  1.75 1.09  1.31 
+ 7  2021  1.61 0.996 1.17 
+ 8  2022  1.47 0.914 0.981
+ 9  2023  1.38 0.825 0.933
+10  2024  1.31 0.737 0.804</code></pre>
 </div>
 </div>
 
