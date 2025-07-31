@@ -54,7 +54,7 @@
     "href": "comp-eval.html",
     "title": "评价类算法",
     "section": "",
-    "text": "评价类算法包含 13 个章节：\n\n指标数据预处理\n层次分析法\n熵权法\nCRITIC 法\n主成分赋权法\n主客观组合赋权\nTOPSIS\n灰色关联分析\n秩和比法\n模糊综合评价\n数据包络分析\n不平等度量\n系统评价",
+    "text": "评价类算法包含 14 个章节：\n\n指标数据预处理\n层次分析法\n熵权法\nCRITIC 法\nPCA 赋权法\n主客观组合赋权\nTOPSIS\n灰色关联分析\n秩和比法\n模糊综合评价\n数据包络分析（CCR/BCC/SBM，Malmquist）\n不平等度量（基尼系数、泰尔指数）\n区域经济（LQ/HHI/EG 指数）\n系统评价（耦合协调度、障碍度）",
     "crumbs": [
       "评价类算法"
     ]
