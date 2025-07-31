@@ -310,26 +310,79 @@ MathJax ={
 
 </header><section id="sec-preface" class="level1 unnumbered"><h1 class="unnumbered">前言</h1>
 <p>这是与 <code>mathmodels</code> 包配套的中文使用手册<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>，内容整合自该包的 vignettes，目前只完整包含<strong>评价类算法</strong>。</p>
+<p><strong>Github 在线书：</strong>https://zhjx19.github.io/mathmodels-book/</p>
 <section id="mathmodels-包与本配套使用手册的核心特色" class="level2"><h2 class="anchored" data-anchor-id="mathmodels-包与本配套使用手册的核心特色">
 <code>mathmodels</code> 包与本配套使用手册的核心特色</h2>
 <section id="全面覆盖评价类算法" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="全面覆盖评价类算法"><strong>1. 全面覆盖评价类算法</strong></h4>
-<ul>
-<li>指标数据预处理</li>
-<li>层次分析法（AHP）</li>
-<li>熵权法</li>
-<li>CRITIC 赋权</li>
-<li>PCA 赋权</li>
-<li>主客观组合赋权</li>
-<li>TOPSIS</li>
-<li>灰色关联分析（GRA）</li>
-<li>秩和比法（RSR）</li>
-<li>模糊综合评价（FCE）</li>
-<li>数据包络分析（DEA, Malmquist）</li>
-<li>不平等度量：基尼系数、泰尔指数及其分解</li>
-<li>区域经济（LQ、HHI、EG）</li>
-<li>系统评价：耦合协调度、障碍度</li>
-</ul></section><section id="tidyverse-生态无缝衔接" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="tidyverse-生态无缝衔接"><strong>2. tidyverse 生态无缝衔接</strong></h4>
-<p>实际使用算法往往都是批量应用算法，比如</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>算法</strong></th>
+<th><strong>函数</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>指标数据预处理</td>
+<td><code>standardize()/normalize()/rescale_middle()/rescale_interval()/rescale_extreme()/rescale_initial()/rescale_mean()/to_positive()</code></td>
+</tr>
+<tr class="even">
+<td>层次分析法 (AHP)</td>
+<td><code>AHP()</code></td>
+</tr>
+<tr class="odd">
+<td>熵权法</td>
+<td><code>entropy_weight()</code></td>
+</tr>
+<tr class="even">
+<td>CRITIC 赋权</td>
+<td><code>critic_weight()</code></td>
+</tr>
+<tr class="odd">
+<td>PCA 赋权</td>
+<td><code>pca_weight()</code></td>
+</tr>
+<tr class="even">
+<td>主客观组合赋权</td>
+<td><code>combine_weights()</code></td>
+</tr>
+<tr class="odd">
+<td>TOPSIS</td>
+<td><code>topsis()</code></td>
+</tr>
+<tr class="even">
+<td>灰色关联分析 (GRA)</td>
+<td><code>grey_corr()/grey_corr_topsis()</code></td>
+</tr>
+<tr class="odd">
+<td>秩和比法 (RSR)</td>
+<td><code>rank_sum_ratio()</code></td>
+</tr>
+<tr class="even">
+<td>模糊综合评价 (FCE)</td>
+<td><code>fuzzy_eval()/defuzzify()/compute_mf()/tri_mf()/trap_mf()/gauss_mf()/gbell_mf()/gauss2mf()/sigmoid_mf()/dsigmoid_mf()/psigmoid_mf()/z_mf()/pi_mf()/s_mf()/plot_mf()</code></td>
+</tr>
+<tr class="odd">
+<td>数据包络分析 (DDC/BCC/SBM, Malmquist)</td>
+<td><code>basic_DEA()/super_DEA()/basic_SBM()/super_SBM()/malmquist()</code></td>
+</tr>
+<tr class="even">
+<td>不平等度量：基尼系数、泰尔指数及其分解</td>
+<td><code>gini0()/gini()/theil0()/theil()/theil0_g()/theil_g()/theil_g2_cross()/theil_g2_nest()</code></td>
+</tr>
+<tr class="odd">
+<td>区域经济 (LQ, HHI, EG 指数)</td>
+<td><code>LQ()/HHI()/EG()</code></td>
+</tr>
+<tr class="even">
+<td>系统评价：耦合协调度、障碍度</td>
+<td><code>coupling_degree()/obstacle_degree()</code></td>
+</tr>
+</tbody>
+</table></section><section id="tidyverse-生态无缝衔接" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="tidyverse-生态无缝衔接"><strong>2. tidyverse 生态无缝衔接</strong></h4>
+<p>实际使用数学建模算法的最大痛点，往往都是批量应用算法，比如</p>
 <ul>
 <li>层次分析法整个层次结构嵌套了多个子结构，而 <code>AHP()</code> 只解决一个子结构</li>
 <li>计算每个行业每年份内<strong>省份间工资的不平等程度（基尼系数）</strong>
@@ -351,7 +404,7 @@ MathJax ={
 <p>典型应用场景：</p>
 <ul>
 <li>
-<strong>数据预处理</strong>：结合 <code>mutate() + across()</code> 批量处理多列指标</li>
+<strong>数据预处理</strong>：结合 <code>mutate() + across()</code> 批量预处理多列指标</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="sc">|&gt;</span> </span>
@@ -372,19 +425,20 @@ MathJax ={
 <strong>批量建模II</strong>：通过 <code>summarise(..., .by)</code> 分组应用算法</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">summarise</span>(<span class="at">Gini =</span> <span class="fu">gini</span>(平均工资, 就业人数), <span class="at">.by =</span> <span class="fu">c</span>(年份, 行业)) </span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="co"># 计算每个行业每年份内省份间工资的不平等程度(基尼系数)</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># 计算每个行业每年份内省份间工资的不平等程度(基尼系数)</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">summarise</span>(<span class="at">Gini =</span> <span class="fu">gini</span>(平均工资, 就业人数), <span class="at">.by =</span> <span class="fu">c</span>(年份, 行业)) </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>
 <strong>批量建模III</strong>：分组嵌套，每个嵌套数据框应用算法，再解除嵌套</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">coupling_degree</span>(d, <span class="at">id_cols =</span> <span class="st">" 地区"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># 计算每年的二级指标障碍度</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">coupling_degree</span>(d, <span class="at">id_cols =</span> <span class="st">" 地区"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>(2) 将 tidyverse 数据思维融入函数内部</strong></p>
 <p>设计特点：函数内部直接整合分组操作，用户无需额外代码即可处理分组数据。</p>

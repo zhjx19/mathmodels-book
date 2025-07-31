@@ -4,28 +4,32 @@
 
 这是与 `mathmodels` 包配套的中文使用手册[^fn1]，内容整合自该包的 vignettes，目前只完整包含**评价类算法**。
 
+**Github 在线书：**https://zhjx19.github.io/mathmodels-book/
+
 ## `mathmodels` 包与本配套使用手册的核心特色
 
 #### **1. 全面覆盖评价类算法** {.unnumbered}
 
-- 指标数据预处理
-- 层次分析法（AHP）
-- 熵权法
-- CRITIC 赋权
-- PCA 赋权
-- 主客观组合赋权
-- TOPSIS
-- 灰色关联分析（GRA）
-- 秩和比法（RSR）
-- 模糊综合评价（FCE）
-- 数据包络分析（DEA, Malmquist）
-- 不平等度量：基尼系数、泰尔指数及其分解
-- 区域经济（LQ、HHI、EG）
-- 系统评价：耦合协调度、障碍度
+| **算法** | **函数** |
+|----------|----------|
+| 指标数据预处理 | `standardize()/normalize()/rescale_middle()/rescale_interval()/rescale_extreme()/rescale_initial()/rescale_mean()/to_positive()` |
+| 层次分析法 (AHP) | `AHP()` |
+| 熵权法 | `entropy_weight()` |
+| CRITIC 赋权 | `critic_weight()` |
+| PCA 赋权 | `pca_weight()` |
+| 主客观组合赋权 | `combine_weights()` |
+| TOPSIS | `topsis()` |
+| 灰色关联分析 (GRA) | `grey_corr()/grey_corr_topsis()` |
+| 秩和比法 (RSR) | `rank_sum_ratio()` |
+| 模糊综合评价 (FCE) | `fuzzy_eval()/defuzzify()/compute_mf()/tri_mf()/trap_mf()/gauss_mf()/gbell_mf()/gauss2mf()/sigmoid_mf()/dsigmoid_mf()/psigmoid_mf()/z_mf()/pi_mf()/s_mf()/plot_mf()` |
+| 数据包络分析 (DDC/BCC/SBM, Malmquist) | `basic_DEA()/super_DEA()/basic_SBM()/super_SBM()/malmquist()` |
+| 不平等度量：基尼系数、泰尔指数及其分解 | `gini0()/gini()/theil0()/theil()/theil0_g()/theil_g()/theil_g2_cross()/theil_g2_nest()` |
+| 区域经济 (LQ, HHI, EG 指数) | `LQ()/HHI()/EG()` |
+| 系统评价：耦合协调度、障碍度 | `coupling_degree()/obstacle_degree()` |
 
 #### **2. tidyverse 生态无缝衔接** {.unnumbered}
 
-实际使用算法往往都是批量应用算法，比如
+实际使用数学建模算法的最大痛点，往往都是批量应用算法，比如
 
 - 层次分析法整个层次结构嵌套了多个子结构，而 `AHP()` 只解决一个子结构
 - 计算每个行业每年份内**省份间工资的不平等程度（基尼系数）**
@@ -45,7 +49,7 @@ knitr::include_graphics("figs/tidy-R-programming.png")
 
 典型应用场景：
 
-- **数据预处理**：结合 `mutate() + across()` 批量处理多列指标
+- **数据预处理**：结合 `mutate() + across()` 批量预处理多列指标
 
 ```{r eval=FALSE}
 df |> 
@@ -64,14 +68,15 @@ map_dbl(res2, "CR")             # 提取5个一致性比率
 - **批量建模II**：通过 `summarise(..., .by)` 分组应用算法
 
 ```{r eval=FALSE}
+# 计算每个行业每年份内省份间工资的不平等程度(基尼系数)
 df |> 
   summarise(Gini = gini(平均工资, 就业人数), .by = c(年份, 行业)) 
-  # 计算每个行业每年份内省份间工资的不平等程度(基尼系数)
 ```
 
 - **批量建模III**：分组嵌套，每个嵌套数据框应用算法，再解除嵌套
 
 ```{r eval=FALSE}
+# 计算每年的二级指标障碍度
 df |>
   nest(.by = 年份) |>
   mutate(model = map(data, \(d) coupling_degree(d, id_cols = " 地区"))) |>
