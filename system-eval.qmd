@@ -32,6 +32,13 @@ $$
 
 耦合度取决于多个系统的发展程度及其相互关系。比如，当两个系统都发展得很好且相互促进时，耦合度接近于 $1$；反之，当两个系统中有一个发展滞后或彼此关联性弱时，耦合度会很低。
 
+文献[王淑佳, 孔伟 等. 国内耦合协调度模型的误区及修正[J]. 自然资源学报, 2021, 36(3): 793-810.]，发现传统耦合度计算公式得到的 $C$ 值在 $[0,1]$ 区间中的分布概率并不均等，而是大概率偏向于 $1$ 一端，并提出了修正公式：
+$$
+C = \sqrt{\left[1-\frac{\sum_{i>j,j=1}^n |U_i-U_j|}{\sum_{m=1}^{n-1}m}\right]\times\left(\prod_{i=1}^n\frac{U_i}{\max U_i}\right)^{\frac{1}{n-1}}}
+$$
+
+这样修正的 $C$ 值将尽可能分散分布于 $[0, 1]$，加大了区分度，从而在社科领域具有更高效度；进一步计算出来的协调发展度可以更合理地代表耦合协调关系与发展水平的测度。
+
 ### 协调指数
 
 **协调指数**，是各子系统标准化值的加权综合得分，反映系统整体的协调发展程度。其计算公式为：
@@ -68,12 +75,13 @@ $$
 `mathmodels` 包提供了 `coupling_degree()` 函数计算耦合协调度，基本语法：
 
 ```{r eval=FALSE}
-coupling_degree(data, w = NULL, id_cols = NULL)
+coupling_degree(data, w = NULL, id_cols = NULL, type = "standard")
 ```
 
 - `data` 为已归一化的各子系统得分的数据框，可以包含不参与计算的 `id_cols`；
 - `w` 为各系统的权重，默认为 `NULL` 表示等权重；
-- `id_cols` 不参与计算的列名向量，默认为 `NULL`。
+- `id_cols` 不参与计算的列名向量，默认为 `NULL`；
+- `type` 指定耦合度的计算公式，可选 `"standard"`（传统公式）和 `"adjusted"`（修正公式）。
 
 返回 `tibble` 包含 ID （若提供 `id_cols`），`coupling`（耦合度）、`coord`（协调指数）、`coupling_coord`（耦合协调度）。
 
@@ -183,33 +191,33 @@ S = S |>
   mutate(across(3:5, rescale))
 ```
 
-
-- 按年份分组，分别计算耦合协调度
-
-```{r}
-S |> 
-  nest(.by = 年份) |> 
-  mutate(model = map(data, \(d) coupling_degree(d, id_cols = "地区"))) |> 
-  select(-data) |> 
-  unnest(model)
-```
-
-### 批量计算障碍度
-
-- 先用熵权法计算指标权重，注意指标已经归一化
+- 用熵权法计算指标权重，注意指标已经归一化
 
 ```{r}
 w = entropy_weight(S[3:5], rep(NA, 3))$w
 w
 ```
 
+- 按年份分组，分别计算耦合协调度
 
-- 按年份分组，分别计算二级指标障碍度
+```{r}
+S |> 
+  nest(.by = 年份) |> 
+  mutate(model = map(data, 
+                     \(d) coupling_degree(d, w, id_cols = "地区"))) |> 
+  select(-data) |> 
+  unnest(model)
+```
+
+### 批量计算障碍度
+
+- 使用前面计算出的熵权法权重，按年份分组，分别计算二级指标障碍度
 
 ```{r}
 res = S |> 
   nest(.by = 年份) |> 
-  mutate(model = map(data, \(d) obstacle_degree(d, w, id_cols = "地区"))) |> 
+  mutate(model = map(data, 
+                     \(d) obstacle_degree(d, w, id_cols = "地区"))) |> 
   select(-data) |> 
   unnest(model)
 res

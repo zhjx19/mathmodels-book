@@ -348,6 +348,10 @@ C_n = \frac{(u_1u_2\cdots u_n)^{1/n}}{(u_1+u_2+\cdots+u_n)/n}
 </tbody>
 </table>
 <p>耦合度取决于多个系统的发展程度及其相互关系。比如，当两个系统都发展得很好且相互促进时，耦合度接近于 <span class="math inline">\(1\)</span>；反之，当两个系统中有一个发展滞后或彼此关联性弱时，耦合度会很低。</p>
+<p>文献[王淑佳, 孔伟 等. 国内耦合协调度模型的误区及修正[J]. 自然资源学报, 2021, 36(3): 793-810.]，发现传统耦合度计算公式得到的 <span class="math inline">\(C\)</span> 值在 <span class="math inline">\([0,1]\)</span> 区间中的分布概率并不均等，而是大概率偏向于 <span class="math inline">\(1\)</span> 一端，并提出了修正公式： <span class="math display">\[
+C = \sqrt{\left[1-\frac{\sum_{i&gt;j,j=1}^n |U_i-U_j|}{\sum_{m=1}^{n-1}m}\right]\times\left(\prod_{i=1}^n\frac{U_i}{\max U_i}\right)^{\frac{1}{n-1}}}
+\]</span></p>
+<p>这样修正的 <span class="math inline">\(C\)</span> 值将尽可能分散分布于 <span class="math inline">\([0, 1]\)</span>, 加大了区分度，从而在社科领域具有更高效度；进一步计算出来的协调发展度可以更合理地代表耦合协调关系与发展水平的测度。</p>
 </section><section id="协调指数" class="level3" data-number="14.1.2"><h3 data-number="14.1.2" class="anchored" data-anchor-id="协调指数">
 <span class="header-section-number">14.1.2</span> 协调指数</h3>
 <p><strong>协调指数</strong>，是各子系统标准化值的加权综合得分，反映系统整体的协调发展程度。其计算公式为： <span class="math display">\[
@@ -410,7 +414,7 @@ D = \sqrt{C T}
 </table>
 <p><code>mathmodels</code> 包提供了 <code>coupling_degree()</code> 函数计算耦合协调度，基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">coupling_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">coupling_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>, <span class="at">type =</span> <span class="st">"standard"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>
@@ -418,7 +422,9 @@ D = \sqrt{C T}
 <li>
 <code>w</code> 为各系统的权重，默认为 <code>NULL</code> 表示等权重；</li>
 <li>
-<code>id_cols</code> 不参与计算的列名向量，默认为 <code>NULL</code>。</li>
+<code>id_cols</code> 不参与计算的列名向量，默认为 <code>NULL</code>；</li>
+<li>
+<code>type</code> 指定耦合度的计算公式，可选 <code>"standard"</code>（传统公式）和 <code>"adjusted"</code>（修正公式）。</li>
 </ul>
 <p>返回 <code>tibble</code> 包含 ID （若提供 <code>id_cols</code>），<code>coupling</code>（耦合度）、<code>coord</code>（协调指数）、<code>coupling_coord</code>（耦合协调度）。</p>
 </section></section><section id="障碍度" class="level2" data-number="14.2"><h2 data-number="14.2" class="anchored" data-anchor-id="障碍度">
@@ -559,54 +565,56 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, rescale))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>按年份分组，分别计算耦合协调度</li>
+<li>用熵权法计算指标权重，注意指标已经归一化</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>S <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">coupling_degree</span>(d, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 80 × 5
-    年份 地区  coupling  coord coupling_coord
-   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;
- 1  2015 上海  0.965    0.466         0.671  
- 2  2015 北京  0.953    0.449         0.655  
- 3  2015 天津  0.00201  0.0245        0.00701
- 4  2015 山东  0.00106  0.0940        0.00998
- 5  2015 广东  0.987    0.349         0.587  
- 6  2015 江苏  0.786    0.193         0.389  
- 7  2015 浙江  0.951    0.302         0.536  
- 8  2015 福建  0.000820 0.260         0.0146 
- 9  2016 上海  0.970    0.507         0.701  
-10  2016 北京  0.971    0.510         0.703  
-# ℹ 70 more rows</code></pre>
-</div>
-</div>
-</section><section id="批量计算障碍度" class="level3" data-number="14.3.3"><h3 data-number="14.3.3" class="anchored" data-anchor-id="批量计算障碍度">
-<span class="header-section-number">14.3.3</span> 批量计算障碍度</h3>
-<ul>
-<li>先用熵权法计算指标权重，注意指标已经归一化</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>w <span class="ot">=</span> <span class="fu">entropy_weight</span>(S[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))<span class="sc">$</span>w</span>
-<span id="cb14-2"><a href="#cb14-2"></a>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>w <span class="ot">=</span> <span class="fu">entropy_weight</span>(S[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))<span class="sc">$</span>w</span>
+<span id="cb12-2"><a href="#cb12-2"></a>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     科技      经济      生态 
 0.3898977 0.2839915 0.3261108 </code></pre>
 </div>
 </div>
 <ul>
-<li>按年份分组，分别计算二级指标障碍度</li>
+<li>按年份分组，分别计算耦合协调度</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>S <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, </span>
+<span id="cb14-4"><a href="#cb14-4"></a>                     \(d) <span class="fu">coupling_degree</span>(d, w, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 5
+    年份 地区  coupling  coord coupling_coord
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2015 上海  0.965    0.453         0.661  
+ 2  2015 北京  0.953    0.437         0.646  
+ 3  2015 天津  0.00201  0.0255        0.00715
+ 4  2015 山东  0.00106  0.0845        0.00946
+ 5  2015 广东  0.987    0.353         0.591  
+ 6  2015 江苏  0.786    0.188         0.385  
+ 7  2015 浙江  0.951    0.298         0.532  
+ 8  2015 福建  0.000820 0.248         0.0143 
+ 9  2016 上海  0.970    0.496         0.694  
+10  2016 北京  0.971    0.500         0.697  
+# ℹ 70 more rows</code></pre>
+</div>
+</div>
+</section><section id="批量计算障碍度" class="level3" data-number="14.3.3"><h3 data-number="14.3.3" class="anchored" data-anchor-id="批量计算障碍度">
+<span class="header-section-number">14.3.3</span> 批量计算障碍度</h3>
+<ul>
+<li>使用前面计算出的熵权法权重，按年份分组，分别计算二级指标障碍度</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>res <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">obstacle_degree</span>(d, w, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
-<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">unnest</span>(model)</span>
-<span id="cb16-6"><a href="#cb16-6"></a>res</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, </span>
+<span id="cb16-4"><a href="#cb16-4"></a>                     \(d) <span class="fu">obstacle_degree</span>(d, w, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
+<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">unnest</span>(model)</span>
+<span id="cb16-7"><a href="#cb16-7"></a>res</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 80 × 5
     年份 地区   科技   经济  生态
