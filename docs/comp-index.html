@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>7&nbsp; 综合指数测算 – mathmodels 包使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./topsis.html" rel="next">
+<link href="./combine-weights.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script><script>
+MathJax ={
+  tex: {
+    macros: {
+      bm: ["{\\boldsymbol #1}",1],
+    }
+  }
+};
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./comp-index.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">综合指数测算</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="搜索" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">mathmodels 包使用手册</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="搜索"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">前言</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./comp-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">评价类算法</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preprocessing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">指标数据预处理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ahp-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">层次分析法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./entropy-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">熵权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./critic-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">CRITIC 法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pca-weight.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">主成分赋权法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./combine-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./comp-index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">综合指数测算</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./topsis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">TOPSIS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grey-relational.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">灰色关联分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rank-sum-ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">秩和比法</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fuzzy-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">模糊综合评价</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dea.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">数据包络分析</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./inequality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">不平等度量</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regional-economics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">区域经济</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./system-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">系统评价</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">目录</h2>
+   
+  <ul>
+<li>
+<a href="#%E7%86%B5%E6%9D%83%E6%B3%95%E8%B5%8B%E6%9D%83-%E7%BB%BC%E5%90%88%E5%BE%97%E5%88%86" id="toc-熵权法赋权-综合得分" class="nav-link active" data-scroll-target="#%E7%86%B5%E6%9D%83%E6%B3%95%E8%B5%8B%E6%9D%83-%E7%BB%BC%E5%90%88%E5%BE%97%E5%88%86"><span class="header-section-number">7.1</span> 熵权法赋权 + 综合得分</a>
+  <ul class="collapse">
+<li><a href="#%E4%B8%89%E7%BA%A7%E6%8C%87%E6%A0%87%E5%90%91%E4%B8%8A%E5%90%88%E6%88%90%E5%88%B0%E4%BA%8C%E7%BA%A7%E6%8C%87%E6%A0%87" id="toc-三级指标向上合成到二级指标" class="nav-link" data-scroll-target="#%E4%B8%89%E7%BA%A7%E6%8C%87%E6%A0%87%E5%90%91%E4%B8%8A%E5%90%88%E6%88%90%E5%88%B0%E4%BA%8C%E7%BA%A7%E6%8C%87%E6%A0%87">(1) 三级指标向上合成到二级指标</a></li>
+  </ul>
+</li>
+  <li><a href="#%E4%B8%BB%E5%AE%A2%E8%A7%82%E7%BB%84%E5%90%88%E8%B5%8B%E6%9D%83-%E7%BB%BC%E5%90%88%E5%BE%97%E5%88%86" id="toc-主客观组合赋权-综合得分" class="nav-link" data-scroll-target="#%E4%B8%BB%E5%AE%A2%E8%A7%82%E7%BB%84%E5%90%88%E8%B5%8B%E6%9D%83-%E7%BB%BC%E5%90%88%E5%BE%97%E5%88%86"><span class="header-section-number">7.2</span> 主客观组合赋权 + 综合得分</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./comp-eval.html">评价类算法</a></li><li class="breadcrumb-item"><a href="./comp-index.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">综合指数测算</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-comp-index" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">综合指数测算</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>适用于数学建模、经济计量中测算，比如数字经济、就业质量、新质生产力等。</p>
+<p>简单流程：</p>
+<ol type="1">
+<li>构建（三级）指标体系</li>
+<li>搜集指标数据，预处理：正向化、归一化/标准化等</li>
+<li>熵权法：计算三级指标权重</li>
+<li>向上加权合成到二级指标值</li>
+<li>熵权法：计算二级指标权重</li>
+<li>向上加权合成到一级指标值</li>
+</ol>
+<p>当然，也可以改进，比如赋权法用主客观组合赋权；融入评价算法：TOPSIS 等（<strong>注意：不适合后续接回归分析！</strong>）。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.2.0     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(mathmodels)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">library</span>(readxl)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>下面以测算 2020-2022 年 30 个省份的就业质量为例。</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="figs/index-system.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>就业质量评价指标体系（Sheet2）</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/employment-quality.xlsx"</span>, <span class="at">skip =</span> <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">glimpse</span>(df)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 90
+Columns: 13
+$ 年份                                &lt;dbl&gt; 2022, 2022, 2022, 2022, 2022, 2022…
+$ 地区                                &lt;chr&gt; "北京", "天津", "河北", "山西", "内蒙古", "辽宁…
+$ `城镇就业比重（%）`                 &lt;dbl&gt; 87.54417, 83.41385, 58.74302, 59.0…
+$ `城镇登记（调查）失业率（%）`       &lt;dbl&gt; 3.12, 4.68, 3.60, 5.50, 6.00, 5.30…
+$ `劳动力平均受教育年限（年）`        &lt;dbl&gt; 13.050, 11.604, 9.333, 9.880, 9.62…
+$ `本科及以上就业人员占比（%）`       &lt;dbl&gt; 46.9, 30.7, 9.5, 12.6, 14.9, 15.5,…
+$ `城镇单位就业人员平均工资（元）`    &lt;dbl&gt; 208977, 129522, 90745, 90495, 1009…
+$ `城镇单位就业人员平均工资增速（%）` &lt;dbl&gt; 7.359839, 4.852341, 9.959286, 9.80…
+$ `城镇职工养老保险覆盖率（%）`       &lt;dbl&gt; 155.35822, 107.41313, 64.87874, 76…
+$ `城镇职工医疗保险覆盖率（%）`       &lt;dbl&gt; 117.50757, 80.50193, 40.99857, 50.…
+$ `失业保险覆盖率（%）`               &lt;dbl&gt; 140.40363, 75.71429, 37.82216, 53.…
+$ `每万人劳动争议事件发生数（件）`    &lt;dbl&gt; 131.44904, 56.83398, 15.30908, 14.…
+$ `调解劳动争议成功率（%）`           &lt;dbl&gt; 94.61831, 96.42046, 99.54734, 98.5…</code></pre>
+</div>
+</div>
+<section id="熵权法赋权-综合得分" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="熵权法赋权-综合得分">
+<span class="header-section-number">7.1</span> 熵权法赋权 + 综合得分</h2>
+<p>指标数据预处理：量纲一致，方向一致。</p>
+<p><strong>熵权法</strong>，是一种根据各项指标数据所提供的信息量大小（离散程度）来确定指标权重的客观赋权法。</p>
+<p>注意，熵权法已内置归一化，要避免做两次归一化。</p>
+<p>准备指标方向向量：<code>NA</code> 表示不做内置归一化，<code>"+"</code> 表示做内置正向归一化，<code>"-"</code> 表示做内置负向归一化。</p>
+<section id="三级指标向上合成到二级指标" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="三级指标向上合成到二级指标">(1) 三级指标向上合成到二级指标</h3>
+<ul>
+<li>读取指标体系数据，按二级指标切分，据此就能分别取出每组的三级指标数据和方向向量</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>dat <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/employment-quality.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">fill</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">mutate</span>(二级指标 <span class="ot">=</span> <span class="fu">as_factor</span>(二级指标))  <span class="co"># 保证原顺序</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>splits <span class="ot">=</span> <span class="fu">split</span>(dat, dat<span class="sc">$</span>二级指标)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>
+<code>map</code> 循环迭代就能批量执行该层级上的所有熵权法，提取各三级指标的熵权权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rlt <span class="ot">=</span> <span class="fu">map</span>(splits, \(x) <span class="fu">entropy_weight</span>(df[x<span class="sc">$</span>三级指标], x<span class="sc">$</span>方向))</span>
+<span id="cb7-2"><a href="#cb7-2"></a>w_obj <span class="ot">=</span> <span class="fu">map</span>(rlt, <span class="st">"w"</span>) </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>提取三级指标权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">tibble</span>(三级指标 <span class="ot">=</span> dat<span class="sc">$</span>三级指标, 熵权权重 <span class="ot">=</span> <span class="fu">unlist</span>(w_obj))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   三级指标                          熵权权重
+   &lt;chr&gt;                                &lt;dbl&gt;
+ 1 城镇就业比重（%）                    0.846
+ 2 城镇登记（调查）失业率（%）          0.154
+ 3 劳动力平均受教育年限（年）           0.260
+ 4 本科及以上就业人员占比（%）          0.740
+ 5 城镇单位就业人员平均工资（元）       0.813
+ 6 城镇单位就业人员平均工资增速（%）    0.187
+ 7 城镇职工养老保险覆盖率（%）          0.194
+ 8 城镇职工医疗保险覆盖率（%）          0.408
+ 9 失业保险覆盖率（%）                  0.398
+10 每万人劳动争议事件发生数（件）       0.327
+11 调解劳动争议成功率（%）              0.673</code></pre>
+</div>
+</div>
+<ul>
+<li>提取二级指标的综合得分，合并到数据框</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>df1 <span class="ot">=</span> <span class="fu">bind_cols</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">map_df</span>(rlt, <span class="st">"s"</span>))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="二级指标向上合成到一级指标" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="二级指标向上合成到一级指标">(2) 二级指标向上合成到一级指标</h4>
+<ul>
+<li>执行熵权法，提取各二级指标熵权权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>rlt <span class="ot">=</span> <span class="fu">entropy_weight</span>(df1[<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">5</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>rlt<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  就业环境   就业能力   劳动报酬   社会保障   劳动关系 
+0.17080626 0.33165581 0.20987609 0.21058484 0.07707701 </code></pre>
+</div>
+</div>
+<ul>
+<li>提取一级指标综合得分</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>df1 <span class="ot">=</span> df1 <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(就业质量 <span class="ot">=</span> rlt<span class="sc">$</span>s)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>df1</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 90 × 8
+    年份 地区   就业环境 就业能力 劳动报酬 社会保障 劳动关系 就业质量
+   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2022 北京       96.9     99.8     87.1     91.5     33.6     90.4
+ 2  2022 天津       85.2     63.0     38.7     48.1     65.2     58.2
+ 3  2022 河北       37.4     13.1     22.9     13.7     96.6     24.3
+ 4  2022 山西       33.9     21.4     22.6     24.4     90.4     28.1
+ 5  2022 内蒙古     39.1     24.4     30.9     21.4     87.6     31.0
+ 6  2022 辽宁       50.8     26.5     21.0     28.8     80.1     32.5
+ 7  2022 吉林       34.6     22.1     14.9     20.2     68.4     23.2
+ 8  2022 黑龙江     45.6     19.7     21.3     26.1     85.8     29.3
+ 9  2022 上海       84.4     75.1     93.3     53.8     51.7     74.7
+10  2022 江苏       64.3     24.7     35.4     33.3     78.9     38.8
+# ℹ 80 more rows</code></pre>
+</div>
+</div>
+<p>其它支持的客观赋权法还有：<code>pca_weight()</code>（PCA 赋权）、<code>critic_weight()</code>（CRITIC 赋权）。</p>
+</section></section></section><section id="主客观组合赋权-综合得分" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="主客观组合赋权-综合得分">
+<span class="header-section-number">7.2</span> 主客观组合赋权 + 综合得分</h2>
+<p>若想让一级指标得分更有实际意义，应该将主观权重纳入考量。</p>
+<p><strong>层次分析法</strong>，通过综合两两比较各指标相对重要程度来确定指标权重的主观赋权法。</p>
+<section id="三级指标向上合成到二级指标-1" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="三级指标向上合成到二级指标-1">(1) 三级指标向上合成到二级指标</h4>
+<ul>
+<li>问 AI 得到的该层级上各判断矩阵，批量执行 AHP</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>As <span class="ot">=</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,</span>
+<span id="cb15-2"><a href="#cb15-2"></a>                   <span class="dv">3</span>,   <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-3"><a href="#cb15-3"></a>          <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">3</span>,</span>
+<span id="cb15-4"><a href="#cb15-4"></a>                   <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-5"><a href="#cb15-5"></a>          <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">3</span>,</span>
+<span id="cb15-6"><a href="#cb15-6"></a>                   <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-7"><a href="#cb15-7"></a>          <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">2</span>,   <span class="dv">3</span>,</span>
+<span id="cb15-8"><a href="#cb15-8"></a>                   <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span>,   <span class="dv">2</span>,</span>
+<span id="cb15-9"><a href="#cb15-9"></a>                   <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-10"><a href="#cb15-10"></a>          <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,   <span class="dv">3</span>,</span>
+<span id="cb15-11"><a href="#cb15-11"></a>                   <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb15-12"><a href="#cb15-12"></a>rlt <span class="ot">=</span> <span class="fu">map</span>(As, AHP)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>提取各一致性比率，要求一致性比率 <span class="math inline">\(&lt; 0.1\)</span>，否则需要调整判断矩阵</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">map_dbl</span>(rlt, <span class="st">"CR"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.000000000 0.000000000 0.000000000 0.007933373 0.000000000</code></pre>
+</div>
+</div>
+<ul>
+<li>提取各三级指标的 AHP 权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>w_subj <span class="ot">=</span> <span class="fu">map</span>(rlt, <span class="st">"w"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>基于博弈论法批量组合各组主客观权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>ws <span class="ot">=</span> <span class="fu">map2</span>(w_subj, w_obj, </span>
+<span id="cb19-2"><a href="#cb19-2"></a>          \(x, y) <span class="fu">combine_weights</span>(x, y, <span class="at">type =</span> <span class="st">"game"</span>))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>合并三级指标的三种权重结果</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">bind_cols</span>(dat[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>], 熵权重 <span class="ot">=</span> <span class="fu">unlist</span>(w_obj), </span>
+<span id="cb20-2"><a href="#cb20-2"></a>          AHP权重 <span class="ot">=</span> <span class="fu">unlist</span>(w_subj), 组合权重 <span class="ot">=</span> <span class="fu">unlist</span>(ws))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 5
+   二级指标 三级指标                          熵权重 AHP权重 组合权重
+   &lt;fct&gt;    &lt;chr&gt;                              &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+ 1 就业环境 城镇就业比重（%）                  0.846   0.25     0.575
+ 2 就业环境 城镇登记（调查）失业率（%）        0.154   0.75     0.425
+ 3 就业能力 劳动力平均受教育年限（年）         0.260   0.75     0.507
+ 4 就业能力 本科及以上就业人员占比（%）        0.740   0.25     0.493
+ 5 劳动报酬 城镇单位就业人员平均工资（元）     0.813   0.75     0.783
+ 6 劳动报酬 城镇单位就业人员平均工资增速（%）  0.187   0.25     0.217
+ 7 社会保障 城镇职工养老保险覆盖率（%）        0.194   0.540    0.349
+ 8 社会保障 城镇职工医疗保险覆盖率（%）        0.408   0.297    0.376
+ 9 社会保障 失业保险覆盖率（%）                0.398   0.163    0.275
+10 劳动关系 每万人劳动争议事件发生数（件）     0.327   0.75     0.547
+11 劳动关系 调解劳动争议成功率（%）            0.673   0.25     0.453</code></pre>
+</div>
+</div>
+<ul>
+<li>批量计算：每组三级指标向上合成到二级指标值，注意三级指标值需要先做归一化。</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">5</span><span class="sc">:</span><span class="dv">11</span>,<span class="dv">13</span>), mathmodels<span class="sc">::</span>rescale),</span>
+<span id="cb22-3"><a href="#cb22-3"></a>         <span class="fu">across</span>(<span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">12</span>), \(x) mathmodels<span class="sc">::</span><span class="fu">rescale</span>(x, <span class="st">"-"</span>)))</span>
+<span id="cb22-4"><a href="#cb22-4"></a>df1 <span class="ot">=</span> <span class="fu">bind_cols</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">map2_df</span>(splits, ws,</span>
+<span id="cb22-6"><a href="#cb22-6"></a>          \(x, y) <span class="dv">100</span> <span class="sc">*</span> <span class="fu">linear_sum</span>(df[x<span class="sc">$</span>三级指标], y)))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="二级指标向上合成到一级指标-1" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="二级指标向上合成到一级指标-1">(2) 二级指标向上合成到一级指标</h4>
+<ul>
+<li>计算各二级指标熵权权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>w_obj <span class="ot">=</span> <span class="fu">entropy_weight</span>(df1[<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">5</span>))<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>问 AI 得到该层级的判断矩阵，执行 AHP，提取一致性比率</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,</span>
+<span id="cb24-2"><a href="#cb24-2"></a>             <span class="dv">2</span>,  <span class="dv">1</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,  <span class="dv">1</span>,</span>
+<span id="cb24-3"><a href="#cb24-3"></a>             <span class="dv">5</span>,  <span class="dv">3</span>,   <span class="dv">1</span>,   <span class="dv">3</span>,   <span class="dv">5</span>,</span>
+<span id="cb24-4"><a href="#cb24-4"></a>             <span class="dv">4</span>,  <span class="dv">2</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,  <span class="dv">1</span>,   <span class="dv">3</span>,</span>
+<span id="cb24-5"><a href="#cb24-5"></a>             <span class="dv">3</span>,  <span class="dv">1</span>,  <span class="dv">1</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>,  <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">5</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-6"><a href="#cb24-6"></a>rlt <span class="ot">=</span> <span class="fu">AHP</span>(A)</span>
+<span id="cb24-7"><a href="#cb24-7"></a>rlt<span class="sc">$</span>CR</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.03715787</code></pre>
+</div>
+</div>
+<ul>
+<li>提取 AHP 权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>w_subj <span class="ot">=</span> rlt<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>基于博弈论法组合主客观权重</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>w <span class="ot">=</span> <span class="fu">combine_weights</span>(w_subj, w_obj, <span class="at">type =</span> <span class="st">"game"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>合并二级指标的三种权重结果</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">tibble</span>(二级指标 <span class="ot">=</span> <span class="fu">names</span>(w_obj),</span>
+<span id="cb28-2"><a href="#cb28-2"></a>       熵权权重 <span class="ot">=</span> w_obj, AHP权重 <span class="ot">=</span> w_subj, 组合权重 <span class="ot">=</span> w)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  二级指标 熵权权重 AHP权重 组合权重
+  &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+1 就业环境   0.159   0.0604   0.104 
+2 就业能力   0.303   0.122    0.203 
+3 劳动报酬   0.257   0.467    0.366 
+4 社会保障   0.229   0.236    0.246 
+5 劳动关系   0.0525  0.114    0.0818</code></pre>
+</div>
+</div>
+<ul>
+<li>向上加权合成到一级指标值</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>df1 <span class="ot">=</span> df1 <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">mutate</span>(就业质量 <span class="ot">=</span> <span class="fu">linear_sum</span>(df1[<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>], w))</span>
+<span id="cb30-3"><a href="#cb30-3"></a>df1</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 90 × 8
+    年份 地区   就业环境 就业能力 劳动报酬 社会保障 劳动关系 就业质量
+   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2022 北京       92.1    100       85.6     92.3     22.6     85.7
+ 2  2022 天津       77.0     66.3     38.2     50.1     63.9     53.0
+ 3  2022 河北       49.3     18.5     24.2     14.9     96.2     29.3
+ 4  2022 山西       38.3     27.6     23.8     25.3     92.3     32.1
+ 5  2022 内蒙古     39.6     28.0     32.3     23.4     86.6     34.4
+ 6  2022 辽宁       50.8     30.6     21.8     31.5     82.4     33.9
+ 7  2022 吉林       47.0     25.6     15.2     22.7     78.0     27.6
+ 8  2022 黑龙江     56.2     24.1     22.6     31.6     86.0     33.8
+ 9  2022 上海       57.5     77.2     92.4     52.9     56.4     73.0
+10  2022 江苏       63.1     29.3     35.2     33.1     80.2     40.0
+# ℹ 80 more rows</code></pre>
+</div>
+</div>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./combine-weights.html" class="pagination-link" aria-label="主客观组合赋权">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">主客观组合赋权</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./topsis.html" class="pagination-link" aria-label="TOPSIS">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">TOPSIS</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

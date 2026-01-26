@@ -18,6 +18,7 @@ book:
         - critic-weight.qmd
         - pca-weight.qmd
         - combine-weights.qmd
+        - comp-index.qmd
         - topsis.qmd
         - grey-relational.qmd
         - rank-sum-ratio.qmd
