@@ -10,3 +10,5 @@
 
 *_files/
 _main.tex
+
+**/*.quarto_ipynb

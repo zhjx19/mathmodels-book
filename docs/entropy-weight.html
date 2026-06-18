@@ -2,10 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>3&nbsp; 熵权法 – mathmodels 包使用手册</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -106,7 +109,7 @@ MathJax ={
     }
   }
 };
-</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -117,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -355,14 +358,14 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 <span class="header-section-number">3.2</span> 案例：河流水质数据</h2>
 <p>加载包：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="准备数据" class="level3" data-number="3.2.1"><h3 data-number="3.2.1" class="anchored" data-anchor-id="准备数据">
 <span class="header-section-number">3.2.1</span> 准备数据</h3>
 <p>使用内置的 <code>water_quality</code> 数据来演示：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>water_quality </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>water_quality </span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 5
       ID    O2    PH  germ nutrient
@@ -394,10 +397,10 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 <span class="header-section-number">3.2.2</span> 数据预处理</h3>
 <p>借助 <code>mathmodels</code> 包提供的预处理函数，使用 <code>mutate()</code> 修改列即可。只需要处理居中型和区间型指标，因为指标归一化已内置到熵权法函数。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="ot">=</span> water_quality <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="ot">=</span> water_quality <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">mutate</span>(<span class="at">PH =</span> <span class="fu">rescale_middle</span>(PH, <span class="dv">7</span>), </span>
 <span id="cb4-3"><a href="#cb4-3"></a>         <span class="at">nutrient =</span> <span class="fu">rescale_interval</span>(nutrient, <span class="dv">10</span>, <span class="dv">20</span>))</span>
-<span id="cb4-4"><a href="#cb4-4"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 5
       ID    O2     PH  germ nutrient
@@ -428,7 +431,7 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 <span class="header-section-number">3.2.3</span> 熵权法</h3>
 <p>用 <code>entropy_weight()</code> 函数实现用<strong>熵权法</strong>计算权重，该函数已内置归一化处理，基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">entropy_weight</span>(X, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">epsilon =</span> <span class="fl">0.002</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">entropy_weight</span>(X, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">epsilon =</span> <span class="fl">0.002</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -438,14 +441,14 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 </ul>
 <p>本例已对指标列 <code>PH</code> 和 <code>nutrient</code> 事先做了归一化，故将指标方向设置为 <code>NA</code>，以不再重复做归一化，只是微调 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 值，避免熵权法计算时出现 <span class="math inline">\(\ln(0)\)</span>。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>idx <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"+"</span>, <span class="cn">NA</span>, <span class="st">"-"</span>, <span class="cn">NA</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>res <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="sc">-</span><span class="dv">1</span>], idx)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>idx <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"+"</span>, <span class="cn">NA</span>, <span class="st">"-"</span>, <span class="cn">NA</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>res <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="sc">-</span><span class="dv">1</span>], idx)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>查看指标权重：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>res<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>res<span class="sc">$</span>w</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       O2        PH      germ  nutrient 
 0.3153202 0.1813149 0.3506929 0.1526721 </code></pre>
@@ -455,7 +458,7 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 <li>查看评价对象得分：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res<span class="sc">$</span>s</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res<span class="sc">$</span>s</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 42.05869 43.14229 59.75555 58.55797 47.47757 37.60200 61.51622 66.57186
  [9] 75.49739 71.25274 79.89397 59.70830 63.57278 12.10016 48.22587 48.81539
@@ -466,8 +469,8 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 <li>对应到河流，增加排名列：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">tibble</span>(<span class="at">ID =</span> df<span class="sc">$</span>ID, <span class="at">score =</span> res<span class="sc">$</span>s, <span class="at">rank =</span> <span class="fu">min_rank</span>(<span class="sc">-</span>score)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">arrange</span>(rank)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">tibble</span>(<span class="at">ID =</span> df<span class="sc">$</span>ID, <span class="at">score =</span> res<span class="sc">$</span>s, <span class="at">rank =</span> <span class="fu">min_rank</span>(<span class="sc">-</span>score)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">arrange</span>(rank)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 3
       ID score  rank
@@ -547,13 +550,14 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

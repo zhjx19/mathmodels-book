@@ -2,11 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="张敬信">
 <title>mathmodels 包使用手册</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -89,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -281,7 +284,7 @@ MathJax ={
 <a href="#sec-preface" id="toc-sec-preface" class="nav-link active" data-scroll-target="#sec-preface">前言</a>
   <ul class="collapse">
 <li><a href="#mathmodels-%E5%8C%85%E4%B8%8E%E6%9C%AC%E9%85%8D%E5%A5%97%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E8%89%B2" id="toc-mathmodels-包与本配套使用手册的核心特色" class="nav-link" data-scroll-target="#mathmodels-%E5%8C%85%E4%B8%8E%E6%9C%AC%E9%85%8D%E5%A5%97%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E8%89%B2"><code>mathmodels</code> 包与本配套使用手册的核心特色</a></li>
-  <li><a href="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.5-%E7%89%88%E6%9C%AC" id="toc-关于-mathmodels-包当前-0.0.5-版本" class="nav-link" data-scroll-target="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.5-%E7%89%88%E6%9C%AC">关于 <code>mathmodels</code> 包（当前 0.0.5 版本）</a></li>
+  <li><a href="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.7-%E7%89%88%E6%9C%AC" id="toc-关于-mathmodels-包当前-0.0.7-版本" class="nav-link" data-scroll-target="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.7-%E7%89%88%E6%9C%AC">关于 <code>mathmodels</code> 包（当前 0.0.7 版本）</a></li>
   <li><a href="#%E6%9B%B4%E5%A4%9A%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90" id="toc-更多学习资源" class="nav-link" data-scroll-target="#%E6%9B%B4%E5%A4%9A%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90">更多学习资源</a></li>
   </ul>
 </li>
@@ -307,7 +310,7 @@ MathJax ={
     <div>
     <div class="quarto-title-meta-heading">发布于</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026年1月27日</p>
+      <p class="date">2026年6月19日</p>
     </div>
   </div>
   
@@ -415,38 +418,38 @@ MathJax ={
 <strong>数据预处理</strong>：结合 <code>mutate() + across()</code> 批量预处理多列指标</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, rescale))  <span class="co"># 归一化多列</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, rescale))  <span class="co"># 归一化多列</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
 <strong>批量建模I</strong>：使用 <code>map()</code> 循环迭代</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># 在位于一层的5个判断矩阵上分别应用AHP()</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># 在位于一层的5个判断矩阵上分别应用AHP()</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>res <span class="ot">=</span> <span class="fu">list</span>(B1, B2, B3, B4, B5) <span class="sc">|&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">map</span>(AHP)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="fu">map_dbl</span>(res2, <span class="st">"CR"</span>)             <span class="co"># 提取5个一致性比率</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="fu">map_dbl</span>(res2, <span class="st">"CR"</span>)             <span class="co"># 提取5个一致性比率</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
 <strong>批量建模II</strong>：通过 <code>summarise(..., .by)</code> 分组应用算法</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># 计算每个行业每年份内省份间工资的不平等程度(基尼系数)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># 计算每个行业每年份内省份间工资的不平等程度(基尼系数)</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">summarise</span>(<span class="at">Gini =</span> <span class="fu">gini</span>(平均工资, 就业人数), <span class="at">.by =</span> <span class="fu">c</span>(年份, 行业)) </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">summarise</span>(<span class="at">Gini =</span> <span class="fu">gini</span>(平均工资, 就业人数), <span class="at">.by =</span> <span class="fu">c</span>(年份, 行业)) </span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
 <strong>批量建模III</strong>：分组嵌套，每个嵌套数据框应用算法，再解除嵌套</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># 计算每年的二级指标障碍度</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># 计算每年的二级指标障碍度</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>df <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, \(d) <span class="fu">coupling_degree</span>(d, <span class="at">id_cols =</span> <span class="st">" 地区"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">unnest</span>(model)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>(2) 将 tidyverse 数据思维融入函数内部</strong></p>
 <p>设计特点：函数内部直接整合分组操作，用户无需额外代码即可处理分组数据。</p>
@@ -480,15 +483,15 @@ MathJax ={
 <strong>学术研究利器</strong>：为数学建模师生或科研工作者提供可靠、高效的算法工具箱。</li>
 </ul>
 <p>总之，这套完整的解决方案将复杂的数学建模算法转化为简单易用的 R 工具，让数学建模师生或科研工作者能够专注于解决实际问题，而非算法实现的细节。</p>
-</section></section><section id="关于-mathmodels-包当前-0.0.5-版本" class="level2"><h2 class="anchored" data-anchor-id="关于-mathmodels-包当前-0.0.5-版本">关于 <code>mathmodels</code> 包（当前 0.0.5 版本）</h2>
+</section></section><section id="关于-mathmodels-包当前-0.0.7-版本" class="level2"><h2 class="anchored" data-anchor-id="关于-mathmodels-包当前-0.0.7-版本">关于 <code>mathmodels</code> 包（当前 0.0.7 版本）</h2>
 <p><a href="https://github.com/zhjx19/mathmodels">mathmodels</a> 包是一个功能丰富的 R 语言数学建模包，专为《数学建模：算法与编程实现》<span class="citation" data-cites="zhang22"><sup>[<a href="references.html#ref-zhang22" role="doc-biblioref">1</a>]</sup></span>（机械工业出版社）配套开发。该包计划涵盖微分方程与差分方程、统计分析、优化、评价和预测等多个领域的算法实现。当前版本重点实现评价类算法，主要包括：指标数据预处理（标准化、归一化等）、主客观赋权方法（层次分析法、熵权法、CRITIC 法、主成分法）及主客观组合赋权、综合评价方法（TOPSIS 法、模糊综合评价法、秩和比法、数据包络分析（DEA, SBM, Malmquist）、不平等测度（基尼系数、泰尔指数）、区域经济（LQ、HHI、EG指数）、系统评价（耦合协调度、障碍度）以及灰色预测模型（GM(1,1)、GM(1,N)、Verhulst 模型）等。本包面向广大数学建模师生和科研工作者而设计，提供便捷高效的算法工具支持。</p>
 <p>可从 Github 安装：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"zhjx19/mathmodels"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"zhjx19/mathmodels"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>或下载到本地解压到当前路径安装（需先安装依赖包：<code>deaR</code> 包）：</p>
+<p>或下载到本地解压到当前路径安装（若需要，先安装依赖包：<code>lpSolveAPI</code> 包）：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">install.packages</span>(<span class="st">"mathmodels-master"</span>, <span class="at">repos=</span><span class="cn">NULL</span>, <span class="at">type=</span><span class="st">"source"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">install.packages</span>(<span class="st">"mathmodels-master"</span>, <span class="at">repos=</span><span class="cn">NULL</span>, <span class="at">type=</span><span class="st">"source"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -575,13 +578,14 @@ MathJax ={
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

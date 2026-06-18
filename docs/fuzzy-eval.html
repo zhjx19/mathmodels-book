@@ -2,10 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>11&nbsp; 模糊综合评价 – mathmodels 包使用手册</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -106,7 +109,7 @@ MathJax ={
     }
   }
 };
-</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -117,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -321,8 +324,8 @@ window.Quarto = {
 </header><p><strong>模糊综合评价法</strong>（Fuzzy Comprehensive Evaluation, FCE） 是一种基于模糊数学理论的综合评价方法，适用于处理具有模糊性和不确定性的多因素评价问题。该方法通过构建隶属函数，将定性指标转化为定量描述，有效刻画“亦此亦彼”的中间过渡状态，从而克服传统评价方法中“非黑即白”的二值判断局限，使评价结果更加贴近现实情况。</p>
 <p>加载包：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="模糊理论" class="level2" data-number="11.1"><h2 data-number="11.1" class="anchored" data-anchor-id="模糊理论">
 <span class="header-section-number">11.1</span> 模糊理论</h2>
@@ -379,22 +382,22 @@ window.Quarto = {
 <p>同理，处理其他指标：做工、品牌、款式。</p>
 <p>下面随机生成了一个数据作为演示，包含 <span class="math inline">\(10\)</span> 个评委对 <span class="math inline">\(3\)</span> 件衣服上述 <span class="math inline">\(4\)</span> 个指标的打分：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>df <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">30</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">120</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">ncol =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">as_tibble</span>(<span class="at">.name_repair =</span> <span class="st">"universal"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="fu">set_names</span>(<span class="fu">str_c</span>(<span class="st">"评委"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">each =</span> <span class="dv">4</span>), </span>
-<span id="cb2-6"><a href="#cb2-6"></a>         指标 <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"颜色"</span>,<span class="st">"做工"</span>,<span class="st">"品牌"</span>,<span class="st">"款式"</span>), <span class="dv">3</span>), <span class="at">.before =</span> <span class="dv">1</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6"></a>         指标 <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"颜色"</span>,<span class="st">"做工"</span>,<span class="st">"品牌"</span>,<span class="st">"款式"</span>), <span class="dv">3</span>), <span class="at">.before =</span> <span class="dv">1</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>第一步</strong>，先宽变长变整洁，根据阈值，比如 <span class="math inline">\([60, 75]\)</span> 离散化为评语：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>), <span class="at">names_to =</span> <span class="st">"评委"</span>, <span class="at">values_to =</span> <span class="st">"打分"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">mutate</span>(评语 <span class="ot">=</span> <span class="fu">case_when</span>(打分 <span class="sc">&lt;</span> <span class="dv">60</span> <span class="sc">~</span> <span class="st">"差"</span>,</span>
 <span id="cb3-4"><a href="#cb3-4"></a>                          打分 <span class="sc">&lt;</span> <span class="dv">75</span> <span class="sc">~</span> <span class="st">"一般"</span>,</span>
 <span id="cb3-5"><a href="#cb3-5"></a>                          <span class="at">.default =</span> <span class="st">"好"</span>),</span>
 <span id="cb3-6"><a href="#cb3-6"></a>         评语 <span class="ot">=</span> <span class="fu">factor</span>(评语, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"差"</span>,<span class="st">"一般"</span>,<span class="st">"好"</span>)))</span>
-<span id="cb3-7"><a href="#cb3-7"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 120 × 5
       ID 指标  评委    打分 评语 
@@ -414,10 +417,10 @@ window.Quarto = {
 </div>
 <p><strong>第二步</strong>，数据统计：分组汇总评语频数，分组计算评语百分比</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">count</span>(ID, 指标, 评语) <span class="sc">|&gt;</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n), <span class="at">.by =</span> <span class="fu">c</span>(ID, 指标))</span>
-<span id="cb5-4"><a href="#cb5-4"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 35 × 5
       ID 指标  评语      n     p
@@ -439,16 +442,16 @@ window.Quarto = {
 <p>第二步已经计算出了所有隶属向量中的元素，只不过是堆在了一列 <code>p</code> 当中。每件衣服的取出来，每个评语的占一列，就是隶属矩阵。需要做的就是：按衣服切分 + 长变宽。</p>
 <p>先把一件衣服做长变宽，写成函数：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>f <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>f <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  data <span class="sc">|&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>    <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> 评语, <span class="at">names_from =</span> 指标, <span class="at">values_from =</span> p) <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a>    <span class="fu">select</span>(<span class="sc">-</span>评语)</span>
-<span id="cb7-5"><a href="#cb7-5"></a>}</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5"><a href="#cb7-5"></a>}</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>再按衣服切分数据，批量地做长变宽：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">split</span>(df, df<span class="sc">$</span>ID) <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">map</span>(f)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">split</span>(df, df<span class="sc">$</span>ID) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">map</span>(f)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$`1`
 # A tibble: 3 × 4
@@ -479,10 +482,10 @@ $`3`
 <p>这是模糊理论中理解隶属函数的经典示例，根据关于“青年人”年龄区间调查表，确定“青年人”的隶属函数。</p>
 <p>该表记录了 129 位专家关于“青年人”年龄区间的调查结果。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>df <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/youth.xlsx"</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>df <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/youth.xlsx"</span>, </span>
 <span id="cb10-2"><a href="#cb10-2"></a>                        <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">set_names</span>(<span class="fu">str_c</span>(<span class="st">"g"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">13</span>))</span>
-<span id="cb10-4"><a href="#cb10-4"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-4"><a href="#cb10-4"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 13
    g1    g2    g3    g4    g5    g6    g7    g8    g9    g10   g11   g12   g13  
@@ -501,12 +504,12 @@ $`3`
 </div>
 <p><strong>第一步</strong>，数据处理：宽变长（忽略缺失）、分割列（转化数值）</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"g"</span>, <span class="at">values_to =</span> <span class="st">"x"</span>, </span>
 <span id="cb12-3"><a href="#cb12-3"></a>               <span class="at">values_drop_na =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">separate</span>(x, <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>), <span class="at">sep =</span> <span class="st">"−"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>g)</span>
-<span id="cb12-6"><a href="#cb12-6"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-6"><a href="#cb12-6"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 129 × 2
       x1    x2
@@ -528,27 +531,27 @@ $`3`
 <p><strong>第二步</strong>，构建隶属函数</p>
 <p>“青年人”的隶属函数，就是包含年龄 <code>x</code> 的年龄区间（最小年龄和最大年龄之间）的占比：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>mf <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>mf <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
 <span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">summarise</span>(df, <span class="at">p =</span> <span class="fu">mean</span>(x1 <span class="sc">&lt;=</span> x <span class="sc">&amp;</span> x <span class="sc">&lt;=</span> x2)) <span class="sc">|&gt;</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a>    <span class="fu">pull</span>(p)</span>
-<span id="cb14-4"><a href="#cb14-4"></a>}</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4"></a>}</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>有一个或多个年龄，都能计算隶属度：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>ages <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="fl">16.5</span>, <span class="dv">20</span>, <span class="dv">43</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">map_dbl</span>(ages, mf)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>ages <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="fl">16.5</span>, <span class="dv">20</span>, <span class="dv">43</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">map_dbl</span>(ages, mf)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9922481 0.3953488 1.0000000 0.0000000</code></pre>
 </div>
 </div>
 <p>可视化该“青年人”隶属函数：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">tibble</span>(年龄 <span class="ot">=</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">40</span>, 隶属度 <span class="ot">=</span> <span class="fu">map_dbl</span>(年龄, mf)) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">tibble</span>(年龄 <span class="ot">=</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">40</span>, 隶属度 <span class="ot">=</span> <span class="fu">map_dbl</span>(年龄, mf)) <span class="sc">|&gt;</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(年龄, 隶属度)) <span class="sc">+</span></span>
 <span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> 年龄, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="fuzzy-eval_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
@@ -588,7 +591,7 @@ $`3`
 <p>另外，还有双高斯隶属函数、广义贝尔隶属函数、Sigmoid 隶属函数族（单 Sigmoid、两 Sigmoid 之差、两 Sigmoid 之积）、多项式隶属函数族（分别形如<span class="math inline">\(Z,\bar{\pi},S\)</span>）。</p>
 <p><code>mathmodels</code> 包提供了上述所有隶属函数的实现，以及可视化隶属函数的函数：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">tri_mf</span>(x, params)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">tri_mf</span>(x, params)</span>
 <span id="cb18-2"><a href="#cb18-2"></a><span class="fu">trap_mf</span>(x, params)</span>
 <span id="cb18-3"><a href="#cb18-3"></a><span class="fu">gauss_mf</span>(x, params)</span>
 <span id="cb18-4"><a href="#cb18-4"></a><span class="fu">gbell_mf</span>(x, params)</span>
@@ -599,21 +602,21 @@ $`3`
 <span id="cb18-9"><a href="#cb18-9"></a><span class="fu">z_mf</span>(x, params)</span>
 <span id="cb18-10"><a href="#cb18-10"></a><span class="fu">pi_mf</span>(x, params)</span>
 <span id="cb18-11"><a href="#cb18-11"></a><span class="fu">s_mf</span>(x, params)</span>
-<span id="cb18-12"><a href="#cb18-12"></a><span class="fu">plot_mf</span>(mf, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">main =</span> <span class="cn">NULL</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="fu">plot_mf</span>(mf, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">main =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>其中，<code>x</code> 为数值向量，<code>params</code> 为各隶属函数相应参数值向量，返回与 <code>x</code> 同样长度的隶属度值。</p>
 <p>以梯形隶属函数为例，包含 <span class="math inline">\(4\)</span> 个参数，比如取 <code>1,5,7,8</code>，计算 <code>1:10</code> 的隶属度值：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">trap_mf</span>(x, <span class="at">params =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">trap_mf</span>(x, <span class="at">params =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0.00 0.25 0.50 0.75 1.00 1.00 1.00 0.00 0.00 0.00</code></pre>
 </div>
 </div>
 <p>可视化该梯形隶属函数：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>f <span class="ot">=</span> \(x) <span class="fu">trap_mf</span>(x, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">plot_mf</span>(f, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">main =</span> <span class="st">"梯形隶属函数"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>f <span class="ot">=</span> \(x) <span class="fu">trap_mf</span>(x, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">plot_mf</span>(f, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">main =</span> <span class="st">"梯形隶属函数"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="fuzzy-eval_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
@@ -626,7 +629,7 @@ $`3`
 <p>将单个指标值转化为属于各评语的隶属向量，是模糊综合评价计算隶属矩阵最核心的、大量重复使用的计算步。而非常常见且合理的做法，就是 三角+梯形隶属函数法 ，或叫做 分段线性隶属函数法。</p>
 <p><code>mathmodels</code> 包提供了 <code>compute_mf()</code> 函数，实现基于三角隶属（两端是半梯形）将单个指标值转化为属于各评语的隶属向量，基本语法为：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">compute_mf</span>(x, thresholds)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">compute_mf</span>(x, thresholds)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -656,10 +659,10 @@ $`3`
 <p>这表示：<span class="math inline">\(≤ 0.05\)</span> 是一级（<span class="math inline">\(100\%\)</span> 隶属），<span class="math inline">\(0.15\)</span> 是二级，<span class="math inline">\(0.25\)</span> 是三级，<span class="math inline">\(≥ 0.50\)</span> 是四级；中间区间线性从 <span class="math inline">\(1\)</span> 减到 <span class="math inline">\(0\)</span>，比如 <span class="math inline">\([0.05, 0.15]\)</span> 一级的隶属度是从 <span class="math inline">\(1\)</span> 线性降到 <span class="math inline">\(0\)</span>，二级隶属是从 <span class="math inline">\(0\)</span> 线性升到 <span class="math inline">\(1\)</span>，其他类似。</p>
 <p>结合函数图形来理解更加直观。为了便于可视化演示，顺便提供了 <code>compute_mf_funs</code> 函数返回所有隶属函数，再用 <code>plot_mf</code> 函数做可视化：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>th <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>th <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>)</span>
 <span id="cb23-2"><a href="#cb23-2"></a>mfs <span class="ot">=</span> <span class="fu">compute_mf_funs</span>(th)</span>
 <span id="cb23-3"><a href="#cb23-3"></a>plots <span class="ot">=</span> <span class="fu">lapply</span>(mfs, \(x) <span class="fu">plot_mf</span>(x, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.6</span>))) </span>
-<span id="cb23-4"><a href="#cb23-4"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(<span class="at">grobs =</span> plots, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-4"><a href="#cb23-4"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(<span class="at">grobs =</span> plots, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="fuzzy-eval_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
@@ -670,7 +673,7 @@ $`3`
 <p>分别是一级、二级、三级、四级的隶属函数，形状依次为右半梯形、三角形、三角形、左半梯形。以右上“二级”隶属函数为例，0.15 处为 1，区间 [0.05, 0.15] 上线性增长到 1。</p>
 <p>比如，某天的 SO2 含量为 0.07，转化为隶属向量：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">compute_mf</span>(<span class="fl">0.07</span>, th)        <span class="co"># 计算隶属向量</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">compute_mf</span>(<span class="fl">0.07</span>, th)        <span class="co"># 计算隶属向量</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8 0.2 0.0 0.0</code></pre>
 </div>
@@ -738,7 +741,7 @@ b_j = \sum_{i=1}^n \Big(a_i \wedge \frac{r_{ij}}{r_0}\Big), \quad j=1,\cdots,m
 \]</span> <span class="math inline">\(r_{0}=\sum\limits_{k=1}^{m}r_{kj}\)</span>，该算子实际上先对模糊评价矩阵 <span class="math inline">\(R\)</span> 中的列向量做了归一化处理, 适用于 <span class="math inline">\(R\)</span> 中元素偏大或偏小的情形。</p>
 <p><code>mathmodels</code> 包提供了 <code>fuzzy_eval()</code> 函数实现模糊合成，基本语法为：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">fuzzy_eval</span>(w, R, type)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">fuzzy_eval</span>(w, R, type)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -775,12 +778,12 @@ R = [r_1,r_2,r_3,r_4] =
 <p>基于合适的模糊合成算子，比如选 <code>3</code> 加权平均型，做模糊合成得到模糊评价向量：<span class="math inline">\(\mu=R\circ w\)</span>，一般对 <span class="math inline">\(\mu\)</span> 进 行归一化处理。</p>
 <p>这里的 <span class="math inline">\(R\)</span> 是分别的、单独的评价（隶属程度），再综合各因素占的权重 <span class="math inline">\(w\)</span>，所以叫做模糊综合评价。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>w <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>w <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>)</span>
 <span id="cb27-2"><a href="#cb27-2"></a>R <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.7</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>,</span>
 <span id="cb27-3"><a href="#cb27-3"></a>             <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
 <span id="cb27-4"><a href="#cb27-4"></a>             <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb27-5"><a href="#cb27-5"></a>mu <span class="ot">=</span> <span class="fu">fuzzy_eval</span>(w, R, <span class="dv">3</span>)</span>
-<span id="cb27-6"><a href="#cb27-6"></a>mu</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-6"><a href="#cb27-6"></a>mu</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.70 0.16 0.14</code></pre>
 </div>
@@ -789,7 +792,7 @@ R = [r_1,r_2,r_3,r_4] =
 <p>模糊评价向量 <span class="math inline">\(\mu\)</span> 是这件衣服对各评语：“好”、“一般”、“差”的隶属度，要得到最终评语或评分，还需要做一步去模糊化。</p>
 <p><code>mathmodels</code> 包，提供了 <code>defuzzify()</code> 函数，实现对模糊评价向量去模糊化，基本语法为：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">defuzzify</span>(mu, scores, <span class="at">method =</span> <span class="st">"weighted_average"</span>) </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">defuzzify</span>(mu, scores, <span class="at">method =</span> <span class="st">"weighted_average"</span>) </span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -801,14 +804,14 @@ R = [r_1,r_2,r_3,r_4] =
 </ul>
 <p><strong>注：</strong>对于归一化的模糊评价隶属向量，加权平均法与重心法结果是相同的。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>scores <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">75</span>, <span class="dv">50</span>)</span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">defuzzify</span>(mu, scores, <span class="at">method =</span> <span class="st">"max_membership"</span>)       <span class="co"># 最大隶属度法</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>scores <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">75</span>, <span class="dv">50</span>)</span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">defuzzify</span>(mu, scores, <span class="at">method =</span> <span class="st">"max_membership"</span>)       <span class="co"># 最大隶属度法</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 90</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">defuzzify</span>(mu, scores)                                  <span class="co"># 加权平均法</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">defuzzify</span>(mu, scores)                                  <span class="co"># 加权平均法</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 82</code></pre>
 </div>
@@ -928,10 +931,10 @@ R = [r_1,r_2,r_3,r_4] =
 <section id="准备评价对象数据表2" class="level3" data-number="11.3.1"><h3 data-number="11.3.1" class="anchored" data-anchor-id="准备评价对象数据表2">
 <span class="header-section-number">11.3.1</span> 准备评价对象数据（表2）</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>df <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">product =</span> <span class="fu">c</span>(<span class="fl">592.5</span>, <span class="dv">529</span>, <span class="dv">412</span>), <span class="at">quality =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">1</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>df <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">product =</span> <span class="fu">c</span>(<span class="fl">592.5</span>, <span class="dv">529</span>, <span class="dv">412</span>), <span class="at">quality =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">1</span>, </span>
 <span id="cb34-2"><a href="#cb34-2"></a>            <span class="at">labor =</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">38</span>, <span class="dv">32</span>), </span>
 <span id="cb34-3"><a href="#cb34-3"></a>            <span class="at">income =</span> <span class="fu">c</span>(<span class="dv">72</span>, <span class="dv">105</span>, <span class="dv">85</span>), <span class="at">ecology =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb34-4"><a href="#cb34-4"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-4"><a href="#cb34-4"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
   product quality labor income ecology
@@ -944,9 +947,9 @@ R = [r_1,r_2,r_3,r_4] =
 <p><strong>数据预处理</strong></p>
 <p>注意，产品质量、亩用工量、生态环境影响是负向指标，需要转化为正向。应该从固定不变的阈值考虑（而不是可变的具体方案指标值），采用最大值 + 平移值做差 方式。 比如，1、2、3、4 要变成 4、3、2、1，需要的变换是 <span class="math inline">\(5 - x\)</span>；而 20、40、60 要变成 60、40、20，需要的变换是 <span class="math inline">\(80 - x\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>df <span class="ot">=</span> df <span class="sc">|&gt;</span> </span>
 <span id="cb36-2"><a href="#cb36-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>), \(x) <span class="dv">5</span> <span class="sc">-</span> x), <span class="at">labor =</span> <span class="dv">80</span> <span class="sc">-</span> labor)</span>
-<span id="cb36-3"><a href="#cb36-3"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-3"><a href="#cb36-3"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
   product quality labor income ecology
@@ -960,41 +963,41 @@ R = [r_1,r_2,r_3,r_4] =
 <span class="header-section-number">11.3.2</span> 准备阈值数据（从表1提炼，用于计算隶属向量）</h3>
 <p>评语集是分数列，对应到优良中差：3（优）、2（良）、1（中）、0（差）。 注意，共有 4 个评语，需要 4 个阈值（同示例）。产品质量和生态环境是 <span class="math inline">\(1, 2, 3, 4\)</span>（可以直接用），其他三个，比如亩产量只提供了 3 个阈值：<span class="math inline">\(350, 450, 550\)</span>，显然在前面补一个 <span class="math inline">\(0\)</span> 是合理的。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>th_mat <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>th_mat <span class="ot">=</span> <span class="fu">tibble</span>(</span>
 <span id="cb38-2"><a href="#cb38-2"></a>  <span class="at">th1 =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">350</span>, <span class="dv">450</span>, <span class="dv">550</span>),            <span class="co"># 亩产量 </span></span>
 <span id="cb38-3"><a href="#cb38-3"></a>  <span class="at">th2 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,                            <span class="co"># 产品质量</span></span>
 <span id="cb38-4"><a href="#cb38-4"></a>  <span class="at">th3 =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">60</span>,<span class="dv">20</span>),                   <span class="co"># 亩用工量</span></span>
 <span id="cb38-5"><a href="#cb38-5"></a>  <span class="at">th4 =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">90</span>, <span class="dv">130</span>),              <span class="co"># 亩收入</span></span>
-<span id="cb38-6"><a href="#cb38-6"></a>  <span class="at">th5 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)                            <span class="co"># 生态环境影响</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-6"><a href="#cb38-6"></a>  <span class="at">th5 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)                            <span class="co"># 生态环境影响</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="批量模糊综合评价" class="level3" data-number="11.3.3"><h3 data-number="11.3.3" class="anchored" data-anchor-id="批量模糊综合评价">
 <span class="header-section-number">11.3.3</span> 批量模糊综合评价</h3>
 <p>本例只有 3 个评价对象，当然可以一个一个地分别计算。</p>
 <p>为了通用于任意多个评价对象，把<strong>对一个评价对象做模糊综合评价</strong>的写成函数：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>eval_one <span class="ot">=</span> <span class="cf">function</span>(x, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">method =</span> <span class="st">"max_membership"</span>) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>eval_one <span class="ot">=</span> <span class="cf">function</span>(x, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">method =</span> <span class="st">"max_membership"</span>) {</span>
 <span id="cb39-2"><a href="#cb39-2"></a>  <span class="co"># x为一个评价对象(提取df的某一行, 转化为向量)</span></span>
 <span id="cb39-3"><a href="#cb39-3"></a>  R <span class="ot">=</span> <span class="fu">map2_dfc</span>(x, th_mat, compute_mf) </span>
 <span id="cb39-4"><a href="#cb39-4"></a>  mu <span class="ot">=</span> <span class="fu">fuzzy_eval</span>(w, R, type)               <span class="co"># 默认对结果归一化</span></span>
 <span id="cb39-5"><a href="#cb39-5"></a>  s <span class="ot">=</span> <span class="fu">defuzzify</span>(mu, scores, method)</span>
 <span id="cb39-6"><a href="#cb39-6"></a>  <span class="fu">list</span>(<span class="at">s =</span> s, <span class="at">mu =</span> mu, <span class="at">R =</span> R)</span>
-<span id="cb39-7"><a href="#cb39-7"></a>}</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-7"><a href="#cb39-7"></a>}</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>其中，<code>type</code> 选择模糊合成的方法，可选 1：取小取大（主因素决定）、2： 乘积最大（主因素突出）、3：乘加（加权平均）、4： 取小上界和、5： 均衡平均。 <code>method</code> 选择去模糊化方法，可选 <code>"max_membership"</code>：最大隶属度法、<code>"weighted_average"</code>：加权平均法、<code>"centroid"</code>：重心法。</p>
 <p><strong>注：</strong>对于归一化的模糊评价隶属向量，加权平均法与重心法结果是相同的。</p>
 <p>准备共用数据：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>w <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.3</span>, <span class="fl">0.25</span>)  <span class="co"># 各指标权重, 可另由赋权法计算</span></span>
-<span id="cb40-2"><a href="#cb40-2"></a>scores <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">60</span>, <span class="dv">75</span>, <span class="dv">90</span>)        <span class="co"># 优良中差的量化分数，用于去模糊化</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>w <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.3</span>, <span class="fl">0.25</span>)  <span class="co"># 各指标权重, 可另由赋权法计算</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>scores <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">60</span>, <span class="dv">75</span>, <span class="dv">90</span>)        <span class="co"># 优良中差的量化分数，用于去模糊化</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>方法 1</strong>：按默认的 乘加法 模糊合成，按最大隶属度法去模糊化。</p>
 <p>在 <code>df</code> 上逐行迭代即可：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>res_m <span class="ot">=</span> <span class="fu">apply</span>(df, <span class="dv">1</span>, eval_one)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>res_m <span class="ot">=</span> <span class="fu">apply</span>(df, <span class="dv">1</span>, eval_one)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>查看 3 种方案的模糊综合评价结果向量：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">map</span>(res_m, <span class="st">"mu"</span>) </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">map</span>(res_m, <span class="st">"mu"</span>) </span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [1] 0.2500 0.3475 0.2025 0.2000
@@ -1008,7 +1011,7 @@ R = [r_1,r_2,r_3,r_4] =
 </div>
 <p>查看 3 种方案的最终得分（上述模糊向量去模糊化），最大隶属度法即最大值所属评语的量化分数：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">map_dbl</span>(res_m, <span class="st">"s"</span>)  </span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">map_dbl</span>(res_m, <span class="st">"s"</span>)  </span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 60 75 75</code></pre>
 </div>
@@ -1017,7 +1020,7 @@ R = [r_1,r_2,r_3,r_4] =
 <li>查看 3 种方案的隶属矩阵，由隶属向量构成：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">map</span>(res_m, <span class="st">"R"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">map</span>(res_m, <span class="st">"R"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 # A tibble: 4 × 5
@@ -1050,8 +1053,8 @@ R = [r_1,r_2,r_3,r_4] =
 <p><strong>方法 2</strong>：按默认的<strong>乘加法</strong>模糊合成，按加权平均法去模糊化。</p>
 <p>对 <code>df</code> 逐行迭代，只查看 3 种方案的最终评分：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>res_w <span class="ot">=</span> <span class="fu">apply</span>(df, <span class="dv">1</span>, \(x) <span class="fu">eval_one</span>(x, <span class="at">method =</span> <span class="st">"centroid"</span>))</span>
-<span id="cb48-2"><a href="#cb48-2"></a><span class="fu">map_dbl</span>(res_w, <span class="st">"s"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>res_w <span class="ot">=</span> <span class="fu">apply</span>(df, <span class="dv">1</span>, \(x) <span class="fu">eval_one</span>(x, <span class="at">method =</span> <span class="st">"centroid"</span>))</span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="fu">map_dbl</span>(res_w, <span class="st">"s"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 61.5375 75.5325 75.6975</code></pre>
 </div>
@@ -1109,13 +1112,14 @@ R = [r_1,r_2,r_3,r_4] =
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

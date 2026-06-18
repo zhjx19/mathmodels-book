@@ -2,10 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>15&nbsp; 系统评价 – mathmodels 包使用手册</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -106,7 +109,7 @@ MathJax ={
     }
   }
 };
-</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -117,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -422,7 +425,7 @@ D = \sqrt{C T}
 </table>
 <p><code>mathmodels</code> 包提供了 <code>coupling_degree()</code> 函数计算耦合协调度，基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">coupling_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>, <span class="at">type =</span> <span class="st">"standard"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">coupling_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>, <span class="at">type =</span> <span class="st">"standard"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -477,15 +480,15 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <p>最终，可根据 <span class="math inline">\(O_{ij}\)</span> 和 <span class="math inline">\(U_i\)</span> 的大小排序，识别出最主要的障碍因素。</p>
 <p><code>mathmodels</code> 包提供了 <code>obstacle_degree()</code> 函数计算障碍度，基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">obstacle_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>, <span class="at">scaled =</span> <span class="cn">FALSE</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">obstacle_degree</span>(data, <span class="at">w =</span> <span class="cn">NULL</span>, <span class="at">id_cols =</span> <span class="cn">NULL</span>, <span class="at">scaled =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>参数同 <code>coupling_degree()</code> 函数，<code>scaled</code> 设置是否对障碍度做行归一化，默认为 <code>FALSE</code>。为了便于批量计算，该函数设计为只计算二级指标障碍度 <span class="math inline">\(O_{ij}\)</span>，想进一步计算一级指标障碍度 <span class="math inline">\(U_i\)</span>，在外面接着使用 <code>summarise(..., .by)</code> 即可。</p>
 </section><section id="案例耦合协调度障碍度" class="level2" data-number="15.3"><h2 data-number="15.3" class="anchored" data-anchor-id="案例耦合协调度障碍度">
 <span class="header-section-number">15.3</span> 案例：耦合协调度、障碍度</h2>
 <p>加载包：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">library</span>(mathmodels)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>使用模拟数据：中国东部沿海地区 8 个省市“科技-经济-生态”系统协调发展研究（2015–2024年）</p>
 <ul>
@@ -494,8 +497,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>生态环境子系统：空气质量优良率, 单位GDP能耗, 绿地覆盖率</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>cdev <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/cdev-sim.csv"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>cdev</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>cdev <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/cdev-sim.csv"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>cdev</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 80 × 11
    地区   年份 R_D投入强度 高新技术企业数 专利授权量 GDP总量 人均可支配收入
@@ -521,16 +524,16 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>用熵权法分别综合评价每个子系统</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>tech <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">3</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>tech <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">3</span>))</span>
 <span id="cb6-2"><a href="#cb6-2"></a>eco <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>], <span class="fu">rep</span>(<span class="st">"+"</span>,<span class="dv">3</span>))</span>
-<span id="cb6-3"><a href="#cb6-3"></a>env <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">9</span><span class="sc">:</span><span class="dv">11</span>], <span class="fu">c</span>(<span class="st">"+"</span>,<span class="st">"-"</span>,<span class="st">"+"</span>))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a>env <span class="ot">=</span> <span class="fu">entropy_weight</span>(cdev[<span class="dv">9</span><span class="sc">:</span><span class="dv">11</span>], <span class="fu">c</span>(<span class="st">"+"</span>,<span class="st">"-"</span>,<span class="st">"+"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>查看指标权重</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rlt <span class="ot">=</span> <span class="fu">list</span>(tech, eco, env)</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">map</span>(rlt, <span class="st">"w"</span>) <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rlt <span class="ot">=</span> <span class="fu">list</span>(tech, eco, env)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">map</span>(rlt, <span class="st">"w"</span>) <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   R_D投入强度 高新技术企业数     专利授权量        GDP总量 人均可支配收入 
      0.3215465      0.3414780      0.3369755      0.3098166      0.2481369 
@@ -542,10 +545,10 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>计算三个子系统的综合得分</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>S <span class="ot">=</span> <span class="fu">map_dfc</span>(rlt, <span class="st">"s"</span>) <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>S <span class="ot">=</span> <span class="fu">map_dfc</span>(rlt, <span class="st">"s"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">set_names</span>(<span class="st">"科技"</span>, <span class="st">"经济"</span>, <span class="st">"生态"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a>S <span class="ot">=</span> <span class="fu">bind_cols</span>(cdev[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], S)</span>
-<span id="cb9-4"><a href="#cb9-4"></a>S</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href="#cb9-4"></a>S</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 80 × 5
    地区   年份  科技  经济  生态
@@ -569,15 +572,15 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>归一化子系统得分</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>S <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, rescale))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>S <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, rescale))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>用熵权法计算指标权重，注意指标已经归一化</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>w <span class="ot">=</span> <span class="fu">entropy_weight</span>(S[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))<span class="sc">$</span>w</span>
-<span id="cb12-2"><a href="#cb12-2"></a>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>w <span class="ot">=</span> <span class="fu">entropy_weight</span>(S[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))<span class="sc">$</span>w</span>
+<span id="cb12-2"><a href="#cb12-2"></a>w</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     科技      经济      生态 
 0.3898977 0.2839915 0.3261108 </code></pre>
@@ -587,12 +590,12 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>按年份分组，分别计算耦合协调度</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>S <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>S <span class="sc">|&gt;</span> </span>
 <span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
 <span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, </span>
 <span id="cb14-4"><a href="#cb14-4"></a>                     \(d) <span class="fu">coupling_degree</span>(d, w, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
 <span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
-<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">unnest</span>(model)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">unnest</span>(model)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 80 × 5
     年份 地区  coupling  coord coupling_coord
@@ -616,13 +619,13 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>使用前面计算出的熵权法权重，按年份分组，分别计算二级指标障碍度</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>res <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>res <span class="ot">=</span> S <span class="sc">|&gt;</span> </span>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
 <span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">map</span>(data, </span>
 <span id="cb16-4"><a href="#cb16-4"></a>                     \(d) <span class="fu">obstacle_degree</span>(d, w, <span class="at">id_cols =</span> <span class="st">"地区"</span>))) <span class="sc">|&gt;</span> </span>
 <span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">|&gt;</span> </span>
 <span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">unnest</span>(model)</span>
-<span id="cb16-7"><a href="#cb16-7"></a>res</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-7"><a href="#cb16-7"></a>res</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 80 × 5
     年份 地区   科技   经济  生态
@@ -644,8 +647,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>若要查看每年 <code>科技</code> 前三大的障碍度</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>res <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">slice_max</span>(科技, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">slice_max</span>(科技, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> 年份)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 30 × 5
     年份 地区   科技  经济   生态
@@ -667,9 +670,9 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>若要查看每个子系统前三大的障碍度，先宽变长</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>res <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>res <span class="sc">|&gt;</span> </span>
 <span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">pivot_longer</span>(科技<span class="sc">:</span>生态, <span class="at">names_to =</span> <span class="st">"子系统"</span>, <span class="at">values_to =</span> <span class="st">"障碍度"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">slice_max</span>(障碍度, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> <span class="fu">c</span>(年份, 子系统))</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">slice_max</span>(障碍度, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">by =</span> <span class="fu">c</span>(年份, 子系统))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 90 × 4
     年份 地区  子系统 障碍度
@@ -691,8 +694,8 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
 <li>批量计算一级指标障碍度 <span class="math inline">\(U_i\)</span>，即按年份分组汇总列和</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>res <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(科技<span class="sc">:</span>生态, sum), <span class="at">.by =</span> 年份)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>res <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(科技<span class="sc">:</span>生态, sum), <span class="at">.by =</span> 年份)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 4
     年份  科技  经济  生态
@@ -762,13 +765,14 @@ U_i = \sum_{j=1}^{m_i} O_{ij}
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

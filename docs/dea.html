@@ -2,10 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>12&nbsp; 数据包络分析 – mathmodels 包使用手册</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -106,7 +109,7 @@ MathJax ={
     }
   }
 };
-</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -117,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -473,11 +476,16 @@ x_{1m}&amp;x_{2m}&amp;\cdots&amp;x_{nm}&amp;-x_{im}\end{bmatrix}\begin{bmatrix}\
 <p>以<strong>投入导向的 BCC（对偶）模型</strong>改写为超效率模型为例：对每个决策单元 <span class="math inline">\(k\)</span>， <span class="math display">\[
 \begin{aligned} &amp; \min \theta \\ \text{s.t.} \quad &amp; \sum_{\substack{i=1\\i \neq k}}^n \lambda_i x_{ij} \leq \theta x_{kj}, \quad j = 1, \cdots, m \\ &amp; \sum_{\substack{i=1\\i \neq k}}^n \lambda_i y_{ir} \geq y_{kr}, \quad r = 1, \cdots, q \\ &amp; \sum_{\substack{i=1\\i \neq k}}^n \lambda_i = 1, \\  &amp;\lambda_i \geq 0, \quad i \neq k \end{aligned}
 \]</span></p>
-<p><code>mathmodels</code> 包对 <code>deaR</code> 包中的相应函数做了封装，提供了四个函数：<code>basic_DEA</code>、<code>super_DEA</code>、<code>basic_SBM</code> 和 <code>super_SBM</code>，分别适用于不同类型的 DEA 或 SBM 模型变体：径向数据包络分析（DEA）模型（Charnes 等，1978；Banker 等，1984）和基于松弛变量测度的 SBM 模型（Tone，2001）计算效率得分提供了简化的操作接口，支持在规模报酬不变（CRS）或规模报酬可变（VRS）条件下，运行标准模型和超效率模型，并可选择性地处理非期望产出。</p>
+<p><code>mathmodels</code> 包为数据包络分析（DEA）提供了简洁统一的接口，包含四个函数：<code>basic_DEA()</code>、<code>super_DEA()</code>、<code>basic_SBM()</code> 和 <code>super_SBM()</code>。这些函数基于 <code>lpSolveAPI</code> 线性规划求解器独立实现，分别对应两类主流 DEA 模型：</p>
+<ul>
+<li>径向模型（Charnes 等，1978；Banker 等，1984）：<code>basic_DEA()</code> 计算标准效率得分，<code>super_DEA()</code> 进一步区分有效单元，允许超效率值大于 1；</li>
+<li>SBM 模型（Tone，2001）：<code>basic_SBM()</code> 和 <code>super_SBM()</code> 采用基于松弛变量的测度方法，弥补径向模型忽略非径向松弛的不足。</li>
+</ul>
+<p>四个函数均支持规模报酬不变（CRS）与规模报酬可变（VRS）两种设定，支持投入导向、产出导向或非导向，并可选择性地处理非期望产出。所有函数输入为标准数据框，输出为结构化 tibble，可与 tidyverse 管道操作无缝集成。</p>
 <p>基本语法为（同其它函数）：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">basic_DEA</span>(data, inputs, outputs, <span class="at">ud_outputs =</span> <span class="cn">NULL</span>,</span>
-<span id="cb1-2"><a href="#cb1-2"></a>          <span class="at">orientation =</span> <span class="st">"io"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">basic_DEA</span>(data, inputs, outputs, <span class="at">ud_outputs =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-2"><a href="#cb1-2"></a>          <span class="at">orientation =</span> <span class="st">"io"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -595,38 +603,38 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 \text{MI}^t = \text{PEC} \times \text{PTC} \times \text{SEC}
 \]</span></p>
 <p>这被称为 <strong>三重分解法</strong>，完整揭示了生产率增长的来源。</p>
-<p><code>mathmodels</code> 包提供了 <code>malmquist()</code> 计算跨时期的 Malmquist 指数及其分解，该函数是对 <code>deaR</code> 包中相关函数做了封装，更便于使用。基本语法：</p>
+<p><code>mathmodels</code> 包提供了 <code>malmquist()</code> 函数，用于计算跨时期的 Malmquist 生产率指数及其分解。该函数基于 <code>lpSolveAPI</code> 线性规划求解器独立实现，支持多种参照集与分解方法，输入为标准长格式数据框，可与 tidyverse 管道操作无缝集成。基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">malmquist</span>(data, period, inputs, outputs,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">malmquist</span>(data, period, inputs, outputs,</span>
 <span id="cb2-2"><a href="#cb2-2"></a>          <span class="at">orientation =</span> <span class="st">"oo"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3"></a>          <span class="at">type1 =</span> <span class="st">"glob"</span>, <span class="at">type2 =</span> <span class="st">"rd"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a>          <span class="at">type1 =</span> <span class="st">"glob"</span>, <span class="at">type2 =</span> <span class="st">"rd"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
-<code>data</code>: 长格式数据框，第 1 列为决策单元，包含时期列</li>
+<code>data</code>：长格式数据框，第 1 列为决策单元，包含时期列</li>
 <li>
-<code>period, inputs, outputs</code>: 时期、投入和产出对应的列索引或列名</li>
+<code>period, inputs, outputs</code>：时期、投入和产出对应的列索引或列名</li>
 <li>
-<code>orientation</code>: <code>"io"</code>（投入导向），<code>"oo"</code>（产出导向，默认）</li>
+<code>orientation</code>：“io”（投入导向），“oo”（产出导向，默认）</li>
 <li>
-<code>rts</code>: <code>"vrs"</code>（可变规模报酬，默认），<code>"crs"</code>（不变规模报酬）</li>
+<code>rts</code>：“vrs”（可变规模报酬，默认），“crs”（不变规模报酬）</li>
 <li>
-<code>type1</code>: 参照集：<code>"cont"</code>（当期），<code>"seq"</code>（序列）或 <code>"glob"</code>（全局，默认）</li>
+<code>type1</code>：参照集：“cont”（当期），“seq”（序列）或 “glob”（全局，默认）</li>
 <li>
-<code>type2</code>: 分解方法：<code>"fgnz"</code>（Färe 等，1994），<code>"rd"</code>（Ray 和 Desli，1997，默认），<code>"gl"</code>（广义 Malmquist）或 <code>"bias"</code>（偏向性技术变化）</li>
+<code>type2</code>：分解方法：“fgnz”（Färe 等，1994），“rd”（Ray 和 Desli，1997，默认）</li>
 </ul>
-<p>返回包含 Period、DMU、Malmquist 指数、EC（效率变化）、TC（技术变化）、PECH（纯效率变化）和 SECH（规模效率变化）的数据框。</p>
+<p>返回包含 Period、DMU、mi（Malmquist 指数）、ec（效率变化）、tc（技术变化）、pech（纯效率变化）和 sech（规模效率变化）的 tibble 数据框。</p>
 </section></section></section></section><section id="dea-案例" class="level2" data-number="12.3"><h2 data-number="12.3" class="anchored" data-anchor-id="dea-案例">
 <span class="header-section-number">12.3</span> DEA 案例</h2>
 <p>加载包：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">library</span>(mathmodels)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>案例数据：</strong>2011 年各省（市、自治区）医院的部分投入和产出指标。以床位数和卫生技术人员数作为投入，以诊疗人次数和入院人数作为产出，（可选）医疗废弃物作为非期望产出。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/hospital.csv"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/hospital.csv"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 31 × 6
    DMU   `床位数(万个)` `卫技人员数(万个)` `诊疗人次数(万人次)` `入院人数(万人)`
@@ -647,14 +655,14 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 </div>
 <p>先以投入导向、VRS 假设下的 DEA 模型（BCC）为例，不考虑非期望产出：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>bbc_in <span class="ot">=</span> <span class="fu">basic_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
-<span id="cb6-2"><a href="#cb6-2"></a>                   <span class="at">orientation =</span> <span class="st">"io"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>bbc_in <span class="ot">=</span> <span class="fu">basic_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb6-2"><a href="#cb6-2"></a>                   <span class="at">orientation =</span> <span class="st">"io"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>查看各 DMU 效率值</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>bbc_in<span class="sc">$</span>efficiencies</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>bbc_in<span class="sc">$</span>efficiencies</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     安徽      北京      福建      甘肃      广东      广西      贵州      海南 
 0.9548803 0.9184863 1.0000000 0.8550507 1.0000000 0.7966680 0.9708290 0.9414552 
@@ -671,11 +679,11 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 <code>bbc_in</code> 对象中还包含其它结果（略）：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>bbc_in<span class="sc">$</span>slacks      <span class="co"># 松弛变量</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>bbc_in<span class="sc">$</span>slacks      <span class="co"># 松弛变量</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>bbc_in<span class="sc">$</span>lambdas     <span class="co"># 权重</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>bbc_in<span class="sc">$</span>targets     <span class="co"># 目标值</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a>bbc_in<span class="sc">$</span>references  <span class="co"># 参照单元</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>bbc_in<span class="sc">$</span>returns     <span class="co"># 规模收益</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-5"><a href="#cb9-5"></a>bbc_in<span class="sc">$</span>returns     <span class="co"># 规模收益</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -710,9 +718,9 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 </ul>
 <p>若计算同样设置下的超效率：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res <span class="ot">=</span> <span class="fu">super_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>res <span class="ot">=</span> <span class="fu">super_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
 <span id="cb10-2"><a href="#cb10-2"></a>                <span class="at">orientation =</span> <span class="st">"io"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3"></a>res<span class="sc">$</span>efficiencies</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3"></a>res<span class="sc">$</span>efficiencies</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     安徽      北京      福建      甘肃      广东      广西      贵州      海南 
 0.9548803 0.9184863 1.0518247 0.8550507        NA 0.7966680 0.9708290 0.9414552 
@@ -726,9 +734,9 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 </div>
 <p>注意，有些 DMU 的超效率为 <code>NA</code>，对应其线性规划模型无可行解，一种处理办法是将其替换为标准 DEA 效率值：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>idx <span class="ot">=</span> <span class="fu">is.na</span>(res<span class="sc">$</span>efficiencies)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>idx <span class="ot">=</span> <span class="fu">is.na</span>(res<span class="sc">$</span>efficiencies)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>res<span class="sc">$</span>efficiencies[idx] <span class="ot">=</span> bbc_in<span class="sc">$</span>efficiencies[idx]</span>
-<span id="cb12-3"><a href="#cb12-3"></a>res<span class="sc">$</span>efficiencies</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3"></a>res<span class="sc">$</span>efficiencies</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     安徽      北京      福建      甘肃      广东      广西      贵州      海南 
 0.9548803 0.9184863 1.0518247 0.8550507 1.0000000 0.7966680 0.9708290 0.9414552 
@@ -742,37 +750,37 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 </div>
 <p>最后，再计算另外四种 DEA 效率：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ccr_in <span class="ot">=</span> <span class="fu">basic_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ccr_in <span class="ot">=</span> <span class="fu">basic_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
 <span id="cb14-2"><a href="#cb14-2"></a>                   <span class="at">orientation =</span> <span class="st">"io"</span>, <span class="at">rts =</span> <span class="st">"crs"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3"></a>ccr_out <span class="ot">=</span> <span class="fu">basic_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
 <span id="cb14-4"><a href="#cb14-4"></a>                   <span class="at">orientation =</span> <span class="st">"oo"</span>, <span class="at">rts =</span> <span class="st">"crs"</span>)</span>
 <span id="cb14-5"><a href="#cb14-5"></a>bbc_out <span class="ot">=</span> <span class="fu">basic_DEA</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>, </span>
 <span id="cb14-6"><a href="#cb14-6"></a>                   <span class="at">orientation =</span> <span class="st">"oo"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span>
 <span id="cb14-7"><a href="#cb14-7"></a>sbm_ud_out <span class="ot">=</span> <span class="fu">basic_SBM</span>(df, <span class="at">inputs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">outputs =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">ud_outputs =</span> <span class="dv">3</span>,</span>
-<span id="cb14-8"><a href="#cb14-8"></a>                       <span class="at">orientation =</span> <span class="st">"oo"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-8"><a href="#cb14-8"></a>                       <span class="at">orientation =</span> <span class="st">"oo"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>合并结果，并计算规模效率（CRS 效率 = VRS 效率 * 规模效率）：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">tibble</span>(<span class="at">DMU =</span> df<span class="sc">$</span>DMU, <span class="at">ccr_in =</span> ccr_in<span class="sc">$</span>efficiencies, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">tibble</span>(<span class="at">DMU =</span> df<span class="sc">$</span>DMU, <span class="at">ccr_in =</span> ccr_in<span class="sc">$</span>efficiencies, </span>
 <span id="cb15-2"><a href="#cb15-2"></a>       <span class="at">ccr_out =</span> ccr_out<span class="sc">$</span>efficiencies, </span>
 <span id="cb15-3"><a href="#cb15-3"></a>       <span class="at">bbc_in =</span> bbc_in<span class="sc">$</span>efficiencies, </span>
 <span id="cb15-4"><a href="#cb15-4"></a>       <span class="at">bbc_out =</span> bbc_out<span class="sc">$</span>efficiencies, </span>
 <span id="cb15-5"><a href="#cb15-5"></a>       <span class="at">sbm_ud_out =</span> sbm_ud_out<span class="sc">$</span>efficiencies,</span>
-<span id="cb15-6"><a href="#cb15-6"></a>       <span class="at">scale_eff =</span> ccr_in <span class="sc">/</span> bbc_in)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-6"><a href="#cb15-6"></a>       <span class="at">scale_eff =</span> ccr_in <span class="sc">/</span> bbc_in)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 31 × 7
    DMU   ccr_in ccr_out bbc_in bbc_out sbm_ud_out scale_eff
    &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
  1 安徽   0.944   0.944  0.955   0.957      0.690     0.989
- 2 北京   0.917   0.917  0.918   0.917      0.839     0.999
- 3 福建   1.00    1      1.00    1          1.000     1.000
+ 2 北京   0.917   0.917  0.918   0.917      0.748     0.999
+ 3 福建   1.00    1      1.00    1          1         1.000
  4 甘肃   0.834   0.834  0.855   0.849      1         0.975
- 5 广东   1.000   1      1.00    1          1.000     1.000
- 6 广西   0.795   0.795  0.797   0.802      0.847     0.998
+ 5 广东   1.000   1      1.00    1          1.00      1.000
+ 6 广西   0.795   0.795  0.797   0.802      0.475     0.998
  7 贵州   0.963   0.963  0.971   0.970      0.728     0.992
- 8 海南   0.833   0.833  0.941   0.932      0.771     0.885
- 9 河北   0.904   0.904  0.939   0.945      0.619     0.963
-10 河南   0.883   0.883  0.962   0.970      0.841     0.918
+ 8 海南   0.833   0.833  0.941   0.932      0.731     0.885
+ 9 河北   0.904   0.904  0.939   0.945      0.608     0.963
+10 河南   0.883   0.883  0.962   0.970      0.817     0.918
 # ℹ 21 more rows</code></pre>
 </div>
 </div>
@@ -793,8 +801,8 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 </ul>
 <p>该数据集可评估中国工业部门在“十一五”期间的生产效率变化、技术进步与规模效益。数据结构清晰，适合进行跨期、跨区域的效率比较分析。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/economy.csv"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a>dat</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/economy.csv"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>dat</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 155 × 5
    DMUs         Period Capital Labor   GIOV
@@ -814,9 +822,9 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
 </div>
 <p>调用 <code>malmquist()</code> 函数计算 <code>Malmquist</code> 指数及其分解，需要提供长格式数据框，设置日期、投入、产出列，可选提供导向、规模收益假设、参照集、计算方法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">malmquist</span>(dat, <span class="at">period =</span> <span class="dv">2</span>, <span class="at">inputs =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">outputs =</span> <span class="dv">5</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">malmquist</span>(dat, <span class="at">period =</span> <span class="dv">2</span>, <span class="at">inputs =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">outputs =</span> <span class="dv">5</span>,</span>
 <span id="cb19-2"><a href="#cb19-2"></a>          <span class="at">orientation =</span> <span class="st">"oo"</span>, <span class="at">rts =</span> <span class="st">"vrs"</span>,</span>
-<span id="cb19-3"><a href="#cb19-3"></a>          <span class="at">type1 =</span> <span class="st">"glob"</span>, <span class="at">type2 =</span> <span class="st">"rd"</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3"></a>          <span class="at">type1 =</span> <span class="st">"glob"</span>, <span class="at">type2 =</span> <span class="st">"rd"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 124 × 7
    Period    DMU             mi    ec    tc  pech  sech
@@ -889,13 +897,14 @@ D_O^t(\mathbf{x},\mathbf{y}) = \sup\left\{ \eta \geq 0 \mid (\mathbf{x}, \eta\ma
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

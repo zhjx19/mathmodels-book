@@ -217,7 +217,13 @@ $$
 \begin{aligned} & \min \theta \\ \text{s.t.} \quad & \sum_{\substack{i=1\\i \neq k}}^n \lambda_i x_{ij} \leq \theta x_{kj}, \quad j = 1, \cdots, m \\ & \sum_{\substack{i=1\\i \neq k}}^n \lambda_i y_{ir} \geq y_{kr}, \quad r = 1, \cdots, q \\ & \sum_{\substack{i=1\\i \neq k}}^n \lambda_i = 1, \\  &\lambda_i \geq 0, \quad i \neq k \end{aligned}
 $$
 
-`mathmodels` 包对 `deaR` 包中的相应函数做了封装，提供了四个函数：`basic_DEA`、`super_DEA`、`basic_SBM` 和 `super_SBM`，分别适用于不同类型的 DEA 或 SBM 模型变体：径向数据包络分析（DEA）模型（Charnes 等，1978；Banker 等，1984）和基于松弛变量测度的 SBM 模型（Tone，2001）计算效率得分提供了简化的操作接口，支持在规模报酬不变（CRS）或规模报酬可变（VRS）条件下，运行标准模型和超效率模型，并可选择性地处理非期望产出。
+`mathmodels` 包为数据包络分析（DEA）提供了简洁统一的接口，包含四个函数：`basic_DEA()`、`super_DEA()`、`basic_SBM()` 和 `super_SBM()`。这些函数基于 `lpSolveAPI` 线性规划求解器独立实现，分别对应两类主流 DEA 模型：
+
+- 径向模型（Charnes 等，1978；Banker 等，1984）：`basic_DEA()` 计算标准效率得分，`super_DEA()` 进一步区分有效单元，允许超效率值大于 1；
+- SBM 模型（Tone，2001）：`basic_SBM()` 和 `super_SBM()` 采用基于松弛变量的测度方法，弥补径向模型忽略非径向松弛的不足。
+
+四个函数均支持规模报酬不变（CRS）与规模报酬可变（VRS）两种设定，支持投入导向、产出导向或非导向，并可选择性地处理非期望产出。所有函数输入为标准数据框，输出为结构化 tibble，可与 tidyverse 管道操作无缝集成。
+
 
 基本语法为（同其它函数）：
 
@@ -358,7 +364,7 @@ $$
 
 这被称为 **三重分解法**，完整揭示了生产率增长的来源。
 
-`mathmodels` 包提供了 `malmquist()` 计算跨时期的 Malmquist 指数及其分解，该函数是对 `deaR` 包中相关函数做了封装，更便于使用。基本语法：
+`mathmodels` 包提供了 `malmquist()` 函数，用于计算跨时期的 Malmquist 生产率指数及其分解。该函数基于 `lpSolveAPI` 线性规划求解器独立实现，支持多种参照集与分解方法，输入为标准长格式数据框，可与 tidyverse 管道操作无缝集成。基本语法：
 
 ```{r eval=FALSE}
 malmquist(data, period, inputs, outputs,
@@ -366,14 +372,15 @@ malmquist(data, period, inputs, outputs,
           type1 = "glob", type2 = "rd")
 ```
 
-- `data`: 长格式数据框，第 1 列为决策单元，包含时期列
-- `period, inputs, outputs`: 时期、投入和产出对应的列索引或列名
-- `orientation`: `"io"`（投入导向），`"oo"`（产出导向，默认）
-- `rts`: `"vrs"`（可变规模报酬，默认），`"crs"`（不变规模报酬）
-- `type1`: 参照集：`"cont"`（当期），`"seq"`（序列）或 `"glob"`（全局，默认）
-- `type2`: 分解方法：`"fgnz"`（Färe 等，1994），`"rd"`（Ray 和 Desli，1997，默认），`"gl"`（广义 Malmquist）或 `"bias"`（偏向性技术变化）
+- `data`：长格式数据框，第 1 列为决策单元，包含时期列
+- `period, inputs, outputs`：时期、投入和产出对应的列索引或列名
+- `orientation`："io"（投入导向），"oo"（产出导向，默认）
+- `rts`："vrs"（可变规模报酬，默认），"crs"（不变规模报酬）
+- `type1`：参照集："cont"（当期），"seq"（序列）或 "glob"（全局，默认）
+- `type2`：分解方法："fgnz"（Färe 等，1994），"rd"（Ray 和 Desli，1997，默认）
 
-返回包含 Period、DMU、Malmquist 指数、EC（效率变化）、TC（技术变化）、PECH（纯效率变化）和 SECH（规模效率变化）的数据框。
+返回包含 Period、DMU、mi（Malmquist 指数）、ec（效率变化）、tc（技术变化）、pech（纯效率变化）和 sech（规模效率变化）的 tibble 数据框。
+
 
 ## DEA 案例
 

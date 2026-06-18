@@ -2,10 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>9&nbsp; 灰色关联分析 – mathmodels 包使用手册</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -106,7 +109,7 @@ MathJax ={
     }
   }
 };
-</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -117,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -372,8 +375,8 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 </ul>
 <p>加载包：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(mathmodels)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section><section id="案例-1运动员训练与成绩" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="案例-1运动员训练与成绩">
 <span class="header-section-number">9.2</span> 案例 1：运动员训练与成绩</h2>
@@ -381,8 +384,8 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 <section id="创建数据" class="level3" data-number="9.2.1"><h3 data-number="9.2.1" class="anchored" data-anchor-id="创建数据">
 <span class="header-section-number">9.2.1</span> 创建数据</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>sports <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/sports.xlsx"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>sports</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>sports <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/sports.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>sports</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 18
    年份  铅球 `4kg前抛` `4kg后抛` `4kg原地` 立定跳远  高翻  抓举  卧推 `3kg前抛`
@@ -399,10 +402,10 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 </section><section id="无量纲化处理" class="level3" data-number="9.2.2"><h3 data-number="9.2.2" class="anchored" data-anchor-id="无量纲化处理">
 <span class="header-section-number">9.2.2</span> 无量纲化处理</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>sports <span class="ot">=</span> sports <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>sports <span class="ot">=</span> sports <span class="sc">|&gt;</span> </span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">16</span>, rescale_initial),</span>
 <span id="cb4-3"><a href="#cb4-3"></a>         <span class="fu">across</span>(<span class="dv">17</span><span class="sc">:</span><span class="dv">18</span>, \(x) <span class="fu">rescale_initial</span>(x, <span class="st">"-"</span>)))</span>
-<span id="cb4-4"><a href="#cb4-4"></a>sports</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4"></a>sports</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 18
    年份  铅球 `4kg前抛` `4kg后抛` `4kg原地` 立定跳远  高翻  抓举  卧推 `3kg前抛`
@@ -420,7 +423,7 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 <span class="header-section-number">9.2.3</span> 计算灰色关联度</h3>
 <p><code>mathmodel</code> 包提供了 <code>grey_corr()</code> 函数实现计算灰色关联度，基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">grey_corr</span>(ref, cmp, <span class="at">rho =</span> <span class="fl">0.5</span>, <span class="at">w =</span> <span class="cn">NULL</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">grey_corr</span>(ref, cmp, <span class="at">rho =</span> <span class="fl">0.5</span>, <span class="at">w =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -434,14 +437,14 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 </ul>
 <p>采用默认分辨系数，不提供指标权重：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>res <span class="ot">=</span> <span class="fu">grey_corr</span>(sports[[<span class="dv">2</span>]], sports[,<span class="dv">3</span><span class="sc">:</span><span class="dv">18</span>])</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>res <span class="ot">=</span> <span class="fu">grey_corr</span>(sports[[<span class="dv">2</span>]], sports[,<span class="dv">3</span><span class="sc">:</span><span class="dv">18</span>])</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>将结果转化为数据框，并排序：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">enframe</span>(res, <span class="at">value =</span> <span class="st">"灰色关联度"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>灰色关联度)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">enframe</span>(res, <span class="at">value =</span> <span class="st">"灰色关联度"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>灰色关联度)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 2
    name     灰色关联度
@@ -472,8 +475,8 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 <section id="创建数据-1" class="level3" data-number="9.3.1"><h3 data-number="9.3.1" class="anchored" data-anchor-id="创建数据-1">
 <span class="header-section-number">9.3.1</span> 创建数据</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>invest <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/invest.csv"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>invest</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>invest <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/invest.csv"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>invest</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 12
    year    x1    x2    x3    x4    x5    y1    y2    y3    y4    y5    y6
@@ -488,9 +491,9 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 </section><section id="无量纲化处理-1" class="level3" data-number="9.3.2"><h3 data-number="9.3.2" class="anchored" data-anchor-id="无量纲化处理-1">
 <span class="header-section-number">9.3.2</span> 无量纲化处理</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>invest <span class="ot">=</span> invest <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>invest <span class="ot">=</span> invest <span class="sc">|&gt;</span> </span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span><span class="dv">1</span>, rescale_initial))</span>
-<span id="cb12-3"><a href="#cb12-3"></a>invest</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3"></a>invest</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 12
    year    x1    x2    x3    x4    x5    y1    y2    y3    y4    y5    y6
@@ -505,8 +508,8 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 </section><section id="优势分析批量计算灰色关联度" class="level3" data-number="9.3.3"><h3 data-number="9.3.3" class="anchored" data-anchor-id="优势分析批量计算灰色关联度">
 <span class="header-section-number">9.3.3</span> 优势分析：批量计算灰色关联度</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">map_dfc</span>(invest[<span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>], \(x) <span class="fu">grey_corr</span>(x, invest[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>])) <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">投资/产出</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">names</span>(invest)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">.before =</span> <span class="dv">1</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">map_dfc</span>(invest[<span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>], \(x) <span class="fu">grey_corr</span>(x, invest[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>])) <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">投资/产出</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">names</span>(invest)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">.before =</span> <span class="dv">1</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 7
   `投资/产出`    y1    y2    y3    y4    y5    y6
@@ -535,10 +538,10 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 <li>只将中间型、区间型指标做归一化：</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>df <span class="ot">=</span> water_quality <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>df <span class="ot">=</span> water_quality <span class="sc">|&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">mutate</span>(<span class="at">PH =</span> <span class="fu">rescale_middle</span>(PH, <span class="dv">7</span>),</span>
 <span id="cb16-3"><a href="#cb16-3"></a>         <span class="at">nutrient =</span> <span class="fu">rescale_interval</span>(nutrient, <span class="dv">10</span>, <span class="dv">20</span>))</span>
-<span id="cb16-4"><a href="#cb16-4"></a>df</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-4"><a href="#cb16-4"></a>df</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 5
       ID    O2     PH  germ nutrient
@@ -569,9 +572,9 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 <span class="header-section-number">9.4.2</span> 指标权重：熵权法</h3>
 <p>已经归一化的指标，不必重复做归一化：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>idx <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"+"</span>, <span class="cn">NA</span>, <span class="st">"-"</span>, <span class="cn">NA</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>idx <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"+"</span>, <span class="cn">NA</span>, <span class="st">"-"</span>, <span class="cn">NA</span>)</span>
 <span id="cb18-2"><a href="#cb18-2"></a>res <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], idx)  </span>
-<span id="cb18-3"><a href="#cb18-3"></a>res<span class="sc">$</span>w</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3"></a>res<span class="sc">$</span>w</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       O2        PH      germ  nutrient 
 0.3153202 0.1813149 0.3506929 0.1526721 </code></pre>
@@ -581,7 +584,7 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 <span class="header-section-number">9.4.3</span> 灰色关联评价</h3>
 <p><code>mathmodels</code> 包提供了 <code>grey_corr_topsis()</code> 函数实现灰色关联 <code>TOPSIS</code> 法，基本语法：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">grey_corr_topsis</span>(X, w, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">rho =</span> <span class="fl">0.5</span>)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">grey_corr_topsis</span>(X, w, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">rho =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -595,14 +598,14 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
 </ul>
 <p>执行灰色关联 TOPSIS 评价，已经归一化的指标，不必重复做归一化：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>gcd <span class="ot">=</span> <span class="fu">grey_corr_topsis</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], res<span class="sc">$</span>w, idx)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>gcd <span class="ot">=</span> <span class="fu">grey_corr_topsis</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], res<span class="sc">$</span>w, idx)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>转化成 <code>0-100</code> 分数，增加排名列：</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">tibble</span>(<span class="at">ID =</span> df<span class="sc">$</span>ID, 灰色关联度 <span class="ot">=</span> gcd, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">tibble</span>(<span class="at">ID =</span> df<span class="sc">$</span>ID, 灰色关联度 <span class="ot">=</span> gcd, </span>
 <span id="cb22-2"><a href="#cb22-2"></a>       <span class="at">score =</span> <span class="fu">rescale</span>(灰色关联度, <span class="at">b =</span> <span class="dv">100</span>),</span>
 <span id="cb22-3"><a href="#cb22-3"></a>       <span class="at">rank =</span> <span class="fu">min_rank</span>(<span class="sc">-</span>score)) <span class="sc">|&gt;</span></span>
-<span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>score)</span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>score)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 4
       ID 灰色关联度 score  rank
@@ -682,13 +685,14 @@ r_i=\frac{1}{n}\sum_{k=1}^n\eta_i(k)
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
