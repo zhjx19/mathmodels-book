@@ -91,10 +91,10 @@ df
 
 ### 指标权重：熵权法
 
-使用 `entropy_weight()`，`PH` 和 `nutrient` 已归一化，不再重复做：
+使用 `weight_entropy()`，`PH` 和 `nutrient` 已归一化，不再重复做：
 
 ```{r}
-res = entropy_weight(df[2:5], c("+",NA,"-",NA))   
+res = weight_entropy(df[2:5], c("+",NA,"-",NA))   
 res$w
 ```
 

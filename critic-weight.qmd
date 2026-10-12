@@ -123,10 +123,10 @@ df
 
 ### CRITIC 及其改进权重
 
-用 `critic_weight()` 函数实现用 CRITIC 法及其改进计算权重，该函数已内置归一化处理，基本语法：
+用 `weight_critic()` 函数实现用 CRITIC 法及其改进计算权重，该函数已内置归一化处理，基本语法：
 
 ```{r eval=FALSE}
-critic_weight(
+weight_critic(
   X,
   index = NULL,
   method = "std",
@@ -145,7 +145,7 @@ critic_weight(
 
 ```{r}
 idx = c("+", NA, "-", NA)
-res = critic_weight(df[-1], idx)     # 默认基于标准差
+res = weight_critic(df[-1], idx)     # 默认基于标准差
 ```
 
 - 查看各指标权重
@@ -170,7 +170,7 @@ tibble(ID = df$ID, score = res$s, rank = min_rank(-score)) |>
 #### (2) 熵-CRITIC 权重 {.unnumbered}
 
 ```{r}
-res = critic_weight(df[-1], idx, method = "entropy")    # 基于熵
+res = weight_critic(df[-1], idx, method = "entropy")    # 基于熵
 res$w
 ```
 
@@ -178,7 +178,7 @@ res$w
 
 ```{r}
 # 基于熵、spearman相关系数
-res = critic_weight(df[-1], idx, method = "entropy", 
+res = weight_critic(df[-1], idx, method = "entropy", 
                     cor_method = "spearman")
 res$w
 ```

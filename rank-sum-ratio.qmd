@@ -162,7 +162,7 @@ res$reg |> summary()
 - 指标权重采用熵权法，注意应该根据原始数据计算：
 
 ```{r}
-rlt = entropy_weight(df[-1], c("+","-","-"))
+rlt = weight_entropy(df[-1], c("+","-","-"))
 rlt$w
 ```
 

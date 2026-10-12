@@ -27,6 +27,17 @@ book:
         - inequality.qmd
         - regional-economics.qmd
         - system-eval.qmd
+    # 以下各章的 .qmd 尚未加入仓库，暂注释；补入后取消注释即可
+    # - part: pred.qmd
+    #   chapters:
+    #     - grey-pred.qmd
+    #     - reg-pred.qmd
+    #     - ts-pred.qmd
+    #     - markov-pred.qmd
+    # - part: diff-eq.qmd
+    #   chapters:
+    #     - pop-models.qmd
+    #     - epi-models.qmd
     - references.qmd
 #  appendices:
 #    - appendix-a.qmd

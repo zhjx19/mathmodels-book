@@ -205,17 +205,17 @@ knitr::include_graphics("figs/gauss-mf.png")
 `mathmodels` 包提供了上述所有隶属函数的实现，以及可视化隶属函数的函数：
 
 ```{r eval=FALSE}
-tri_mf(x, params)
-trap_mf(x, params)
-gauss_mf(x, params)
-gbell_mf(x, params)
-gauss2mf(x, params)
-sigmoid_mf(x, params)
-dsigmoid_mf(x, params)
-psigmoid_mf(x, params)
-z_mf(x, params)
-pi_mf(x, params)
-s_mf(x, params)
+mf_tri(x, params)
+mf_trap(x, params)
+mf_gauss(x, params)
+mf_gbell(x, params)
+mf_gauss2(x, params)
+mf_sigmoid(x, params)
+mf_dsigmoid(x, params)
+mf_psigmoid(x, params)
+mf_z(x, params)
+mf_pi(x, params)
+mf_s(x, params)
 plot_mf(mf, xlim = c(0, 10), main = NULL)
 ```
 
@@ -225,29 +225,29 @@ plot_mf(mf, xlim = c(0, 10), main = NULL)
 
 ```{r}
 x = 1:10
-trap_mf(x, params = c(1, 5, 7, 8))
+mf_trap(x, params = c(1, 5, 7, 8))
 ```
 
 可视化该梯形隶属函数：
 
 ```{r}
-f = \(x) trap_mf(x, c(1, 5, 7, 8))
+f = \(x) mf_trap(x, c(1, 5, 7, 8))
 plot_mf(f, xlim = c(0,10), main = "梯形隶属函数")
 ```
 
 ### `compute_mf()` 函数
 
-将单个指标值转化为属于各评语的隶属向量，是模糊综合评价计算隶属矩阵最核心的、大量重复使用的计算步。而非常常见且合理的做法，就是 三角+梯形隶属函数法 ，或叫做 分段线性隶属函数法。
+将单个指标值转化为属于各评语的隶属向量，是模糊综合评价计算隶属矩阵最核心的、大量重复使用的计算步。而非常常见且合理的做法，就是**三角+梯形隶属函数法**，或叫做 分段线性隶属函数法。
 
 `mathmodels` 包提供了 `compute_mf()` 函数，实现基于三角隶属（两端是半梯形）将单个指标值转化为属于各评语的隶属向量，基本语法为：
 
 ```{r eval=FALSE}
-compute_mf(x, thresholds)
+compute_mf(x, knots)
 ```
 
 -   `x` 为单个指标值；
--   `thresholds` 为指标值划分到各评语的中间界限构成的向量（长度至少为 $2$）
--   返回 `mv` 为隶属向量，对应单个评价对象的单个指标值。
+-   `knots` 为指标值划分到各评语的中间界限构成的向量（长度至少为 $2$）
+-   返回隶属向量，对应单个评价对象的单个指标值。
 
 **用法示例**
 
@@ -522,7 +522,7 @@ th_mat = tibble(
 ```{r}
 eval_one = function(x, type = 3, method = "max_membership") {
   # x为一个评价对象(提取df的某一行, 转化为向量)
-  R = map2_dfc(x, th_mat, compute_mf) 
+  R = map2(x, th_mat, compute_mf) |> sapply(cbind)
   mu = fuzzy_eval(w, R, type)               # 默认对结果归一化
   s = defuzzify(mu, scores, method)
   list(s = s, mu = mu, R = R)

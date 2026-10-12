@@ -128,10 +128,10 @@ df
 
 ### 主成分赋权
 
-用 `pca_weight()` 函数实现用**主成分法**计算权重，该函数已内置标准化处理，基本语法：
+用 `weight_pca()` 函数实现用**主成分法**计算权重，该函数已内置标准化处理，基本语法：
 
 ```{r eval=FALSE}
-pca_weight(X, index = NULL, nfs = NULL, varimax = TRUE, method = "abs")
+weight_pca(X, index = NULL, nfs = NULL, varimax = TRUE, method = "abs")
 ```
 
 - `index` 可以指定对哪些列做正向（`"+"`）、负向（`"-"`）、不做（`NA`）标准化；
@@ -143,7 +143,7 @@ pca_weight(X, index = NULL, nfs = NULL, varimax = TRUE, method = "abs")
 
 ```{r}
 idx = c("+", "+", "-", "+")
-res = pca_weight(df[-1], idx, nfs = 3)
+res = weight_pca(df[-1], idx, nfs = 3)
 ```
 
 - 查看指标权重：

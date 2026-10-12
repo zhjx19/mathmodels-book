@@ -161,7 +161,7 @@ df
 
 ```{r}
 idx = c("+", NA, "-", NA)
-res = entropy_weight(df[2:5], idx)  
+res = weight_entropy(df[2:5], idx)  
 res$w
 ```
 

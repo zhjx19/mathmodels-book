@@ -102,10 +102,10 @@ df
 
 ### 熵权法
 
-用 `entropy_weight()` 函数实现用**熵权法**计算权重，该函数已内置归一化处理，基本语法：
+用 `weight_entropy()` 函数实现用**熵权法**计算权重，该函数已内置归一化处理，基本语法：
 
 ```{r eval=FALSE}
-entropy_weight(X, index = NULL, epsilon = 0.002)
+weight_entropy(X, index = NULL, epsilon = 0.002)
 ```
 
 - `index` 可以指定对哪些列做正向（`"+"`）、负向（`"-"`）、不做（`NA`）归一化，默认 `index = NULL` 表示，所有列都不做归一化。
@@ -115,7 +115,7 @@ entropy_weight(X, index = NULL, epsilon = 0.002)
 
 ```{r}
 idx = c("+", NA, "-", NA)
-res = entropy_weight(df[-1], idx)
+res = weight_entropy(df[-1], idx)
 ```
 
 - 查看指标权重：

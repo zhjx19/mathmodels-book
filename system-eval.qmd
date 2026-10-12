@@ -161,9 +161,9 @@ cdev
 - 用熵权法分别综合评价每个子系统
 
 ```{r}
-tech = entropy_weight(cdev[3:5], rep("+",3))
-eco = entropy_weight(cdev[6:8], rep("+",3))
-env = entropy_weight(cdev[9:11], c("+","-","+"))
+tech = weight_entropy(cdev[3:5], rep("+",3))
+eco = weight_entropy(cdev[6:8], rep("+",3))
+env = weight_entropy(cdev[9:11], c("+","-","+"))
 ```
 
 - 查看指标权重
@@ -194,7 +194,7 @@ S = S |>
 - 用熵权法计算指标权重，注意指标已经归一化
 
 ```{r}
-w = entropy_weight(S[3:5], rep(NA, 3))$w
+w = weight_entropy(S[3:5], rep(NA, 3))$w
 w
 ```
 

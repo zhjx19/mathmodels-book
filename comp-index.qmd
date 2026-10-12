@@ -58,7 +58,7 @@ splits = split(dat, dat$二级指标)
 - `map` 循环迭代就能批量执行该层级上的所有熵权法，提取各三级指标的熵权权重
 
 ```{r}
-rlt = map(splits, \(x) entropy_weight(df[x$三级指标], x$方向))
+rlt = map(splits, \(x) weight_entropy(df[x$三级指标], x$方向))
 w_obj = map(rlt, "w") 
 ```
 
@@ -80,7 +80,7 @@ df1 = bind_cols(df[1:2], map_df(rlt, "s"))
 - 执行熵权法，提取各二级指标熵权权重
 
 ```{r}
-rlt = entropy_weight(df1[3:7], rep("+",5))
+rlt = weight_entropy(df1[3:7], rep("+",5))
 rlt$w
 ```
 
@@ -93,7 +93,7 @@ df1
 ```
 
 
-其它支持的客观赋权法还有：`pca_weight()`（PCA 赋权）、`critic_weight()`（CRITIC 赋权）。
+其它支持的客观赋权法还有：`weight_pca()`（PCA 赋权）、`weight_critic()`（CRITIC 赋权）。
 
 ## 主客观组合赋权 + 综合得分
 
@@ -163,7 +163,7 @@ df1 = bind_cols(df[1:2],
 - 计算各二级指标熵权权重
 
 ```{r}
-w_obj = entropy_weight(df1[3:7], rep("+",5))$w
+w_obj = weight_entropy(df1[3:7], rep("+",5))$w
 ```
 
 - 问 AI 得到该层级的判断矩阵，执行 AHP，提取一致性比率

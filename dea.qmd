@@ -222,7 +222,7 @@ $$
 - 径向模型（Charnes 等，1978；Banker 等，1984）：`basic_DEA()` 计算标准效率得分，`super_DEA()` 进一步区分有效单元，允许超效率值大于 1；
 - SBM 模型（Tone，2001）：`basic_SBM()` 和 `super_SBM()` 采用基于松弛变量的测度方法，弥补径向模型忽略非径向松弛的不足。
 
-四个函数均支持规模报酬不变（CRS）与规模报酬可变（VRS）两种设定，支持投入导向、产出导向或非导向，并可选择性地处理非期望产出。所有函数输入为标准数据框，输出为结构化 tibble，可与 tidyverse 管道操作无缝集成。
+四个函数均支持规模报酬不变（CRS）与规模报酬可变（VRS）两种设定，并可选择性地处理非期望产出；其中径向模型（`basic_DEA()`、`super_DEA()`）支持投入导向（`"io"`）与产出导向（`"oo"`），SBM 模型（`basic_SBM()`、`super_SBM()`）为非导向模型。所有函数输入为标准数据框，输出为结构化 tibble，可与 tidyverse 管道操作无缝集成。
 
 
 基本语法为（同其它函数）：
@@ -465,7 +465,7 @@ ccr_out = basic_DEA(df, inputs = 2:3, outputs = 4:5,
 bbc_out = basic_DEA(df, inputs = 2:3, outputs = 4:5, 
                    orientation = "oo", rts = "vrs")
 sbm_ud_out = basic_SBM(df, inputs = 2:3, outputs = 4:6, ud_outputs = 3,
-                       orientation = "oo", rts = "vrs")
+                       rts = "vrs")
 ```
 
 合并结果，并计算规模效率（CRS 效率 = VRS 效率 * 规模效率）：
