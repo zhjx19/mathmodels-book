@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>13&nbsp; 不平等度量 – mathmodels 包使用手册</title>
 <style>
@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
@@ -860,26 +860,26 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 <pre><code># A tibble: 20 × 14
     年份      T     Tb     Tw   Tw_b   Tw_w 信息业 制造业   医疗   商贸 建筑业
    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1  2014 0.0590 0.0304 0.0286 0.0129 0.0157 0.0612 0.0144 0.0369 0.0599 0.0108
- 2  2014 1      0.515  0.485  0.219  0.266  0.0483 0.0902 0.0439 0.0689 0.0335
- 3  2015 0.0609 0.0326 0.0283 0.0128 0.0155 0.0578 0.0152 0.0316 0.0595 0.0110
- 4  2015 1      0.535  0.465  0.210  0.255  0.0471 0.0884 0.0395 0.0657 0.0312
- 5  2016 0.0615 0.0331 0.0285 0.0129 0.0156 0.0584 0.0165 0.0294 0.0609 0.0109
- 6  2016 1      0.537  0.463  0.209  0.253  0.0498 0.0916 0.0390 0.0661 0.0294
- 7  2017 0.0644 0.0348 0.0295 0.0133 0.0163 0.0576 0.0163 0.0299 0.0618 0.0118
- 8  2017 1      0.541  0.459  0.206  0.253  0.0517 0.0830 0.0410 0.0630 0.0294
- 9  2018 0.0650 0.0350 0.0300 0.0127 0.0173 0.0577 0.0151 0.0315 0.0620 0.0118
-10  2018 1      0.539  0.461  0.196  0.265  0.0565 0.0711 0.0440 0.0641 0.0302
-11  2019 0.0663 0.0333 0.0330 0.0153 0.0178 0.0639 0.0157 0.0383 0.0604 0.0140
-12  2019 1      0.502  0.498  0.231  0.268  0.0669 0.0668 0.0599 0.0635 0.0297
-13  2020 0.0693 0.0333 0.0361 0.0169 0.0192 0.0680 0.0159 0.0376 0.0700 0.0150
-14  2020 1      0.480  0.520  0.243  0.277  0.0751 0.0636 0.0581 0.0675 0.0287
-15  2021 0.0731 0.0352 0.0380 0.0171 0.0209 0.0659 0.0164 0.0365 0.0692 0.0163
-16  2021 1      0.481  0.519  0.233  0.286  0.0758 0.0639 0.0557 0.0652 0.0267
-17  2022 0.0807 0.0411 0.0397 0.0187 0.0210 0.0670 0.0176 0.0375 0.0747 0.0190
-18  2022 1      0.509  0.491  0.231  0.260  0.0741 0.0610 0.0536 0.0642 0.0259
-19  2023 0.0783 0.0406 0.0377 0.0171 0.0206 0.0663 0.0157 0.0353 0.0694 0.0166
-20  2023 1      0.519  0.481  0.218  0.263  0.0768 0.0552 0.0542 0.0639 0.0221
+ 1  2014 0.0609 0.0304 0.0305 0.0129 0.0176 0.0641 0.0148 0.0400 0.0660 0.0111
+ 2  2014 1      0.499  0.501  0.212  0.290  0.0490 0.0897 0.0461 0.0735 0.0334
+ 3  2015 0.0628 0.0326 0.0302 0.0128 0.0174 0.0603 0.0157 0.0339 0.0654 0.0113
+ 4  2015 1      0.519  0.481  0.204  0.277  0.0476 0.0885 0.0411 0.0701 0.0312
+ 5  2016 0.0633 0.0331 0.0302 0.0129 0.0174 0.0600 0.0170 0.0314 0.0669 0.0112
+ 6  2016 1      0.522  0.478  0.203  0.274  0.0497 0.0919 0.0404 0.0706 0.0295
+ 7  2017 0.0663 0.0348 0.0315 0.0133 0.0182 0.0598 0.0169 0.0322 0.0681 0.0122
+ 8  2017 1      0.525  0.475  0.200  0.275  0.0520 0.0831 0.0428 0.0674 0.0297
+ 9  2018 0.0670 0.0350 0.0319 0.0127 0.0192 0.0599 0.0156 0.0338 0.0681 0.0122
+10  2018 1      0.523  0.477  0.190  0.287  0.0570 0.0710 0.0459 0.0684 0.0304
+11  2019 0.0684 0.0333 0.0352 0.0153 0.0199 0.0666 0.0162 0.0412 0.0661 0.0147
+12  2019 1      0.486  0.514  0.223  0.290  0.0675 0.0668 0.0624 0.0673 0.0302
+13  2020 0.0718 0.0333 0.0386 0.0169 0.0217 0.0711 0.0163 0.0399 0.0774 0.0157
+14  2020 1      0.463  0.537  0.235  0.302  0.0758 0.0633 0.0596 0.0720 0.0290
+15  2021 0.0759 0.0352 0.0407 0.0171 0.0236 0.0683 0.0169 0.0387 0.0762 0.0171
+16  2021 1      0.463  0.537  0.225  0.312  0.0758 0.0635 0.0568 0.0693 0.0270
+17  2022 0.0835 0.0411 0.0425 0.0187 0.0238 0.0697 0.0182 0.0396 0.0827 0.0200
+18  2022 1      0.492  0.508  0.223  0.285  0.0744 0.0608 0.0548 0.0686 0.0264
+19  2023 0.0810 0.0406 0.0403 0.0171 0.0232 0.0693 0.0162 0.0375 0.0768 0.0173
+20  2023 1      0.502  0.498  0.211  0.287  0.0777 0.0550 0.0557 0.0683 0.0222
 # ℹ 3 more variables: 教育 &lt;dbl&gt;, 科研 &lt;dbl&gt;, 金融业 &lt;dbl&gt;</code></pre>
 </div>
 </div>
@@ -897,7 +897,7 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 <span id="cb35-5"><a href="#cb35-5"></a>          <span class="at">.by =</span> 年份) <span class="sc">|&gt;</span> </span>
 <span id="cb35-6"><a href="#cb35-6"></a>  <span class="fu">unnest_wider</span>(Theil)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 20 × 40
+<pre><code># A tibble: 20 × 44
     年份      T   Tb_g1  Tb_g2     Tw   东部    西部      东北    中部 东部_上海
    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
  1  2014 0.0609 0.00915 0.0234 0.0283 0.0374 0.00286 0.000441  0.00308    0.0547
@@ -920,7 +920,7 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 18  2022 1      0.191   0.375  0.434  0.361  0.00503 0.000149  0.00948    0.0499
 19  2023 0.0810 0.0140  0.0319 0.0351 0.0499 0.00254 0.0000470 0.00450    0.0490
 20  2023 1      0.172   0.394  0.433  0.380  0.00578 0.0000231 0.00894    0.0486
-# ℹ 30 more variables: 西部_云南 &lt;dbl&gt;, 西部_内蒙古 &lt;dbl&gt;, 东部_北京 &lt;dbl&gt;,
+# ℹ 34 more variables: 西部_云南 &lt;dbl&gt;, 西部_内蒙古 &lt;dbl&gt;, 东部_北京 &lt;dbl&gt;,
 #   东北_吉林 &lt;dbl&gt;, 西部_四川 &lt;dbl&gt;, 东部_天津 &lt;dbl&gt;, 西部_宁夏 &lt;dbl&gt;,
 #   中部_安徽 &lt;dbl&gt;, 东部_山东 &lt;dbl&gt;, 中部_山西 &lt;dbl&gt;, 东部_广东 &lt;dbl&gt;,
 #   西部_广西 &lt;dbl&gt;, 西部_新疆 &lt;dbl&gt;, 东部_江苏 &lt;dbl&gt;, 中部_江西 &lt;dbl&gt;,
@@ -933,6 +933,7 @@ T_w = \sum_i \sum_j \left( \frac{Y_{ij}}{Y} \right) T_w^{ij}
 <ul>
 <li><p>泰尔指数：<code>T = Tb_g1 + Tb_g2 + Tw</code></p></li>
 <li><p>贡献率：<code>R_Tb_g2 = R_东部 + ... + R_中部</code>，<code>R_Tw = R_东部_上海 + ... + R_东北_黑龙江</code></p></li>
+<li><p>结果末尾额外给出以 <code>.within</code> 结尾的列（如 <code>东北.within</code>），表示各 <code>group1</code>（区域）组内泰尔指数的贡献率，四个区域相加等于 <code>R_Tw</code>。</p></li>
 </ul>
 
 

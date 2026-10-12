@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>11&nbsp; 模糊综合评价 – mathmodels 包使用手册</title>
 <style>
@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
@@ -591,31 +591,31 @@ $`3`
 <p>另外，还有双高斯隶属函数、广义贝尔隶属函数、Sigmoid 隶属函数族（单 Sigmoid、两 Sigmoid 之差、两 Sigmoid 之积）、多项式隶属函数族（分别形如<span class="math inline">\(Z,\bar{\pi},S\)</span>）。</p>
 <p><code>mathmodels</code> 包提供了上述所有隶属函数的实现，以及可视化隶属函数的函数：</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">tri_mf</span>(x, params)</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">trap_mf</span>(x, params)</span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">gauss_mf</span>(x, params)</span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="fu">gbell_mf</span>(x, params)</span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="fu">gauss2mf</span>(x, params)</span>
-<span id="cb18-6"><a href="#cb18-6"></a><span class="fu">sigmoid_mf</span>(x, params)</span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="fu">dsigmoid_mf</span>(x, params)</span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="fu">psigmoid_mf</span>(x, params)</span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="fu">z_mf</span>(x, params)</span>
-<span id="cb18-10"><a href="#cb18-10"></a><span class="fu">pi_mf</span>(x, params)</span>
-<span id="cb18-11"><a href="#cb18-11"></a><span class="fu">s_mf</span>(x, params)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">mf_tri</span>(x, params)</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">mf_trap</span>(x, params)</span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">mf_gauss</span>(x, params)</span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="fu">mf_gbell</span>(x, params)</span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="fu">mf_gauss2</span>(x, params)</span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="fu">mf_sigmoid</span>(x, params)</span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="fu">mf_dsigmoid</span>(x, params)</span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="fu">mf_psigmoid</span>(x, params)</span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="fu">mf_z</span>(x, params)</span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="fu">mf_pi</span>(x, params)</span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="fu">mf_s</span>(x, params)</span>
 <span id="cb18-12"><a href="#cb18-12"></a><span class="fu">plot_mf</span>(mf, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">main =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>其中，<code>x</code> 为数值向量，<code>params</code> 为各隶属函数相应参数值向量，返回与 <code>x</code> 同样长度的隶属度值。</p>
 <p>以梯形隶属函数为例，包含 <span class="math inline">\(4\)</span> 个参数，比如取 <code>1,5,7,8</code>，计算 <code>1:10</code> 的隶属度值：</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">trap_mf</span>(x, <span class="at">params =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">mf_trap</span>(x, <span class="at">params =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0.00 0.25 0.50 0.75 1.00 1.00 1.00 0.00 0.00 0.00</code></pre>
 </div>
 </div>
 <p>可视化该梯形隶属函数：</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>f <span class="ot">=</span> \(x) <span class="fu">trap_mf</span>(x, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>f <span class="ot">=</span> \(x) <span class="fu">mf_trap</span>(x, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>))</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="fu">plot_mf</span>(f, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">main =</span> <span class="st">"梯形隶属函数"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -626,17 +626,17 @@ $`3`
 </div>
 </section></section><section id="compute_mf-函数" class="level3" data-number="11.1.3"><h3 data-number="11.1.3" class="anchored" data-anchor-id="compute_mf-函数">
 <span class="header-section-number">11.1.3</span> <code>compute_mf()</code> 函数</h3>
-<p>将单个指标值转化为属于各评语的隶属向量，是模糊综合评价计算隶属矩阵最核心的、大量重复使用的计算步。而非常常见且合理的做法，就是 三角+梯形隶属函数法 ，或叫做 分段线性隶属函数法。</p>
+<p>将单个指标值转化为属于各评语的隶属向量，是模糊综合评价计算隶属矩阵最核心的、大量重复使用的计算步。而非常常见且合理的做法，就是<strong>三角+梯形隶属函数法</strong>，或叫做 分段线性隶属函数法。</p>
 <p><code>mathmodels</code> 包提供了 <code>compute_mf()</code> 函数，实现基于三角隶属（两端是半梯形）将单个指标值转化为属于各评语的隶属向量，基本语法为：</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">compute_mf</span>(x, thresholds)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">compute_mf</span>(x, knots)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
 <code>x</code> 为单个指标值；</li>
 <li>
-<code>thresholds</code> 为指标值划分到各评语的中间界限构成的向量（长度至少为 <span class="math inline">\(2\)</span>）</li>
-<li>返回 <code>mv</code> 为隶属向量，对应单个评价对象的单个指标值。</li>
+<code>knots</code> 为指标值划分到各评语的中间界限构成的向量（长度至少为 <span class="math inline">\(2\)</span>）</li>
+<li>返回隶属向量，对应单个评价对象的单个指标值。</li>
 </ul>
 <p><strong>用法示例</strong></p>
 <p>举个例子，大气污染物评价，其中 SO2 的四个等级阈值为：</p>
@@ -977,7 +977,7 @@ R = [r_1,r_2,r_3,r_4] =
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>eval_one <span class="ot">=</span> <span class="cf">function</span>(x, <span class="at">type =</span> <span class="dv">3</span>, <span class="at">method =</span> <span class="st">"max_membership"</span>) {</span>
 <span id="cb39-2"><a href="#cb39-2"></a>  <span class="co"># x为一个评价对象(提取df的某一行, 转化为向量)</span></span>
-<span id="cb39-3"><a href="#cb39-3"></a>  R <span class="ot">=</span> <span class="fu">map2_dfc</span>(x, th_mat, compute_mf) </span>
+<span id="cb39-3"><a href="#cb39-3"></a>  R <span class="ot">=</span> <span class="fu">map2</span>(x, th_mat, compute_mf) <span class="sc">|&gt;</span> <span class="fu">sapply</span>(cbind)</span>
 <span id="cb39-4"><a href="#cb39-4"></a>  mu <span class="ot">=</span> <span class="fu">fuzzy_eval</span>(w, R, type)               <span class="co"># 默认对结果归一化</span></span>
 <span id="cb39-5"><a href="#cb39-5"></a>  s <span class="ot">=</span> <span class="fu">defuzzify</span>(mu, scores, method)</span>
 <span id="cb39-6"><a href="#cb39-6"></a>  <span class="fu">list</span>(<span class="at">s =</span> s, <span class="at">mu =</span> mu, <span class="at">R =</span> R)</span>
@@ -1023,31 +1023,25 @@ R = [r_1,r_2,r_3,r_4] =
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">map</span>(res_m, <span class="st">"R"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-# A tibble: 4 × 5
-  product quality labor income ecology
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-1       0       0  0      0          1
-2       0       1  0.75   0.45       0
-3       0       0  0.25   0.55       0
-4       1       0  0      0          0
+     product quality labor income ecology
+[1,]       0       0  0.00   0.00       1
+[2,]       0       1  0.75   0.45       0
+[3,]       0       0  0.25   0.55       0
+[4,]       1       0  0.00   0.00       0
 
 [[2]]
-# A tibble: 4 × 5
-  product quality labor income ecology
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-1    0          0   0    0           0
-2    0          0   0    0           1
-3    0.21       1   0.9  0.625       0
-4    0.79       0   0.1  0.375       0
+     product quality labor income ecology
+[1,]    0.00       0   0.0  0.000       0
+[2,]    0.00       0   0.0  0.000       1
+[3,]    0.21       1   0.9  0.625       0
+[4,]    0.79       0   0.1  0.375       0
 
 [[3]]
-# A tibble: 4 × 5
-  product quality labor income ecology
-    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-1    0          0   0    0           0
-2    0.38       0   0    0.125       0
-3    0.62       0   0.6  0.875       1
-4    0          1   0.4  0           0</code></pre>
+     product quality labor income ecology
+[1,]    0.00       0   0.0  0.000       0
+[2,]    0.38       0   0.0  0.125       0
+[3,]    0.62       0   0.6  0.875       1
+[4,]    0.00       1   0.4  0.000       0</code></pre>
 </div>
 </div>
 <p><strong>方法 2</strong>：按默认的<strong>乘加法</strong>模糊合成，按加权平均法去模糊化。</p>

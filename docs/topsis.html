@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>8&nbsp; TOPSIS – mathmodels 包使用手册</title>
 <style>
@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
@@ -429,9 +429,9 @@ f_i=\dfrac{d_i^0}{d_i^0+d_i^*},\quad i=1,\cdots,n
 </div>
 </section><section id="指标权重熵权法" class="level3" data-number="8.2.2"><h3 data-number="8.2.2" class="anchored" data-anchor-id="指标权重熵权法">
 <span class="header-section-number">8.2.2</span> 指标权重：熵权法</h3>
-<p>使用 <code>entropy_weight()</code>，<code>PH</code> 和 <code>nutrient</code> 已归一化，不再重复做：</p>
+<p>使用 <code>weight_entropy()</code>，<code>PH</code> 和 <code>nutrient</code> 已归一化，不再重复做：</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>res <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">c</span>(<span class="st">"+"</span>,<span class="cn">NA</span>,<span class="st">"-"</span>,<span class="cn">NA</span>))   </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>res <span class="ot">=</span> <span class="fu">weight_entropy</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], <span class="fu">c</span>(<span class="st">"+"</span>,<span class="cn">NA</span>,<span class="st">"-"</span>,<span class="cn">NA</span>))   </span>
 <span id="cb6-2"><a href="#cb6-2"></a>res<span class="sc">$</span>w</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       O2        PH      germ  nutrient 
@@ -453,9 +453,12 @@ f_i=\dfrac{d_i^0}{d_i^0+d_i^*},\quad i=1,\cdots,n
 <span id="cb9-2"><a href="#cb9-2"></a>RC <span class="ot">=</span> <span class="fu">topsis</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], res<span class="sc">$</span>w, idx)</span>
 <span id="cb9-3"><a href="#cb9-3"></a>RC               <span class="co"># 相对接近度</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 0.3841556 0.4852199 0.5021310 0.5084128 0.4226200 0.3945085 0.5502261
- [8] 0.6258551 0.7260529 0.7138447 0.8091923 0.6159619 0.6007565 0.1593096
-[15] 0.4974685 0.4250799 0.5565555 0.4815844 0.3070290 0.7098355</code></pre>
+<pre><code>        1         2         3         4         5         6         7         8 
+0.3841556 0.4852199 0.5021310 0.5084128 0.4226200 0.3945085 0.5502261 0.6258551 
+        9        10        11        12        13        14        15        16 
+0.7260529 0.7138447 0.8091923 0.6159619 0.6007565 0.1593096 0.4974685 0.4250799 
+       17        18        19        20 
+0.5565555 0.4815844 0.3070290 0.7098355 </code></pre>
 </div>
 </div>
 <p>转化成 <span class="math inline">\(0 \sim 100\)</span> 分数，增加排名列：</p>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>3&nbsp; 熵权法 – mathmodels 包使用手册</title>
 <style>
@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
@@ -429,9 +429,9 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 </div>
 </section><section id="熵权法" class="level3" data-number="3.2.3"><h3 data-number="3.2.3" class="anchored" data-anchor-id="熵权法">
 <span class="header-section-number">3.2.3</span> 熵权法</h3>
-<p>用 <code>entropy_weight()</code> 函数实现用<strong>熵权法</strong>计算权重，该函数已内置归一化处理，基本语法：</p>
+<p>用 <code>weight_entropy()</code> 函数实现用<strong>熵权法</strong>计算权重，该函数已内置归一化处理，基本语法：</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">entropy_weight</span>(X, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">epsilon =</span> <span class="fl">0.002</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">weight_entropy</span>(X, <span class="at">index =</span> <span class="cn">NULL</span>, <span class="at">epsilon =</span> <span class="fl">0.002</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
@@ -442,7 +442,7 @@ s_i=100 × \sum\limits_{j=1}^m w_j x_{ij}, \quad i=1,\,\cdots,\,n
 <p>本例已对指标列 <code>PH</code> 和 <code>nutrient</code> 事先做了归一化，故将指标方向设置为 <code>NA</code>，以不再重复做归一化，只是微调 <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 值，避免熵权法计算时出现 <span class="math inline">\(\ln(0)\)</span>。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>idx <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"+"</span>, <span class="cn">NA</span>, <span class="st">"-"</span>, <span class="cn">NA</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>res <span class="ot">=</span> <span class="fu">entropy_weight</span>(df[<span class="sc">-</span><span class="dv">1</span>], idx)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-2"><a href="#cb7-2"></a>res <span class="ot">=</span> <span class="fu">weight_entropy</span>(df[<span class="sc">-</span><span class="dv">1</span>], idx)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>查看指标权重：</li>

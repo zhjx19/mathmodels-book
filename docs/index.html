@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="张敬信">
 <title>mathmodels 包使用手册</title>
@@ -92,7 +92,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
@@ -284,7 +284,7 @@ MathJax ={
 <a href="#sec-preface" id="toc-sec-preface" class="nav-link active" data-scroll-target="#sec-preface">前言</a>
   <ul class="collapse">
 <li><a href="#mathmodels-%E5%8C%85%E4%B8%8E%E6%9C%AC%E9%85%8D%E5%A5%97%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E8%89%B2" id="toc-mathmodels-包与本配套使用手册的核心特色" class="nav-link" data-scroll-target="#mathmodels-%E5%8C%85%E4%B8%8E%E6%9C%AC%E9%85%8D%E5%A5%97%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E8%89%B2"><code>mathmodels</code> 包与本配套使用手册的核心特色</a></li>
-  <li><a href="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.7-%E7%89%88%E6%9C%AC" id="toc-关于-mathmodels-包当前-0.0.7-版本" class="nav-link" data-scroll-target="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.7-%E7%89%88%E6%9C%AC">关于 <code>mathmodels</code> 包（当前 0.0.7 版本）</a></li>
+  <li><a href="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.14-%E7%89%88%E6%9C%AC" id="toc-关于-mathmodels-包当前-0.0.14-版本" class="nav-link" data-scroll-target="#%E5%85%B3%E4%BA%8E-mathmodels-%E5%8C%85%E5%BD%93%E5%89%8D-0.0.14-%E7%89%88%E6%9C%AC">关于 <code>mathmodels</code> 包（当前 0.0.14 版本）</a></li>
   <li><a href="#%E6%9B%B4%E5%A4%9A%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90" id="toc-更多学习资源" class="nav-link" data-scroll-target="#%E6%9B%B4%E5%A4%9A%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90">更多学习资源</a></li>
   </ul>
 </li>
@@ -310,7 +310,7 @@ MathJax ={
     <div>
     <div class="quarto-title-meta-heading">发布于</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026年6月19日</p>
+      <p class="date">2026年10月12日</p>
     </div>
   </div>
   
@@ -345,15 +345,15 @@ MathJax ={
 </tr>
 <tr class="odd">
 <td>熵权法</td>
-<td><code>entropy_weight()</code></td>
+<td><code>weight_entropy()</code></td>
 </tr>
 <tr class="even">
 <td>CRITIC 赋权</td>
-<td><code>critic_weight()</code></td>
+<td><code>weight_critic()</code></td>
 </tr>
 <tr class="odd">
 <td>PCA 赋权</td>
-<td><code>pca_weight()</code></td>
+<td><code>weight_pca()</code></td>
 </tr>
 <tr class="even">
 <td>主客观组合赋权</td>
@@ -373,7 +373,7 @@ MathJax ={
 </tr>
 <tr class="even">
 <td>模糊综合评价 (FCE)</td>
-<td><code>fuzzy_eval()/defuzzify()/compute_mf()/tri_mf()/trap_mf()/gauss_mf()/gbell_mf()/gauss2mf()/sigmoid_mf()/dsigmoid_mf()/psigmoid_mf()/z_mf()/pi_mf()/s_mf()/plot_mf()</code></td>
+<td><code>fuzzy_eval()/defuzzify()/compute_mf()/mf_tri()/mf_trap()/mf_gauss()/mf_gbell()/mf_gauss2()/mf_sigmoid()/mf_dsigmoid()/mf_psigmoid()/mf_z()/mf_pi()/mf_s()/plot_mf()</code></td>
 </tr>
 <tr class="odd">
 <td>数据包络分析 (DDC/BCC/SBM, Malmquist)</td>
@@ -483,13 +483,32 @@ MathJax ={
 <strong>学术研究利器</strong>：为数学建模师生或科研工作者提供可靠、高效的算法工具箱。</li>
 </ul>
 <p>总之，这套完整的解决方案将复杂的数学建模算法转化为简单易用的 R 工具，让数学建模师生或科研工作者能够专注于解决实际问题，而非算法实现的细节。</p>
-</section></section><section id="关于-mathmodels-包当前-0.0.7-版本" class="level2"><h2 class="anchored" data-anchor-id="关于-mathmodels-包当前-0.0.7-版本">关于 <code>mathmodels</code> 包（当前 0.0.7 版本）</h2>
-<p><a href="https://github.com/zhjx19/mathmodels">mathmodels</a> 包是一个功能丰富的 R 语言数学建模包，专为《数学建模：算法与编程实现》<span class="citation" data-cites="zhang22"><sup>[<a href="references.html#ref-zhang22" role="doc-biblioref">1</a>]</sup></span>（机械工业出版社）配套开发。该包计划涵盖微分方程与差分方程、统计分析、优化、评价和预测等多个领域的算法实现。当前版本重点实现评价类算法，主要包括：指标数据预处理（标准化、归一化等）、主客观赋权方法（层次分析法、熵权法、CRITIC 法、主成分法）及主客观组合赋权、综合评价方法（TOPSIS 法、模糊综合评价法、秩和比法、数据包络分析（DEA, SBM, Malmquist）、不平等测度（基尼系数、泰尔指数）、区域经济（LQ、HHI、EG指数）、系统评价（耦合协调度、障碍度）以及灰色预测模型（GM(1,1)、GM(1,N)、Verhulst 模型）等。本包面向广大数学建模师生和科研工作者而设计，提供便捷高效的算法工具支持。</p>
+</section></section><section id="关于-mathmodels-包当前-0.0.14-版本" class="level2"><h2 class="anchored" data-anchor-id="关于-mathmodels-包当前-0.0.14-版本">关于 <code>mathmodels</code> 包（当前 0.0.14 版本）</h2>
+<p><a href="https://github.com/zhjx19/mathmodels">mathmodels</a> 包是一个功能丰富的 R 语言数学建模包，专为《数学建模：算法与编程实现》<span class="citation" data-cites="zhang22"><sup>[<a href="references.html#ref-zhang22" role="doc-biblioref">1</a>]</sup></span>（机械工业出版社）配套开发，面向广大数学建模师生和科研工作者而设计，提供便捷高效的数学建模工具集，侧重以易用的方式实现严谨算法。</p>
+<p>当前版本（0.0.14）在已有的综合评价、预测、微分方程等算法之上，新增了多元统计工具（降维、聚类、判别、对应分析、多维标度、典型相关与偏相关，<code>mv_*</code> 系列）、统计推断工具（<code>stat_*</code> 系列检验、<code>stat_bootstrap()</code> / <code>stat_perm_test()</code> 重抽样框架、<code>export_table()</code> 三线表导出），以及数据清洗工具（缺失值诊断 <code>na_summary()</code>、插补 <code>impute()</code> / <code>impute_model()</code> / <code>impute_multiple()</code>、<code>rubin_pool()</code> / <code>pool_fit()</code> 合并与 <code>outlier()</code> 异常值处理）。同时统一了函数命名：赋权函数统一为 <code>weight_*</code> 前缀，隶属函数统一为 <code>mf_*</code> 前缀，微分方程模型统一为 <code>ode_*</code> 前缀。</p>
+<p><strong>主要功能概览：</strong></p>
+<ul>
+<li><p><strong>综合评价</strong>：AHP、熵权法、CRITIC、PCA赋权、TOPSIS、灰色关联分析（GRA）、秩和比法（RSR）、模糊综合评价（FCE）、数据包络分析（CCR/BCC/SBM、Malmquist指数），外加基尼系数、泰尔指数等不平等度量，以及耦合协调度与障碍度模型。</p></li>
+<li>
+<p><strong>预测模型</strong>：</p>
+<ul>
+<li><p>灰色预测：<code>GM(1,1)</code>、<code>GM(1,N)</code>、Verhulst模型。</p></li>
+<li><p>马尔可夫预测：<code>markov_chain()</code>、<code>GM11_markov()</code>。</p></li>
+<li><p>回归预测：<code>reg_lm()</code>、<code>reg_logistic()</code>、<code>reg_poisson()</code>、<code>reg_negbin()</code>（支持逐步回归）；配套 <code>reg_predict()</code>、<code>reg_diagnostics()</code> 及可视化函数 <code>plot_reg_predict()</code>、<code>plot_reg_residuals()</code>。</p></li>
+<li><p>时间序列：以 <code>ts_df</code> 为核心的轻量级工具集，涵盖数据转换（<code>as_ts_df()</code>）、缺失值处理（<code>complete_ts_df()</code>、<code>impute_ts_df()</code>）、Box-Cox/对数/差分变换与逆变换（<code>ts_transform()</code>、<code>ts_back_transform()</code>）、平稳性检验（<code>ts_test()</code>）、STL分解（<code>ts_stl()</code>）、ETS与SARIMA建模（<code>ts_ets()</code>、<code>ts_sarima()</code>）、统一预测接口（<code>ts_forecast()</code>），以及配套的可视化函数：<code>plot_ts()</code>、<code>plot_ts_forecast()</code>、<code>plot_ts_acf()</code>、<code>plot_ts_pacf()</code>、<code>plot_ts_stl()</code>、<code>plot_ts_residuals()</code>。</p></li>
+</ul>
+</li>
+<li><p><strong>插值与曲线拟合</strong>：分段线性插值、样条插值、多项式插值与Hermite插值（<code>interp_linear()</code>、<code>interp_spline()</code>、<code>interp_poly()</code>、<code>interp_hermite()</code>）；曲线拟合（<code>poly_fit()</code>、<code>curve_fit()</code>、<code>growth_fit()</code>），对Logistic、Gompertz、Michaelis-Menten等非线性模型自动生成初始值。</p></li>
+<li><p>微分方程模型：<code>ode_solver()</code> 支持字符串公式定义的任意常微分方程组；内置人口模型（Malthus、Logistic）、传染病仓室模型（SI、SIS、SIR、SEIR）以及Lotka-Volterra捕食者-猎物模型，统一采用 init + params 接口。传染病可视化（<code>plot_compartments()</code>、<code>plot_incidence()</code>、<code>plot_phase_si()</code>、<code>plot_Rt_estimate()</code>）与指标计算（<code>epi_metrics()</code> 可输出R₀、峰值、罹患率等）。</p></li>
+<li><p><strong>多元统计</strong>：降维（<code>mv_pca()</code>、<code>mv_efa()</code>）、聚类（<code>mv_hclust()</code>、<code>mv_kmeans()</code>）、判别分析（<code>mv_discrim()</code>）、对应分析与多维标度（<code>mv_corresp()</code>、<code>mv_mds()</code>）、典型相关与偏相关（<code>mv_cancor()</code>、<code>mv_pcor()</code>），以及配套的碎石图、得分图、轮廓图、树状图等可视化函数。</p></li>
+<li><p><strong>统计推断与数据清洗</strong>：<code>stat_*</code> 系列假设检验、重抽样（<code>stat_bootstrap()</code>、<code>stat_perm_test()</code>）与三线表导出（<code>export_table()</code>）；缺失值诊断与插补（<code>na_summary()</code>、<code>impute()</code>、<code>impute_model()</code>、<code>impute_multiple()</code>、<code>rubin_pool()</code>、<code>pool_fit()</code>）及异常值处理（<code>outlier()</code>）。</p></li>
+<li><p>与<code>tidyverse</code>的配合：原生支持管道操作（<code>|&gt;</code>）及 <code>dplyr/ggplot2</code>，数据清洗、分组计算与批量处理流畅顺手。</p></li>
+</ul>
 <p>可从 Github 安装：</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"zhjx19/mathmodels"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>或下载到本地解压到当前路径安装（若需要，先安装依赖包：<code>lpSolveAPI</code> 包）：</p>
+<p>或下载到本地解压到当前路径安装（若需要，先安装依赖包：<code>lpSolveAPI</code> 等）：</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">install.packages</span>(<span class="st">"mathmodels-master"</span>, <span class="at">repos=</span><span class="cn">NULL</span>, <span class="at">type=</span><span class="st">"source"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -509,6 +528,7 @@ MathJax ={
 </div>
 </div>
 </div>
+<p>或者<a href="https://www.zhihu.com/column/c_1953564194499692128">最简R编程入门</a></p>
 </section><section id="更多学习资源" class="level2"><h2 class="anchored" data-anchor-id="更多学习资源">更多学习资源</h2>
 <p>欢迎关注我的<a href="https://www.zhihu.com/people/huc_zhangjingxin/columns">知乎</a>，公众号：R 语言与数学建模，B 站：<a href="https://space.bilibili.com/192858956/upload/video">张敬信老师</a></p>
 <p>欢迎加入我的个人知识库，里面有所有整理好的我出品的基于 tidyverse/mlr3verse 的全网最新的 R 语言编程、R 机器学习、数学建模相关学习、案例资料，可以下载，可以 DeepSeek 问答：</p>
